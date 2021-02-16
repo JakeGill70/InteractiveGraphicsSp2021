@@ -4,6 +4,9 @@
 #include <glad/glad.h> 
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "GraphicsStructures.h"
+#include "OGLGraphicsObject.h"
+#include "SimpleOGLRenderer.h"
 
 void OnWindowResize_Callback(GLFWwindow* window, int width, int height)
 {
@@ -72,18 +75,7 @@ bool CreateShaderProgram(GLuint& shaderProgram)
    return true;
 }
 
-struct Vector3D {
-   GLfloat x, y, z;
-};
 
-struct RGB {
-   GLfloat red, green, blue;
-};
-
-struct Vertex {
-   Vector3D position;
-   RGB color;
-};
 
 void SetUpScene(Vertex vertexData[])
 {
@@ -209,11 +201,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
       return -1;
    }
 
-   Vertex triangleVertexData[3];
-   SetUpScene(triangleVertexData);
+   SimpleOGLRenderer simpleRenderer;
+   simpleRenderer.SetShaderProgram(shaderProgram);
+   simpleRenderer.SetPositionAttribute({ 3, sizeof(Vertex), 0 });
+   simpleRenderer.SetColorAttribute({ 3, sizeof(Vertex), sizeof(GLfloat) * 3 });
+   OGLGraphicsObject triangle(&simpleRenderer);
+   triangle.AddVertex({     0,  0.5f, 0, 1, 0, 0 });
+   triangle.AddVertex({ -0.5f, -0.5f, 0, 0, 0, 1 });
+   triangle.AddVertex({  0.5f, -0.5f, 0, 0, 1, 0 });
+   triangle.SendToGPU();
 
-   GLuint vaoId, vboId;
-   SendSceneDataToGPU(vaoId, vboId, triangleVertexData, sizeof(triangleVertexData));
+   //Vertex triangleVertexData[3];
+   //SetUpScene(triangleVertexData);
+
+   //GLuint vaoId, vboId;
+   //SendSceneDataToGPU(vaoId, vboId, triangleVertexData, sizeof(triangleVertexData));
 
    //glfwMaximizeWindow(window);
    glfwShowWindow(window);
@@ -222,13 +224,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-      RenderScene(vaoId, vboId, shaderProgram);
+      ///RenderScene(vaoId, vboId, shaderProgram);
+      triangle.Render();
 
       glfwSwapBuffers(window);
       glfwPollEvents();
    }
 
-   glDeleteVertexArrays(1, &vaoId);
+   //glDeleteVertexArrays(1, &vaoId);
    glfwTerminate();
    return 0;
 }
