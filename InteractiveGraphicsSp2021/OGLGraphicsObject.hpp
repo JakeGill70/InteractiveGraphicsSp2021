@@ -2,36 +2,31 @@
 #ifndef OGL_GRAPHICS_OBJECT
 #define OGL_GRAPHICS_OBJECT
 
-#include "AbstractGraphicsObject.hpp"
-#include "AbstractRenderer.hpp"
+#include "AbstractVertexGraphicsObject.hpp"
+#include "AbstractRenderer.h"
 
 template <class T>
 class OGLGraphicsObject :
-    public AbstractGraphicsObject<T>
+    public AbstractVertexObject<T>
 {
 private:
    GLuint _vboId;
 
 public:
-   OGLGraphicsObject(AbstractRenderer<T>* renderer);
+   OGLGraphicsObject(AbstractRenderer* renderer);
 
-   inline size_t GetBufferId();
+   inline size_t GetBufferId() {
+      return this->_vboId;
+   }
 
    void SendToGPU();
 };
 
 template<class T>
-OGLGraphicsObject<T>::OGLGraphicsObject(AbstractRenderer<T>* renderer) : AbstractGraphicsObject<T>(renderer)
+OGLGraphicsObject<T>::OGLGraphicsObject(AbstractRenderer* renderer) : AbstractVertexObject<T>(renderer)
 {
    this->_vboId = (GLuint)this->_renderer->GenerateBuffer();
 }
-
-template<class T>
-inline size_t OGLGraphicsObject<T>::GetBufferId()
-{
-   return this->_vboId;
-}
-
 
 template <class T>
 void OGLGraphicsObject<T>::SendToGPU()

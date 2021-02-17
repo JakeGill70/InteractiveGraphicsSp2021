@@ -11,7 +11,7 @@ struct RGB {
    GLfloat red, green, blue;
 };
 
-struct Vertex {
+struct VertexPC {
    Vector3D position;
    RGB color;
 };

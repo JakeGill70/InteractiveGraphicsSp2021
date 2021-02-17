@@ -147,13 +147,15 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="SimpleOGLRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AbstractGraphicsObject.hpp" />
-    <ClInclude Include="AbstractRenderer.hpp" />
+    <ClInclude Include="AbstractGraphicsObject.h" />
+    <ClInclude Include="AbstractVertexGraphicsObject.hpp" />
+    <ClInclude Include="AbstractRenderer.h" />
     <ClInclude Include="GraphicsStructures.h" />
     <ClInclude Include="OGLGraphicsObject.hpp" />
-    <ClInclude Include="SimpleOGLRenderer.hpp" />
+    <ClInclude Include="SimpleOGLRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
