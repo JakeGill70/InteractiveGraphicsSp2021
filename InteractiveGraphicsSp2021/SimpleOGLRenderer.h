@@ -11,6 +11,7 @@ class SimpleOGLRenderer :
 private:
    GLuint _vaoId;
    struct VertexAttribute {
+      int index;
       int count;
       size_t bytesToNext;
       size_t offsetToFirst;
@@ -19,8 +20,8 @@ private:
 public:
    SimpleOGLRenderer() : AbstractRenderer(), _vaoId(0)
    {
-      _positionAttribute = { 3, 0, 0 };
-      _colorAttribute = { 3, 0, 0 };
+      _positionAttribute = { 0, 3, 0, 0 };
+      _colorAttribute = { 1, 3, 0, 0 };
       glGenVertexArrays(1, &_vaoId);
    }
 
@@ -43,6 +44,9 @@ public:
    size_t GenerateBuffer();
 
    void Render(AbstractGraphicsObject* object);
+
+private:
+   void SetUpBufferInterpretation();
 
 };
 

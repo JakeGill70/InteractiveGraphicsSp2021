@@ -20,6 +20,9 @@ public:
    virtual inline void Select() = 0;
    virtual void Render(AbstractGraphicsObject* object) = 0;
    virtual size_t GenerateBuffer() = 0;
+
+ private:
+   virtual void SetUpBufferInterpretation() = 0;
 };
 
 #endif

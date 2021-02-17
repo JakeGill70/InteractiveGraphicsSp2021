@@ -14,8 +14,20 @@ void SimpleOGLRenderer::Render(AbstractGraphicsObject* object)
    glBindVertexArray(_vaoId);
    glUseProgram((GLuint)this->_shaderProgram);
    glBindBuffer(GL_ARRAY_BUFFER, (GLuint)object->GetBufferId());
+
+   SetUpBufferInterpretation();
+   glDrawArrays(GL_TRIANGLES, 0, (GLsizei)object->GetNumberOfElements());
+
+   glDisableVertexAttribArray(0);
+   glDisableVertexAttribArray(1);
+   glUseProgram(0);
+   glBindVertexArray(0);
+}
+
+void SimpleOGLRenderer::SetUpBufferInterpretation()
+{
    // Positions
-   glEnableVertexAttribArray(0);
+   glEnableVertexAttribArray(_positionAttribute.index);
    glVertexAttribPointer(
       0,
       (GLint)_positionAttribute.count,
@@ -25,7 +37,7 @@ void SimpleOGLRenderer::Render(AbstractGraphicsObject* object)
       (void*)_positionAttribute.offsetToFirst
    );
    // Colors
-   glEnableVertexAttribArray(1);
+   glEnableVertexAttribArray(_colorAttribute.index);
    glVertexAttribPointer(
       1,
       (GLint)_colorAttribute.count,
@@ -34,11 +46,4 @@ void SimpleOGLRenderer::Render(AbstractGraphicsObject* object)
       (GLsizei)_colorAttribute.bytesToNext,
       (void*)_colorAttribute.offsetToFirst
    );
-
-   glDrawArrays(GL_TRIANGLES, 0, (GLsizei)object->GetNumberOfElements());
-
-   glDisableVertexAttribArray(0);
-   glDisableVertexAttribArray(1);
-   glUseProgram(0);
-   glBindVertexArray(0);
 }

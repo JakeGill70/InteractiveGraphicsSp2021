@@ -116,8 +116,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
    SimpleOGLRenderer simpleRenderer;
    simpleRenderer.SetShaderProgram(shaderProgram);
-   simpleRenderer.SetPositionAttribute({ 3, sizeof(VertexPC), 0 });
-   simpleRenderer.SetColorAttribute({ 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
+   simpleRenderer.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
+   simpleRenderer.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
    OGLGraphicsObject<VertexPC> triangle(&simpleRenderer);
    triangle.AddVertex({     0,  0.5f, 0, 1, 0, 0 });
    triangle.AddVertex({ -0.5f, -0.5f, 0, 0, 0, 1 });
