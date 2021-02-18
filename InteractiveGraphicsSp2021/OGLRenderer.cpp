@@ -12,7 +12,7 @@ size_t OGLRenderer::GenerateBuffer()
 void OGLRenderer::Render(AbstractGraphicsObject* object)
 {
    glBindVertexArray(_vaoId);
-   glUseProgram((GLuint)this->_shaderProgram);
+   glUseProgram((GLuint)_shaderProgram);
    glBindBuffer(GL_ARRAY_BUFFER, (GLuint)object->GetBufferId());
 
    SetUpBufferInterpretation();
@@ -29,7 +29,7 @@ void OGLRenderer::SetUpBufferInterpretation()
    // Positions
    glEnableVertexAttribArray(_positionAttribute.index);
    glVertexAttribPointer(
-      0,
+      _positionAttribute.index,
       (GLint)_positionAttribute.count,
       GL_FLOAT,
       GL_FALSE,
@@ -39,7 +39,7 @@ void OGLRenderer::SetUpBufferInterpretation()
    // Colors
    glEnableVertexAttribArray(_colorAttribute.index);
    glVertexAttribPointer(
-      1,
+      _colorAttribute.index,
       (GLint)_colorAttribute.count,
       GL_FLOAT,
       GL_FALSE,

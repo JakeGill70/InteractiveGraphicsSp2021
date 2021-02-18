@@ -26,7 +26,7 @@ public:
    }
 
    ~OGLRenderer(){
-      glDeleteVertexArrays(1, &this->_vaoId);
+      glDeleteVertexArrays(1, &_vaoId);
    }
 
    inline void SetPositionAttribute(VertexAttribute pa) {
@@ -38,7 +38,7 @@ public:
    }
 
    inline void Select() {
-      glBindVertexArray(this->_vaoId);
+      glBindVertexArray(_vaoId);
    }
 
    size_t GenerateBuffer();
