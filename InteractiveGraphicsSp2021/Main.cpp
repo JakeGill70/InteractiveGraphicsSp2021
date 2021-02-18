@@ -6,7 +6,7 @@
 #include <iostream>
 #include "GraphicsStructures.h"
 #include "OGLGraphicsObject.hpp"
-#include "SimpleOGLRenderer.h"
+#include "OGLRenderer.h"
 
 void OnWindowResize_Callback(GLFWwindow* window, int width, int height)
 {
@@ -114,11 +114,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
       return -1;
    }
 
-   SimpleOGLRenderer simpleRenderer;
-   simpleRenderer.SetShaderProgram(shaderProgram);
-   simpleRenderer.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
-   simpleRenderer.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
-   OGLGraphicsObject<VertexPC> triangle(&simpleRenderer);
+   OGLRenderer renderer;
+   renderer.SetShaderProgram(shaderProgram);
+   renderer.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
+   renderer.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
+   OGLGraphicsObject<VertexPC> triangle(&renderer);
    triangle.AddVertex({     0,  0.5f, 0, 1, 0, 0 });
    triangle.AddVertex({ -0.5f, -0.5f, 0, 0, 0, 1 });
    triangle.AddVertex({  0.5f, -0.5f, 0, 0, 1, 0 });

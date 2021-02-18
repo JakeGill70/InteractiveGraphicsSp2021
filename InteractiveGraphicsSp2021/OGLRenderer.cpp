@@ -1,7 +1,7 @@
-#include "SimpleOGLRenderer.h"
+#include "OGLRenderer.h"
 #include "AbstractGraphicsObject.h"
 
-size_t SimpleOGLRenderer::GenerateBuffer()
+size_t OGLRenderer::GenerateBuffer()
 {
    glBindVertexArray(_vaoId);
    GLuint vbo;
@@ -9,7 +9,7 @@ size_t SimpleOGLRenderer::GenerateBuffer()
    return vbo;
 }
 
-void SimpleOGLRenderer::Render(AbstractGraphicsObject* object)
+void OGLRenderer::Render(AbstractGraphicsObject* object)
 {
    glBindVertexArray(_vaoId);
    glUseProgram((GLuint)this->_shaderProgram);
@@ -24,7 +24,7 @@ void SimpleOGLRenderer::Render(AbstractGraphicsObject* object)
    glBindVertexArray(0);
 }
 
-void SimpleOGLRenderer::SetUpBufferInterpretation()
+void OGLRenderer::SetUpBufferInterpretation()
 {
    // Positions
    glEnableVertexAttribArray(_positionAttribute.index);

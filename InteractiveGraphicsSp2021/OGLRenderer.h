@@ -1,11 +1,11 @@
 #pragma once
-#ifndef SIMPLE_OGL_RENDERER
-#define SIMPLE_OGL_RENDERER
+#ifndef OGL_RENDERER
+#define OGL_RENDERER
 
 #include "AbstractRenderer.h"
 #include <glad/glad.h>
 
-class SimpleOGLRenderer :
+class OGLRenderer :
     public AbstractRenderer
 {
 private:
@@ -18,14 +18,14 @@ private:
    } _positionAttribute, _colorAttribute;
 
 public:
-   SimpleOGLRenderer() : AbstractRenderer(), _vaoId(0)
+   OGLRenderer() : AbstractRenderer(), _vaoId(0)
    {
       _positionAttribute = { 0, 3, 0, 0 };
       _colorAttribute = { 1, 3, 0, 0 };
       glGenVertexArrays(1, &_vaoId);
    }
 
-   ~SimpleOGLRenderer(){
+   ~OGLRenderer(){
       glDeleteVertexArrays(1, &this->_vaoId);
    }
 
