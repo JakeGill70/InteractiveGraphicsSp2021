@@ -9,7 +9,7 @@ using std::vector;
 #include "AbstractRenderer.h"
 
 template <class T>
-class AbstractVertexObject :
+class AbstractVertexGraphicsObject :
    public AbstractGraphicsObject
 {
 protected:
@@ -17,11 +17,11 @@ protected:
    AbstractRenderer* _renderer;
 
 public:
-   AbstractVertexObject(AbstractRenderer* renderer) {
+   AbstractVertexGraphicsObject(AbstractRenderer* renderer) {
       this->_renderer = renderer;
    }
 
-   virtual ~AbstractVertexObject() {}
+   virtual ~AbstractVertexGraphicsObject() {}
 
    void AddVertex(const T& vertex);
 
@@ -33,15 +33,15 @@ public:
 };
 
 template<class T>
-void AbstractVertexObject<T>::AddVertex(const T& vertex)
+void AbstractVertexGraphicsObject<T>::AddVertex(const T& vertex)
 {
    this->_vertices.push_back(vertex);
 }
 
 template <class T>
-void AbstractVertexObject<T>::Render()
+void AbstractVertexGraphicsObject<T>::Render()
 {
-   AbstractVertexObject<T>* self = this;
+   AbstractVertexGraphicsObject<T>* self = this;
    this->_renderer->Render(self);
 }
 

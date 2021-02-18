@@ -7,7 +7,7 @@
 
 template <class T>
 class OGLGraphicsObject :
-    public AbstractVertexObject<T>
+    public AbstractVertexGraphicsObject<T>
 {
 private:
    GLuint _vboId;
@@ -23,7 +23,7 @@ public:
 };
 
 template<class T>
-OGLGraphicsObject<T>::OGLGraphicsObject(AbstractRenderer* renderer) : AbstractVertexObject<T>(renderer)
+OGLGraphicsObject<T>::OGLGraphicsObject(AbstractRenderer* renderer) : AbstractVertexGraphicsObject<T>(renderer)
 {
    this->_vboId = (GLuint)this->_renderer->GenerateBuffer();
 }
