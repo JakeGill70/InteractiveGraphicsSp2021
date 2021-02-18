@@ -1,6 +1,6 @@
 #pragma once
-#ifndef ABSTRACT_VERTEX_OBJECT
-#define ABSTRACT_VERTEX_OBJECT
+#ifndef ABSTRACT_VERTEX_GRAPHICS_OBJECT
+#define ABSTRACT_VERTEX_GRAPHICS_OBJECT
 
 #include "AbstractGraphicsObject.h"
 #include <vector>
