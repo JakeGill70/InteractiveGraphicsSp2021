@@ -6,73 +6,11 @@
 #include <iostream>
 #include "GraphicsStructures.h"
 #include "OGLGraphicsObject.hpp"
-#include "OGLRenderer.h"
+#include "OGLShader.h"
 
 void OnWindowResize_Callback(GLFWwindow* window, int width, int height)
 {
    glViewport(0, 0, width, height);
-}
-
-GLuint CompileShader(GLenum type, const GLchar* source)
-{
-   GLint length = (GLint)(sizeof(GLchar) * strlen(source));
-   GLuint shader = glCreateShader(type);
-   glShaderSource(shader, 1, (const GLchar**)&source, &length);
-   glCompileShader(shader);
-   GLint shaderOk = 0;
-   glGetShaderiv(shader, GL_COMPILE_STATUS, &shaderOk);
-   if (!shaderOk) {
-      glDeleteShader(shader);
-      shader = 0;
-   }
-   return shader;
-}
-
-GLuint LinkShader(GLuint vertexShader, GLuint fragmentShader)
-{
-   GLuint program = glCreateProgram();
-   glAttachShader(program, vertexShader);
-   glAttachShader(program, fragmentShader);
-   glLinkProgram(program);
-   GLint programOk = 0;
-   glGetProgramiv(program, GL_LINK_STATUS, &programOk);
-   if (!programOk) {
-      glDeleteShader(program);
-      program = 0;
-   }
-   return program;
-}
-
-bool CreateShaderProgram(GLuint& shaderProgram)
-{
-   const GLchar* vertexSource =
-      "#version 400\n"\
-      "layout(location = 0) in vec3 position;\n"\
-      "layout(location = 1) in vec3 vertexColor;\n"\
-      "out vec4 fragColor;\n"\
-      "void main()\n"\
-      "{\n"\
-      "   gl_Position = vec4(position, 1.0);\n" \
-      "   fragColor = vec4(vertexColor, 1.0);\n" \
-      "}\n";
-   GLuint vertexShader = CompileShader(GL_VERTEX_SHADER, vertexSource);
-   if (vertexShader == 0) return false;
-
-   const GLchar* fragmentSource =
-      "#version 400\n"\
-      "in vec4 fragColor;\n"\
-      "out vec4 color;\n"\
-      "void main()\n"\
-      "{\n"\
-      "   color = fragColor;\n"\
-      "}\n";
-   GLuint fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentSource);
-   if (fragmentShader == 0) return false;
-
-   shaderProgram = LinkShader(vertexShader, fragmentShader);
-   glDeleteShader(vertexShader);
-   glDeleteShader(fragmentShader);
-   return true;
 }
 
 void ProcessUserInput(GLFWwindow* window)
@@ -107,18 +45,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
    glfwSetFramebufferSizeCallback(window, OnWindowResize_Callback);
 
-   GLuint shaderProgram;
-   bool isCreated = CreateShaderProgram(shaderProgram);
-   if (!isCreated) {
-      std::cout << "Failed to create the shader program" << std::endl;
-      return -1;
-   }
 
-   OGLRenderer renderer;
-   renderer.SetShaderProgram(shaderProgram);
-   renderer.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
-   renderer.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
-   OGLGraphicsObject<VertexPC> triangle(&renderer);
+   OGLShader shader;
+   shader.Create();
+   shader.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
+   shader.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
+   OGLGraphicsObject<VertexPC> triangle(&shader);
    triangle.AddVertex({     0,  0.5f, 0, 1, 0, 0 });
    triangle.AddVertex({ -0.5f, -0.5f, 0, 0, 0, 1 });
    triangle.AddVertex({  0.5f, -0.5f, 0, 0, 1, 0 });

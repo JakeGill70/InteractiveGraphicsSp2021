@@ -2,7 +2,10 @@
 #ifndef ABSTRACT_GRAPHICS_OBJECT
 #define ABSTRACT_GRAPHICS_OBJECT
 
-class AbstractGraphicsObject
+#include "BaseObject.h"
+
+class AbstractGraphicsObject : 
+   public BaseObject
 {
 public:
    AbstractGraphicsObject() {}

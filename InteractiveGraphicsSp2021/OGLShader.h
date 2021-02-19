@@ -1,12 +1,14 @@
 #pragma once
-#ifndef OGL_RENDERER
-#define OGL_RENDERER
+#ifndef OGL_SHADER
+#define OGL_SHADER
 
-#include "AbstractRenderer.h"
+#include <string>
+using std::string;
+#include "AbstractShader.h"
 #include <glad/glad.h>
 
-class OGLRenderer :
-    public AbstractRenderer
+class OGLShader :
+    public AbstractShader
 {
 private:
    GLuint _vaoId;
@@ -16,16 +18,13 @@ private:
       size_t bytesToNext;
       size_t offsetToFirst;
    } _positionAttribute, _colorAttribute;
+   string _vertexSource;
+   string _fragmentSource;
 
 public:
-   OGLRenderer() : AbstractRenderer(), _vaoId(0)
-   {
-      _positionAttribute = { 0, 3, 0, 0 };
-      _colorAttribute = { 1, 3, 0, 0 };
-      glGenVertexArrays(1, &_vaoId);
-   }
+   OGLShader();
 
-   ~OGLRenderer(){
+   ~OGLShader(){
       glDeleteVertexArrays(1, &_vaoId);
    }
 
@@ -44,10 +43,14 @@ public:
    size_t GenerateBuffer();
 
    void Render(AbstractGraphicsObject* object);
+   bool Create();
 
-private:
+protected:
+   void SetDefaultSource();
    void SetUpBufferInterpretation();
-
+   GLuint Compile(GLenum type, const GLchar* source);
+   GLuint Link(GLuint vertexShader, GLuint fragmentShader);
+   void LogError(GLuint shader, PFNGLGETSHADERIVPROC glGet__iv, PFNGLGETSHADERINFOLOGPROC glGet__InfoLog);
 };
 
 
