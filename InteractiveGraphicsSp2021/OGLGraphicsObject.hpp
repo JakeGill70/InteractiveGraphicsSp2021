@@ -25,13 +25,13 @@ public:
 template<class T>
 OGLGraphicsObject<T>::OGLGraphicsObject(AbstractShader* shader) : AbstractVertexGraphicsObject<T>(shader)
 {
-   this->_vboId = (GLuint)this->_renderer->GenerateBuffer();
+   this->_vboId = (GLuint)this->_shader->GenerateBuffer();
 }
 
 template <class T>
 void OGLGraphicsObject<T>::SendToGPU()
 {
-   this->_renderer->Select();
+   this->_shader->Select();
    // Bind the object to the binding target
    glBindBuffer(GL_ARRAY_BUFFER, _vboId);
 
