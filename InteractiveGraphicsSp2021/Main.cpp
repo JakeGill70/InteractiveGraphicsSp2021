@@ -45,7 +45,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
    glfwSetFramebufferSizeCallback(window, OnWindowResize_Callback);
 
-
    OGLShader shader;
    shader.Create();
    shader.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });

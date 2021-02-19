@@ -32,8 +32,6 @@ void OGLShader::Render(AbstractGraphicsObject* object)
    glBindVertexArray(0);
 }
 
-
-
 void OGLShader::SetDefaultSource()
 {
    _vertexSource =
