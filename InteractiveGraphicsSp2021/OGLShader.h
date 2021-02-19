@@ -40,10 +40,19 @@ public:
       glBindVertexArray(_vaoId);
    }
 
+   inline void SelectProgram() {
+      glUseProgram(_shaderProgram);
+   }
+
+   inline void SetVertexSource(string source) {
+      _vertexSource = source;
+   }
+
    size_t GenerateBuffer();
 
    void Render(AbstractGraphicsObject* object);
    bool Create();
+   void SendMatrixToGPU(const string& name, const glm::mat4& matrix);
 
 protected:
    void SetDefaultSource();

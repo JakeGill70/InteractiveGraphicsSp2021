@@ -1,5 +1,6 @@
 #include "OGLShader.h"
 #include "AbstractGraphicsObject.h"
+#include <glm/gtc/type_ptr.hpp>
 
 OGLShader::OGLShader() : AbstractShader(), _vaoId(0)
 {
@@ -92,6 +93,12 @@ bool OGLShader::Create()
    glDeleteShader(fragmentShader);
    if (_shaderProgram == 0) return false;
    return true;
+}
+
+void OGLShader::SendMatrixToGPU(const string& name, const glm::mat4& matrix)
+{
+   unsigned int uniformLocation = glGetUniformLocation(_shaderProgram, name.c_str());
+   glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 GLuint OGLShader::Compile(GLenum type, const GLchar* source)

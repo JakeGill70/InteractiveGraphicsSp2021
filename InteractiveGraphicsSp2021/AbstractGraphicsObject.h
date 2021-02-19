@@ -3,10 +3,14 @@
 #define ABSTRACT_GRAPHICS_OBJECT
 
 #include "BaseObject.h"
+#include "ReferenceFrame.h"
 
 class AbstractGraphicsObject : 
    public BaseObject
 {
+public:
+   ReferenceFrame frame;
+
 public:
    AbstractGraphicsObject() {}
    virtual ~AbstractGraphicsObject() {}
