@@ -14,11 +14,11 @@ class AbstractVertexGraphicsObject :
 {
 protected:
    vector<T> _vertices;
-   AbstractShader* _renderer;
+   AbstractShader* _shader;
 
 public:
-   AbstractVertexGraphicsObject(AbstractShader* renderer) {
-      this->_renderer = renderer;
+   AbstractVertexGraphicsObject(AbstractShader* shader) {
+      this->_shader = shader;
    }
 
    virtual ~AbstractVertexGraphicsObject() {}
@@ -41,7 +41,7 @@ void AbstractVertexGraphicsObject<T>::AddVertex(const T& vertex)
 template <class T>
 void AbstractVertexGraphicsObject<T>::Render()
 {
-   this->_renderer->Render(this);
+   this->_shader->Render(this);
 }
 
 #endif

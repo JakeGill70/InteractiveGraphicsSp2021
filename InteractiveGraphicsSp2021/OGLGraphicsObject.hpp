@@ -13,7 +13,7 @@ private:
    GLuint _vboId;
 
 public:
-   OGLGraphicsObject(AbstractShader* renderer);
+   OGLGraphicsObject(AbstractShader* shader);
 
    inline size_t GetBufferId() {
       return this->_vboId;
@@ -23,7 +23,7 @@ public:
 };
 
 template<class T>
-OGLGraphicsObject<T>::OGLGraphicsObject(AbstractShader* renderer) : AbstractVertexGraphicsObject<T>(renderer)
+OGLGraphicsObject<T>::OGLGraphicsObject(AbstractShader* shader) : AbstractVertexGraphicsObject<T>(shader)
 {
    this->_vboId = (GLuint)this->_renderer->GenerateBuffer();
 }
