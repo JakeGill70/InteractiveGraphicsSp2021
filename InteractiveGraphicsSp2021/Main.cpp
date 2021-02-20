@@ -159,7 +159,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
       glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-      //triangle.Render();
+      triangle.Render();
       cube.frame.orientation = glm::rotate(cube.frame.orientation, glm::radians(1.0f), glm::vec3( 0, 1, 0 ));
       cube.Render();
 
