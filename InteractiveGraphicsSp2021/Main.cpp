@@ -85,7 +85,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    VertexPC V2 = { -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
    VertexPC V3 = {  0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
    VertexPC V4 = {  0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   // White vertices
+   // Mixed color vertices
    VertexPC V5 = {  0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f };
    VertexPC V6 = {  0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f };
    VertexPC V7 = { -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f };
@@ -97,7 +97,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    cube.AddVertex(V1);
    cube.AddVertex(V3);
    cube.AddVertex(V4);
-
    // Face 2
    cube.AddVertex(V4);
    cube.AddVertex(V3);
@@ -139,9 +138,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    camera.frame.SetPosition(3, 3, 3);
    camera.UpdateView();
 
+   // Cull back faces and use counter-clockwise winding of front faces
    glEnable(GL_CULL_FACE);
    glCullFace(GL_BACK);
    glFrontFace(GL_CCW);
+
+   // Enable depth testing
+   //glEnable(GL_DEPTH_TEST);
+   //glDepthMask(GL_TRUE);
+   //glDepthFunc(GL_LEQUAL);
+   //glDepthRange(0.0f, 1.0f);
 
    int width, height;
    glfwShowWindow(window);
