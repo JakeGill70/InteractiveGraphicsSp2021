@@ -157,7 +157,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
       camera.UpdateProjection(width / (float)height);
 
       simple3DShader.SelectProgram();
-      simple3DShader.SendMatrixToGPU("world", cube.frame.orientation);
       simple3DShader.SendMatrixToGPU("view", camera.GetView());
       simple3DShader.SendMatrixToGPU("projection", camera.GetProjection());
 
@@ -165,8 +164,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
       glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
       triangle.Render();
+
       cube.frame.orientation = glm::rotate(cube.frame.orientation, glm::radians(1.0f), glm::vec3( 0, 1, 0 ));
+      simple3DShader.SelectProgram();
+      simple3DShader.SendMatrixToGPU("world", cube.frame.orientation);
       cube.Render();
 
       glfwSwapBuffers(window);
