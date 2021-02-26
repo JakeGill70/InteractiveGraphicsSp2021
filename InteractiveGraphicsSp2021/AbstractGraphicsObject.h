@@ -18,6 +18,7 @@ public:
    virtual void Render() = 0;
    virtual void SendToGPU() = 0;
    virtual size_t GetBufferId() = 0;
+   virtual void SetBufferId(size_t bufferId) = 0;
    virtual size_t GetNumberOfElements() = 0;
 };
 #endif

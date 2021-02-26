@@ -34,7 +34,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-   GLFWwindow* window = glfwCreateWindow(800, 600, "ETSU Computing Interactive Graphics", NULL, NULL);
+   GLFWwindow* window = glfwCreateWindow(800, 600, "Lab Week 7 - Interactive Graphics", NULL, NULL);
    if (window == NULL) {
       std::cout << "Failed to create GLFW window" << std::endl;
       glfwTerminate();
@@ -53,12 +53,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    shader.Create();
    shader.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
    shader.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
-   OGLGraphicsObject<VertexPC> triangle(&shader);
+
+   OGLGraphicsObject<VertexPC> triangle;
+   triangle.SetBufferId(shader.GenerateBuffer());
+   shader.AddObjectToRender("triangle", &triangle);
    triangle.AddVertex({     0,  0.5f, 0, 1, 0, 0 });
    triangle.AddVertex({ -0.5f, -0.5f, 0, 0, 0, 1 });
    triangle.AddVertex({  0.5f, -0.5f, 0, 0, 1, 0 });
    triangle.SendToGPU();
-
 
    OGLShader simple3DShader;
    simple3DShader.SetVertexSource(
@@ -79,7 +81,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    simple3DShader.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
    simple3DShader.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
 
-   OGLGraphicsObject<VertexPC> cube(&simple3DShader);
+   OGLGraphicsObject<VertexPC> cube;
+   cube.SetBufferId(simple3DShader.GenerateBuffer());
    // Red vertices
    VertexPC V1 = { -0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
    VertexPC V2 = { -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
@@ -133,10 +136,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    cube.AddVertex(V4);
    cube.AddVertex(V5);
    cube.SendToGPU();
+   simple3DShader.AddObjectToRender("cube", &cube);
 
    BaseCamera camera;
    camera.frame.SetPosition(3, 3, 3);
    camera.UpdateView();
+
+   simple3DShader.SetCamera(&camera);
 
    // Cull back faces and use counter-clockwise winding of front faces
    glEnable(GL_CULL_FACE);
@@ -155,22 +161,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    while (!glfwWindowShouldClose(window)) {
       glfwGetWindowSize(window, &width, &height);
       camera.UpdateProjection(width / (float)height);
-
-      simple3DShader.SelectProgram();
-      simple3DShader.SendMatrixToGPU("view", camera.GetView());
-      simple3DShader.SendMatrixToGPU("projection", camera.GetProjection());
-
       ProcessUserInput(window);
 
       glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-      triangle.Render();
-
-      cube.frame.orientation = glm::rotate(cube.frame.orientation, glm::radians(1.0f), glm::vec3( 0, 1, 0 ));
-      simple3DShader.SelectProgram();
-      simple3DShader.SendMatrixToGPU("world", cube.frame.orientation);
-      cube.Render();
+      shader.RenderObjects();
+      simple3DShader.RenderObjects();
 
       glfwSwapBuffers(window);
       glfwPollEvents();

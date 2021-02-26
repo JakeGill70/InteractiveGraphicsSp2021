@@ -1,6 +1,7 @@
 #include "OGLShader.h"
 #include "AbstractGraphicsObject.h"
 #include <glm/gtc/type_ptr.hpp>
+#include "BaseCamera.h"
 
 OGLShader::OGLShader() : AbstractShader(), _vaoId(0)
 {
@@ -16,6 +17,25 @@ size_t OGLShader::GenerateBuffer()
    GLuint vbo;
    glGenBuffers(1, &vbo);
    return vbo;
+}
+
+void OGLShader::SendGPUData()
+{
+   if (_camera != nullptr) {
+      SendMatrixToGPU("view", _camera->GetView());
+      SendMatrixToGPU("projection", _camera->GetProjection());
+   }
+}
+
+void OGLShader::RenderObjects()
+{
+   SelectProgram();
+   SendGPUData();
+   for (auto iterator = _objectsToRender.begin(); iterator != _objectsToRender.end(); iterator++) {
+      AbstractGraphicsObject* object = iterator->second;
+      SendMatrixToGPU("world", object->frame.orientation);
+      Render(object);
+   }
 }
 
 void OGLShader::Render(AbstractGraphicsObject* object)

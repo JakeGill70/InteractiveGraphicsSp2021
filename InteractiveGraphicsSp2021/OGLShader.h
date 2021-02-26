@@ -7,6 +7,8 @@ using std::string;
 #include "AbstractShader.h"
 #include <glad/glad.h>
 
+class BaseCamera;
+
 class OGLShader :
     public AbstractShader
 {
@@ -50,6 +52,7 @@ public:
 
    size_t GenerateBuffer();
 
+   void RenderObjects();
    void Render(AbstractGraphicsObject* object);
    bool Create();
    void SendMatrixToGPU(const string& name, const glm::mat4& matrix);
@@ -60,6 +63,7 @@ protected:
    GLuint Compile(GLenum type, const GLchar* source);
    GLuint Link(GLuint vertexShader, GLuint fragmentShader);
    void LogError(GLuint shader, PFNGLGETSHADERIVPROC glGet__iv, PFNGLGETSHADERINFOLOGPROC glGet__InfoLog);
+   void SendGPUData();
 };
 
 
