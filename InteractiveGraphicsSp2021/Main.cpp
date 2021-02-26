@@ -11,6 +11,8 @@
 #include "ReferenceFrame.h"
 #include <glm\glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "BaseGraphicsScene.h"
+#include "OGLGraphicsScene.h"
 
 void OnWindowResize_Callback(GLFWwindow* window, int width, int height)
 {
@@ -49,100 +51,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
    glfwSetFramebufferSizeCallback(window, OnWindowResize_Callback);
 
-   OGLShader shader;
-   shader.Create();
-   shader.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
-   shader.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
-
-   OGLGraphicsObject<VertexPC> triangle;
-   triangle.SetBufferId(shader.GenerateBuffer());
-   shader.AddObjectToRender("triangle", &triangle);
-   triangle.AddVertex({     0,  0.5f, 0, 1, 0, 0 });
-   triangle.AddVertex({ -0.5f, -0.5f, 0, 0, 0, 1 });
-   triangle.AddVertex({  0.5f, -0.5f, 0, 0, 1, 0 });
-   triangle.SendToGPU();
-
-   OGLShader simple3DShader;
-   simple3DShader.SetVertexSource(
-      "#version 400\n"\
-      "layout(location = 0) in vec3 position;\n"\
-      "layout(location = 1) in vec3 vertexColor;\n"\
-      "out vec4 fragColor;\n"\
-      "uniform mat4 world;\n"\
-      "uniform mat4 view;\n"\
-      "uniform mat4 projection;\n"\
-      "void main()\n"\
-      "{\n"\
-      "   gl_Position = projection * view * world * vec4(position, 1.0);\n"\
-      "   fragColor = vec4(vertexColor, 1.0);\n"\
-      "}\n"
-   );
-   simple3DShader.Create();
-   simple3DShader.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
-   simple3DShader.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
-
-   OGLGraphicsObject<VertexPC> cube;
-   cube.SetBufferId(simple3DShader.GenerateBuffer());
-   // Red vertices
-   VertexPC V1 = { -0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V2 = { -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V3 = {  0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V4 = {  0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   // Mixed color vertices
-   VertexPC V5 = {  0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f };
-   VertexPC V6 = {  0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f };
-   VertexPC V7 = { -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f };
-   VertexPC V8 = { -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f };
-   // Face 1
-   cube.AddVertex(V1);
-   cube.AddVertex(V2);
-   cube.AddVertex(V3);
-   cube.AddVertex(V1);
-   cube.AddVertex(V3);
-   cube.AddVertex(V4);
-   // Face 2
-   cube.AddVertex(V4);
-   cube.AddVertex(V3);
-   cube.AddVertex(V6);
-   cube.AddVertex(V4);
-   cube.AddVertex(V6);
-   cube.AddVertex(V5);
-   // Face 3
-   cube.AddVertex(V5);
-   cube.AddVertex(V6);
-   cube.AddVertex(V7);
-   cube.AddVertex(V5);
-   cube.AddVertex(V7);
-   cube.AddVertex(V8);
-   // Face 4
-   cube.AddVertex(V8);
-   cube.AddVertex(V7);
-   cube.AddVertex(V2);
-   cube.AddVertex(V8);
-   cube.AddVertex(V2);
-   cube.AddVertex(V1);
-   // Face 5
-   cube.AddVertex(V6);
-   cube.AddVertex(V3);
-   cube.AddVertex(V2);
-   cube.AddVertex(V6);
-   cube.AddVertex(V2);
-   cube.AddVertex(V7);
-   // Face 6
-   cube.AddVertex(V8);
-   cube.AddVertex(V1);
-   cube.AddVertex(V4);
-   cube.AddVertex(V8);
-   cube.AddVertex(V4);
-   cube.AddVertex(V5);
-   cube.SendToGPU();
-   simple3DShader.AddObjectToRender("cube", &cube);
-
-   BaseCamera camera;
-   camera.frame.SetPosition(3, 3, 3);
-   camera.UpdateView();
-
-   simple3DShader.SetCamera(&camera);
+   OGLGraphicsScene scene;
+   scene.Create();
 
    // Cull back faces and use counter-clockwise winding of front faces
    glEnable(GL_CULL_FACE);
@@ -160,14 +70,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    //glfwMaximizeWindow(window);
    while (!glfwWindowShouldClose(window)) {
       glfwGetWindowSize(window, &width, &height);
-      camera.UpdateProjection(width / (float)height);
+      scene.UpdateCameraProjection(width / (float)height);
       ProcessUserInput(window);
 
       glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-      shader.RenderObjects();
-      simple3DShader.RenderObjects();
+      scene.Render();
 
       glfwSwapBuffers(window);
       glfwPollEvents();

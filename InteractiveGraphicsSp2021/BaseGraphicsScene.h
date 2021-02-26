@@ -16,7 +16,6 @@ protected:
    map<string, AbstractShader*> _shaders;
    map<string, AbstractGraphicsObject*> _objects;
    map<string, BaseCamera*> _cameras;
-   //float _aspectRatio;
    BaseCamera* _currentCamera;
 
 public:
@@ -30,6 +29,7 @@ public:
    virtual void AddGraphicsObject(const string& name, AbstractGraphicsObject* object, const string& shaderName)
    {
       _objects[name] = object;
+      _shaders[shaderName]->AddObjectToRender(name, object);
    }
 
    virtual void AddCamera(const string& name, BaseCamera* camera) {
@@ -40,10 +40,8 @@ public:
       _currentCamera = _cameras[cameraName];
    }
 
-   virtual void UpdateProjection(float aspectRatio) {
-      //_aspectRatio = aspectRatio;
-      _currentCamera->UpdateProjection(aspectRatio);
-   }
+   virtual void UpdateCameraProjection(float aspectRatio);
+
 
    virtual void Create() {}
 

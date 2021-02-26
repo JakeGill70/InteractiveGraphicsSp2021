@@ -8,8 +8,8 @@
 using std::string;
 #include <map>
 using std::map;
+#include "AbstractGraphicsObject.h"
 
-class AbstractGraphicsObject;
 class BaseCamera;
 
 class AbstractShader :
@@ -30,6 +30,7 @@ public:
 
    virtual inline void AddObjectToRender(const string& objectName, AbstractGraphicsObject* object) {
       _objectsToRender[objectName] = object;
+      _objectsToRender[objectName]->SetBufferId(GenerateBuffer());
    }
 
    virtual inline void SetCamera(BaseCamera* camera) {
