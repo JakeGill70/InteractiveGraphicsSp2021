@@ -16,6 +16,7 @@ BaseGraphicsScene::~BaseGraphicsScene()
       delete iterator->second;
    }
    _cameras.clear();
+   delete _textFileReader;
 }
 
 void BaseGraphicsScene::UpdateCameraProjection(float aspectRatio)

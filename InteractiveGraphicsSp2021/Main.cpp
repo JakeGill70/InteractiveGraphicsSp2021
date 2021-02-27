@@ -13,6 +13,20 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "BaseGraphicsScene.h"
 #include "OGLGraphicsScene.h"
+#include "TextFileReader.h"
+#include <string>
+using std::wstring;
+
+void ReportMessage(const string& message)
+{
+   // Quick way to convert from string to wstring
+   wstring errorString(message.begin(), message.end());
+   MessageBox(
+      NULL,
+      errorString.c_str(),
+      L"An Error Occurred",
+      MB_OK);
+}
 
 void OnWindowResize_Callback(GLFWwindow* window, int width, int height)
 {
@@ -51,8 +65,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
    glfwSetFramebufferSizeCallback(window, OnWindowResize_Callback);
 
+   auto textFileReader = new TextFileReader();
    OGLGraphicsScene scene;
-   scene.Create();
+   scene.SetTextFileReader(textFileReader);
+   auto created = scene.Create();
+   if (!created) {
+      ReportMessage(scene.GetLog());
+      glfwTerminate();
+      return 0;
+   }
 
    // Cull back faces and use counter-clockwise winding of front faces
    glEnable(GL_CULL_FACE);

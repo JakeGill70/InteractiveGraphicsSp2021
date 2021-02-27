@@ -8,6 +8,7 @@ using std::map;
 #include "AbstractShader.h"
 #include "AbstractGraphicsObject.h"
 #include "BaseCamera.h"
+#include "AbstractReader.h"
 
 class BaseGraphicsScene :
     public BaseObject
@@ -17,9 +18,10 @@ protected:
    map<string, AbstractGraphicsObject*> _objects;
    map<string, BaseCamera*> _cameras;
    BaseCamera* _currentCamera;
+   AbstractReader* _textFileReader;
 
 public:
-   BaseGraphicsScene() : _currentCamera(nullptr) {}
+   BaseGraphicsScene() : _currentCamera(nullptr), _textFileReader(nullptr) {}
    virtual ~BaseGraphicsScene();
 
    virtual void AddShader(const string& name, AbstractShader* shader) {
@@ -42,8 +44,11 @@ public:
 
    virtual void UpdateCameraProjection(float aspectRatio);
 
+   virtual inline void SetTextFileReader(AbstractReader* reader) {
+      _textFileReader = reader;
+   }
 
-   virtual void Create() {}
+   virtual bool Create() { return true; }
 
    virtual void Render();
 };
