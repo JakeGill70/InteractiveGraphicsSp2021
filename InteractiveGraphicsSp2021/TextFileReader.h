@@ -32,7 +32,7 @@ public:
    void Open();
    void Read();
    void Close();
-   string GetContents();
+   virtual string GetContents();
    bool HasError() { return _errorOccurred; }
 };
 

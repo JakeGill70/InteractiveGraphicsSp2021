@@ -11,17 +11,16 @@ bool OGLGraphicsScene::Create()
    shader->SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
    AddShader("defaultShader", shader);
 
-   auto textFileReader = (TextFileReader*)_textFileReader;
-   textFileReader->SetFilePath("Simple3DVertexShader.glsl");
-   textFileReader->Open();
-   textFileReader->Read();
-   textFileReader->Close();
+   _textFileReader->SetFilePath("Simple3DVertexShader.glsl");
+   _textFileReader->Open();
+   _textFileReader->Read();
+   _textFileReader->Close();
    if (_textFileReader->HasError()) {
       return false;
    }
 
    OGLShader* simple3DShader = new OGLShader();
-   simple3DShader->SetVertexSource(textFileReader->GetContents());
+   simple3DShader->SetVertexSource(_textFileReader->GetContents());
    if (!simple3DShader->Create()) {
       return false;
    }

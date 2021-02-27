@@ -1,4 +1,4 @@
-// camera name, pos x, pos y, pos z, fov, near plane, far plane
+# camera name, pos x, pos y, pos z, fov, near plane, far plane
 camera,3,3,3,60,0.1f,50
 <endCameras>
 // shader name, file name vertex shader, file name fragment shader, camera name
