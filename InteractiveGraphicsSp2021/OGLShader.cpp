@@ -110,7 +110,7 @@ GLuint OGLShader::Compile(GLenum type, const GLchar* source)
    GLint shaderOk = 0;
    glGetShaderiv(shader, GL_COMPILE_STATUS, &shaderOk);
    if (!shaderOk) {
-      LogError(shader, glGetProgramiv, glGetProgramInfoLog);
+      LogError(shader, glGetShaderiv, glGetShaderInfoLog);
       glDeleteShader(shader);
       shader = 0;
    }
