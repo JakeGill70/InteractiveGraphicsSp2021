@@ -13,7 +13,7 @@ using std::ifstream;
 // The base class for everything
 class BaseObject
 {
-private:
+protected:
    // All objects will have access to the logger
    static stringstream _log;
 
