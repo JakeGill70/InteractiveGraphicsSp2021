@@ -14,11 +14,11 @@ bool OGLGraphicsScene::Create()
    auto textFileReader = (TextFileReader*)_textFileReader;
    textFileReader->SetFilePath("Simple3DVertexShader.glsl");
    textFileReader->Open();
-   if (textFileReader->HasError()) {
-      return false;
-   }
    textFileReader->Read();
    textFileReader->Close();
+   if (_textFileReader->HasError()) {
+      return false;
+   }
 
    OGLShader* simple3DShader = new OGLShader();
    simple3DShader->SetVertexSource(textFileReader->GetContents());

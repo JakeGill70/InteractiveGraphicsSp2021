@@ -8,5 +8,5 @@ uniform mat4 projection;
 void main()
 {
    gl_Position = projection * view * world * vec4(position, 1.0);
-   fragColor = vec4(vertexColor, 1.0)
+   fragColor = vec4(vertexColor, 1.0);
 }

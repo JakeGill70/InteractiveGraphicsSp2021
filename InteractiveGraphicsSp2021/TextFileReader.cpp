@@ -13,6 +13,7 @@ void TextFileReader::Open()
 
 void TextFileReader::Read()
 {
+   if (_errorOccurred) return;
    string line;
    while (!_fin.eof()) {
       getline(_fin, line);
