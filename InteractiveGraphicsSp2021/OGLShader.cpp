@@ -45,7 +45,7 @@ void OGLShader::Render(AbstractGraphicsObject* object)
    glBindBuffer(GL_ARRAY_BUFFER, (GLuint)object->GetBufferId());
 
    SetUpBufferInterpretation();
-   glDrawArrays(GL_TRIANGLES, 0, (GLsizei)object->GetNumberOfElements());
+   glDrawArrays(object->GetPrimitive(), 0, (GLsizei)object->GetNumberOfElements());
 
    glDisableVertexAttribArray(0);
    glDisableVertexAttribArray(1);

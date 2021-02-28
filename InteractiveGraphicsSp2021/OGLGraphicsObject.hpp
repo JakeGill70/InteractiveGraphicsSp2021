@@ -29,6 +29,7 @@ public:
 template<class T>
 OGLGraphicsObject<T>::OGLGraphicsObject() : _vboId(0)
 {
+   this->_primitive = GL_TRIANGLES;
 }
 
 template <class T>
