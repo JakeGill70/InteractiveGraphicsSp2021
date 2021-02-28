@@ -66,7 +66,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    glfwSetFramebufferSizeCallback(window, OnWindowResize_Callback);
 
    auto textFileReader = new TextFileReader();
-   OGLGraphicsScene scene;
+   auto sceneReader = new SceneReader("Scene.txt");
+   OGLGraphicsScene scene(sceneReader);
    scene.SetTextFileReader(textFileReader);
    auto created = scene.Create();
    if (!created) {

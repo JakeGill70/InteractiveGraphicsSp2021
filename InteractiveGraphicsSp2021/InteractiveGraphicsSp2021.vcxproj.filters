@@ -48,6 +48,9 @@
     <ClCompile Include="TextFileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SceneReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsStructures.h">
@@ -89,9 +92,15 @@
     <ClInclude Include="TextFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SceneReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="labweek07.ig" />
     <None Include="Simple3DVertexShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="scene.txt" />
   </ItemGroup>
 </Project>

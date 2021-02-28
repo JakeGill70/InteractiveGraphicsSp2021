@@ -6,3 +6,13 @@ void AbstractReader::Trim(string& str)
    str.erase(str.find_last_not_of(delimiters) + 1);
    str.erase(0, str.find_first_not_of(delimiters));
 }
+
+void AbstractReader::Split(const std::string& s, char delimiter, std::vector<std::string>& tokens)
+{
+   std::string token;
+   std::istringstream tokenStream(s);
+   while (std::getline(tokenStream, token, delimiter))
+   {
+      tokens.push_back(token);
+   }
+}

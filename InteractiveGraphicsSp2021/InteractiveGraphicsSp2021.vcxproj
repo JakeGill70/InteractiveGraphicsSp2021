@@ -158,6 +158,7 @@
     <ClCompile Include="OGLGraphicsScene.cpp" />
     <ClCompile Include="OGLShader.cpp" />
     <ClCompile Include="ReferenceFrame.cpp" />
+    <ClCompile Include="SceneReader.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,11 +174,15 @@
     <ClInclude Include="OGLGraphicsScene.h" />
     <ClInclude Include="OGLShader.h" />
     <ClInclude Include="ReferenceFrame.h" />
+    <ClInclude Include="SceneReader.h" />
     <ClInclude Include="TextFileReader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="labweek07.ig" />
     <None Include="Simple3DVertexShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="scene.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
