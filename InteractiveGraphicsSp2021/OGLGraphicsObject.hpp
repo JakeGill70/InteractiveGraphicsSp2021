@@ -26,6 +26,7 @@ template<class T>
 OGLGraphicsObject<T>::OGLGraphicsObject(AbstractShader* shader) : AbstractVertexGraphicsObject<T>(shader)
 {
    this->_vboId = (GLuint)this->_shader->GenerateBuffer();
+   this->_primitive = GL_TRIANGLES;
 }
 
 template <class T>
