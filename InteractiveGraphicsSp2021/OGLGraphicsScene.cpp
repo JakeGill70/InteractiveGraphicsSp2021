@@ -27,28 +27,7 @@ bool OGLGraphicsScene::Create()
    camera->UpdateView();
    AddCamera(cameraData[0].name, camera);
 
-   OGLShader* shader = new OGLShader();
-   shader->Create();
-   shader->SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
-   shader->SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
-   AddShader("defaultShader", shader);
-
-   _textFileReader->SetFilePath("Simple3DVertexShader.glsl");
-   _textFileReader->Open();
-   _textFileReader->Read();
-   _textFileReader->Close();
-   if (_textFileReader->HasError()) {
-      return false;
-   }
-
-   OGLShader* simple3DShader = new OGLShader();
-   simple3DShader->SetVertexSource(_textFileReader->GetContents());
-   if (!simple3DShader->Create()) {
-      return false;
-   }
-   simple3DShader->SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
-   simple3DShader->SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
-   AddShader("simple3DShader", simple3DShader);
+   if (!ReadShaderData()) return false;
 
    OGLGraphicsObject<VertexPC>* triangle = new OGLGraphicsObject<VertexPC>();
    AddGraphicsObject("triangle", triangle, "defaultShader");
@@ -112,8 +91,46 @@ bool OGLGraphicsScene::Create()
    cube->AddVertex(V4);
    cube->AddVertex(V5);
    cube->SendToGPU();
-   _shaders["simple3DShader"]->SetCamera(camera);
   
+   return true;
+}
+
+bool OGLGraphicsScene::ReadShaderData()
+{
+   vector<ShaderData>& shaderData = _sceneReader->GetShaderData();
+   for (size_t i = 0; i < shaderData.size(); i++) {
+      OGLShader* shader = new OGLShader();
+      if (shaderData[i].vertexShaderFilePath != "default") {
+         _textFileReader->SetFilePath(shaderData[i].vertexShaderFilePath);
+         _textFileReader->Open();
+         _textFileReader->Read();
+         _textFileReader->Close();
+         if (_textFileReader->HasError()) {
+            return false;
+         }
+         shader->SetVertexSource(_textFileReader->GetContents());
+      }
+      if (shaderData[i].fragmentShaderFilePath != "default") {
+         _textFileReader->SetFilePath(shaderData[i].fragmentShaderFilePath);
+         _textFileReader->Open();
+         _textFileReader->Read();
+         _textFileReader->Close();
+         if (_textFileReader->HasError()) {
+            return false;
+         }
+         shader->SetFragmentSource(_textFileReader->GetContents());
+      }
+      if (!shader->Create()) {
+         return false;
+      }
+      shader->SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
+      shader->SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
+      AddShader(shaderData[i].name, shader);
+      if (shaderData[i].cameraName != "none") {
+         _shaders[shaderData[i].name]->SetCamera(_cameras[shaderData[i].cameraName]);
+      }
+   }
+
    return true;
 }
 

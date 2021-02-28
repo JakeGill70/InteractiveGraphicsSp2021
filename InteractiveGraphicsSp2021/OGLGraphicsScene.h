@@ -18,6 +18,9 @@ public:
 
    bool Create();
 
+protected:
+   bool ReadShaderData();
+
 };
 
 #endif

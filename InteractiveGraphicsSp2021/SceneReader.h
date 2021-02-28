@@ -17,6 +17,13 @@ struct CameraData{
    float fov, nearPlane, farPlane;
 };
 
+struct ShaderData {
+   string name;
+   string vertexShaderFilePath;
+   string fragmentShaderFilePath;
+   string cameraName;
+};
+
 class SceneReader :
     public AbstractReader
 {
@@ -25,6 +32,7 @@ protected:
    ifstream _fin;
    bool _errorOccurred;
    vector<CameraData> _cameraData;
+   vector<ShaderData> _shaderData;
    string _state;
 
 public:
@@ -39,10 +47,14 @@ public:
       return _cameraData;
    }
 
+   vector<ShaderData>& GetShaderData() {
+      return _shaderData;
+   }
+
 protected:
-   virtual void ReadCameraData();
    virtual void ProcessLine(const string& line);
    virtual void ProcessCameraLine(const string& line);
+   virtual void ProcessShaderLine(const string& line);
 };
 
 #endif

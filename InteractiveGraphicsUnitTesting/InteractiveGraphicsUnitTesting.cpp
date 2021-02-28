@@ -97,5 +97,54 @@ namespace InteractiveGraphicsUnitTesting
          std::remove("TestFile.txt");
       }
 
+      TEST_METHOD(ShouldReportTheSingleShaderData)
+      {
+         ofstream fout("TestFile.txt");
+         fout << "# camera name, pos x, pos y, pos z, fov, near plane, far plane" << std::endl;
+         fout << "camera,1,2,3,60,0.1f,50" << std::endl;
+         fout << "<endCameras>" << std::endl;
+         fout << "defaultShader,  default,default,none" << std::endl;
+         fout << "<endShaders>" << std::endl;
+         fout.close();
+
+         SceneReader sut("TestFile.txt");
+         sut.Open();
+         Assert::IsFalse(sut.HasError());
+         sut.Read();
+         vector<ShaderData>& data = sut.GetShaderData();
+         Assert::AreEqual(1, (int)data.size());
+         string expected("defaultShader");
+         Assert::AreEqual(expected, data[0].name);
+         expected = "default";
+         Assert::AreEqual(expected, data[0].vertexShaderFilePath);
+         expected = "default";
+         Assert::AreEqual(expected, data[0].fragmentShaderFilePath);
+         expected = "none";
+         Assert::AreEqual(expected, data[0].cameraName);
+
+         std::remove("TestFile.txt");
+      }
+
+      TEST_METHOD(ShouldReportMultipleShaderData)
+      {
+         ofstream fout("TestFile.txt");
+         fout << "# camera name, pos x, pos y, pos z, fov, near plane, far plane" << std::endl;
+         fout << "camera,1,2,3,60,0.1f,50" << std::endl;
+         fout << "<endCameras>" << std::endl;
+         fout << "defaultShader,  default,default,none" << std::endl;
+         fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
+         fout << "<endShaders>" << std::endl;
+         fout.close();
+
+         SceneReader sut("TestFile.txt");
+         sut.Open();
+         Assert::IsFalse(sut.HasError());
+         sut.Read();
+         vector<ShaderData>& data = sut.GetShaderData();
+         Assert::AreEqual(2, (int)data.size());
+
+         std::remove("TestFile.txt");
+      }
+
    };
 }
