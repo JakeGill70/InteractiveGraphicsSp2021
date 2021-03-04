@@ -14,23 +14,36 @@ class AbstractVertexGraphicsObject :
 {
 protected:
    vector<T> _vertices;
+   vector<unsigned short> _indices;
 
 public:
    AbstractVertexGraphicsObject() {}
 
    virtual ~AbstractVertexGraphicsObject() {}
 
-   void AddVertex(const T& vertex);
+   void AddVertexData(const T& vertex);
 
-   inline size_t GetNumberOfElements() {
-      return this->_vertices.size();
+   void AddIndex(unsigned int index) {
+      this->_indices.push_back(index);
+   }
+
+   void SetIndices(unsigned short indices[], int count);
+
+   inline bool IsIndexed() const {
+      return this->_indices.size() > 0;
+   }
+
+   size_t GetNumberOfElements() {
+      size_t numberOfElements = this->_vertices.size();
+      if (IsIndexed()) numberOfElements = this->_indices.size();
+      return numberOfElements;
    }
 
    virtual void Render();
 };
 
 template<class T>
-void AbstractVertexGraphicsObject<T>::AddVertex(const T& vertex)
+void AbstractVertexGraphicsObject<T>::AddVertexData(const T& vertex)
 {
    this->_vertices.push_back(vertex);
 }
@@ -39,6 +52,14 @@ template <class T>
 void AbstractVertexGraphicsObject<T>::Render()
 {
    //this->_shader->Render(this);
+}
+
+template <class T>
+void AbstractVertexGraphicsObject<T>::SetIndices(unsigned short indices[], int count)
+{
+   for (int i = 0; i < count; i++) {
+      this->_indices.push_back(indices[i]);
+   }
 }
 
 #endif

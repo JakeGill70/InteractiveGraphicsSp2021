@@ -14,9 +14,9 @@ OGLShader::OGLShader() : AbstractShader(), _vaoId(0)
 size_t OGLShader::GenerateBuffer()
 {
    glBindVertexArray(_vaoId);
-   GLuint vbo;
-   glGenBuffers(1, &vbo);
-   return vbo;
+   GLuint buffer;
+   glGenBuffers(1, &buffer);
+   return buffer;
 }
 
 void OGLShader::SendGPUData()
@@ -42,11 +42,17 @@ void OGLShader::Render(AbstractGraphicsObject* object)
 {
    glBindVertexArray(_vaoId);
    glUseProgram((GLuint)_shaderProgram);
-   glBindBuffer(GL_ARRAY_BUFFER, (GLuint)object->GetBufferId());
-
+   GLuint vbo = (GLuint)object->GetBufferId();
+   glBindBuffer(GL_ARRAY_BUFFER, vbo);
    SetUpBufferInterpretation();
-   glDrawArrays(object->GetPrimitive(), 0, (GLsizei)object->GetNumberOfElements());
-
+   if (!object->IsIndexed()) {
+      glDrawArrays(object->GetPrimitive(), 0, (GLsizei)object->GetNumberOfElements());
+   }
+   else {
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (GLuint)object->GetIndexedBufferId());
+      glDrawElements(object->GetPrimitive(), (GLsizei)object->GetNumberOfElements(), 
+         GL_UNSIGNED_SHORT, 0);
+   }
    glDisableVertexAttribArray(0);
    glDisableVertexAttribArray(1);
    glUseProgram(0);

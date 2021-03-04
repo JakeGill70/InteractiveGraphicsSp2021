@@ -26,10 +26,16 @@ public:
       return _primitive;
    }
 
+   inline virtual bool IsIndexed() const {
+      return false;
+   }
+
    virtual void Render() = 0;
    virtual void SendToGPU() = 0;
    virtual size_t GetBufferId() = 0;
    virtual void SetBufferId(size_t bufferId) = 0;
    virtual size_t GetNumberOfElements() = 0;
+   virtual size_t GetIndexedBufferId() = 0;
+   virtual void SetIndexedBufferId(size_t bufferId) = 0;
 };
 #endif

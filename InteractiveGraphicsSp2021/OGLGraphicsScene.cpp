@@ -29,12 +29,12 @@ bool OGLGraphicsScene::Create()
 
    if (!ReadShaderData()) return false;
 
-   OGLGraphicsObject<VertexPC>* triangle = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("triangle", triangle, "defaultShader");
-   triangle->AddVertex({  0.0f,  0.5f, 0, 1, 0, 0 });
-   triangle->AddVertex({ -0.5f, -0.5f, 0, 0, 0, 1 });
-   triangle->AddVertex({  0.5f, -0.5f, 0, 0, 1, 0 });
-   triangle->SendToGPU();
+   //OGLGraphicsObject<VertexPC>* triangle = new OGLGraphicsObject<VertexPC>();
+   //AddGraphicsObject("triangle", triangle, "defaultShader");
+   //triangle->AddVertexData({  0.0f,  0.5f, 0, 1, 0, 0 });
+   //triangle->AddVertexData({ -0.5f, -0.5f, 0, 0, 0, 1 });
+   //triangle->AddVertexData({  0.5f, -0.5f, 0, 0, 1, 0 });
+   //triangle->SendToGPU();
 
    OGLGraphicsObject<VertexPC>* cube = new OGLGraphicsObject<VertexPC>();
    AddGraphicsObject("cube", cube, "simple3DShader");
@@ -49,49 +49,79 @@ bool OGLGraphicsScene::Create()
    VertexPC V7 = { -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f };
    VertexPC V8 = { -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f };
    // Face 1
-   cube->AddVertex(V1);
-   cube->AddVertex(V2);
-   cube->AddVertex(V3);
-   cube->AddVertex(V1);
-   cube->AddVertex(V3);
-   cube->AddVertex(V4);
+   cube->AddVertexData(V1);
+   cube->AddVertexData(V2);
+   cube->AddVertexData(V3);
+   cube->AddVertexData(V1);
+   cube->AddVertexData(V3);
+   cube->AddVertexData(V4);
+   
    // Face 2
-   cube->AddVertex(V4);
-   cube->AddVertex(V3);
-   cube->AddVertex(V6);
-   cube->AddVertex(V4);
-   cube->AddVertex(V6);
-   cube->AddVertex(V5);
+   cube->AddVertexData(V4);
+   cube->AddVertexData(V3);
+   cube->AddVertexData(V6);
+   cube->AddVertexData(V4);
+   cube->AddVertexData(V6);
+   cube->AddVertexData(V5);
+   
    // Face 3
-   cube->AddVertex(V5);
-   cube->AddVertex(V6);
-   cube->AddVertex(V7);
-   cube->AddVertex(V5);
-   cube->AddVertex(V7);
-   cube->AddVertex(V8);
+   cube->AddVertexData(V5);
+   cube->AddVertexData(V6);
+   cube->AddVertexData(V7);
+   cube->AddVertexData(V5);
+   cube->AddVertexData(V7);
+   cube->AddVertexData(V8);
+   
    // Face 4
-   cube->AddVertex(V8);
-   cube->AddVertex(V7);
-   cube->AddVertex(V2);
-   cube->AddVertex(V8);
-   cube->AddVertex(V2);
-   cube->AddVertex(V1);
+   cube->AddVertexData(V8);
+   cube->AddVertexData(V7);
+   cube->AddVertexData(V2);
+   cube->AddVertexData(V8);
+   cube->AddVertexData(V2);
+   cube->AddVertexData(V1);
+   
    // Face 5
-   cube->AddVertex(V6);
-   cube->AddVertex(V3);
-   cube->AddVertex(V2);
-   cube->AddVertex(V6);
-   cube->AddVertex(V2);
-   cube->AddVertex(V7);
+   cube->AddVertexData(V6);
+   cube->AddVertexData(V3);
+   cube->AddVertexData(V2);
+   cube->AddVertexData(V6);
+   cube->AddVertexData(V2);
+   cube->AddVertexData(V7);
+   
    // Face 6
-   cube->AddVertex(V8);
-   cube->AddVertex(V1);
-   cube->AddVertex(V4);
-   cube->AddVertex(V8);
-   cube->AddVertex(V4);
-   cube->AddVertex(V5);
+   cube->AddVertexData(V8);
+   cube->AddVertexData(V1);
+   cube->AddVertexData(V4);
+   cube->AddVertexData(V8);
+   cube->AddVertexData(V4);
+   cube->AddVertexData(V5);
+   cube->frame.TranslateLocal(glm::vec3(-2, 0, 0));
    cube->SendToGPU();
-  
+
+   OGLGraphicsObject<VertexPC>* indexedCube = new OGLGraphicsObject<VertexPC>();
+   AddGraphicsObject("indexedCube", indexedCube, "simple3DShader", true);
+   // Yellow vertices
+   indexedCube->AddVertexData({ -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 0
+   indexedCube->AddVertexData({ -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 1
+   indexedCube->AddVertexData({  0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 2
+   indexedCube->AddVertexData({  0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 3
+   // Mixed color vertices
+   indexedCube->AddVertexData({  0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 4
+   indexedCube->AddVertexData({  0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 5
+   indexedCube->AddVertexData({ -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 6
+   indexedCube->AddVertexData({ -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 7
+   unsigned short indices[] = {
+      0, 1, 2, 0, 2, 3, // Front face
+      3, 2, 5, 3, 5, 4, // Right face
+      4, 5, 6, 4, 6, 7, // Back face
+      7, 6, 1, 7, 1, 0, // Left face
+      5, 2, 1, 5, 1, 6, // Bottom face
+      7, 0, 3, 7, 3, 4  // Top face
+   };
+   indexedCube->SetIndices(indices, sizeof(indices) / sizeof(unsigned short));
+   indexedCube->frame.TranslateLocal(glm::vec3(2, 0, 0));
+   indexedCube->SendToGPU();
+
    return true;
 }
 

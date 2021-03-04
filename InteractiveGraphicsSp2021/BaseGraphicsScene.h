@@ -28,10 +28,12 @@ public:
       _shaders[name] = shader;
    }
 
-   virtual void AddGraphicsObject(const string& name, AbstractGraphicsObject* object, const string& shaderName)
+   virtual void AddGraphicsObject(
+      const string& name, AbstractGraphicsObject* object, 
+      const string& shaderName, bool isIndexed=false)
    {
       _objects[name] = object;
-      _shaders[shaderName]->AddObjectToRender(name, object);
+      _shaders[shaderName]->AddObjectToRender(name, object, isIndexed);
    }
 
    virtual void AddCamera(const string& name, BaseCamera* camera) {
