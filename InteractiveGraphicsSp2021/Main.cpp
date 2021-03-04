@@ -11,6 +11,22 @@
 #include "ReferenceFrame.h"
 #include <glm\glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "BaseGraphicsScene.h"
+#include "OGLGraphicsScene.h"
+#include "TextFileReader.h"
+#include <string>
+using std::wstring;
+
+void ReportMessage(const string& message)
+{
+   // Quick way to convert from string to wstring
+   wstring errorString(message.begin(), message.end());
+   MessageBox(
+      NULL,
+      errorString.c_str(),
+      L"An Error Occurred",
+      MB_OK);
+}
 
 void OnWindowResize_Callback(GLFWwindow* window, int width, int height)
 {
@@ -34,7 +50,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-   GLFWwindow* window = glfwCreateWindow(800, 600, "ETSU Computing Interactive Graphics", NULL, NULL);
+   GLFWwindow* window = glfwCreateWindow(800, 600, "Lab Week 7 - Interactive Graphics", NULL, NULL);
    if (window == NULL) {
       std::cout << "Failed to create GLFW window" << std::endl;
       glfwTerminate();
@@ -49,94 +65,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
    glfwSetFramebufferSizeCallback(window, OnWindowResize_Callback);
 
-   OGLShader shader;
-   shader.Create();
-   shader.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
-   shader.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
-   OGLGraphicsObject<VertexPC> triangle(&shader);
-   triangle.AddVertex({     0,  0.5f, 0, 1, 0, 0 });
-   triangle.AddVertex({ -0.5f, -0.5f, 0, 0, 0, 1 });
-   triangle.AddVertex({  0.5f, -0.5f, 0, 0, 1, 0 });
-   triangle.SendToGPU();
-
-
-   OGLShader simple3DShader;
-   simple3DShader.SetVertexSource(
-      "#version 400\n"\
-      "layout(location = 0) in vec3 position;\n"\
-      "layout(location = 1) in vec3 vertexColor;\n"\
-      "out vec4 fragColor;\n"\
-      "uniform mat4 world;\n"\
-      "uniform mat4 view;\n"\
-      "uniform mat4 projection;\n"\
-      "void main()\n"\
-      "{\n"\
-      "   gl_Position = projection * view * world * vec4(position, 1.0);\n"\
-      "   fragColor = vec4(vertexColor, 1.0);\n"\
-      "}\n"
-   );
-   simple3DShader.Create();
-   simple3DShader.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
-   simple3DShader.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
-
-   OGLGraphicsObject<VertexPC> cube(&simple3DShader);
-   // Red vertices
-   VertexPC V1 = { -0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V2 = { -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V3 = {  0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V4 = {  0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   // Mixed color vertices
-   VertexPC V5 = {  0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f };
-   VertexPC V6 = {  0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f };
-   VertexPC V7 = { -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f };
-   VertexPC V8 = { -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f };
-   // Face 1
-   cube.AddVertex(V1);
-   cube.AddVertex(V2);
-   cube.AddVertex(V3);
-   cube.AddVertex(V1);
-   cube.AddVertex(V3);
-   cube.AddVertex(V4);
-   // Face 2
-   cube.AddVertex(V4);
-   cube.AddVertex(V3);
-   cube.AddVertex(V6);
-   cube.AddVertex(V4);
-   cube.AddVertex(V6);
-   cube.AddVertex(V5);
-   // Face 3
-   cube.AddVertex(V5);
-   cube.AddVertex(V6);
-   cube.AddVertex(V7);
-   cube.AddVertex(V5);
-   cube.AddVertex(V7);
-   cube.AddVertex(V8);
-   // Face 4
-   cube.AddVertex(V8);
-   cube.AddVertex(V7);
-   cube.AddVertex(V2);
-   cube.AddVertex(V8);
-   cube.AddVertex(V2);
-   cube.AddVertex(V1);
-   // Face 5
-   cube.AddVertex(V6);
-   cube.AddVertex(V3);
-   cube.AddVertex(V2);
-   cube.AddVertex(V6);
-   cube.AddVertex(V2);
-   cube.AddVertex(V7);
-   // Face 6
-   cube.AddVertex(V8);
-   cube.AddVertex(V1);
-   cube.AddVertex(V4);
-   cube.AddVertex(V8);
-   cube.AddVertex(V4);
-   cube.AddVertex(V5);
-   cube.SendToGPU();
-
-   BaseCamera camera;
-   camera.frame.SetPosition(3, 3, 3);
-   camera.UpdateView();
+   auto textFileReader = new TextFileReader();
+   auto sceneReader = new SceneReader("Scene.txt");
+   OGLGraphicsScene scene(sceneReader);
+   scene.SetTextFileReader(textFileReader);
+   auto created = scene.Create();
+   if (!created) {
+      ReportMessage(scene.GetLog());
+      glfwTerminate();
+      return 0;
+   }
 
    // Cull back faces and use counter-clockwise winding of front faces
    glEnable(GL_CULL_FACE);
@@ -154,23 +92,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    //glfwMaximizeWindow(window);
    while (!glfwWindowShouldClose(window)) {
       glfwGetWindowSize(window, &width, &height);
-      camera.UpdateProjection(width / (float)height);
-
-      simple3DShader.SelectProgram();
-      simple3DShader.SendMatrixToGPU("view", camera.GetView());
-      simple3DShader.SendMatrixToGPU("projection", camera.GetProjection());
-
+      scene.UpdateCameraProjection(width / (float)height);
       ProcessUserInput(window);
 
       glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-      triangle.Render();
-
-      cube.frame.orientation = glm::rotate(cube.frame.orientation, glm::radians(1.0f), glm::vec3( 0, 1, 0 ));
-      simple3DShader.SelectProgram();
-      simple3DShader.SendMatrixToGPU("world", cube.frame.orientation);
-      cube.Render();
+      scene.Render();
 
       glfwSwapBuffers(window);
       glfwPollEvents();

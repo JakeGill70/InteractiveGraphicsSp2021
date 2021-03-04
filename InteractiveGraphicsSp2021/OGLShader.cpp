@@ -1,6 +1,7 @@
 #include "OGLShader.h"
 #include "AbstractGraphicsObject.h"
 #include <glm/gtc/type_ptr.hpp>
+#include "BaseCamera.h"
 
 OGLShader::OGLShader() : AbstractShader(), _vaoId(0)
 {
@@ -18,6 +19,25 @@ size_t OGLShader::GenerateBuffer()
    return vbo;
 }
 
+void OGLShader::SendGPUData()
+{
+   if (_camera != nullptr) {
+      SendMatrixToGPU("view", _camera->GetView());
+      SendMatrixToGPU("projection", _camera->GetProjection());
+   }
+}
+
+void OGLShader::RenderObjects()
+{
+   SelectProgram();
+   SendGPUData();
+   for (auto iterator = _objectsToRender.begin(); iterator != _objectsToRender.end(); iterator++) {
+      AbstractGraphicsObject* object = iterator->second;
+      SendMatrixToGPU("world", object->frame.orientation);
+      Render(object);
+   }
+}
+
 void OGLShader::Render(AbstractGraphicsObject* object)
 {
    glBindVertexArray(_vaoId);
@@ -25,7 +45,7 @@ void OGLShader::Render(AbstractGraphicsObject* object)
    glBindBuffer(GL_ARRAY_BUFFER, (GLuint)object->GetBufferId());
 
    SetUpBufferInterpretation();
-   glDrawArrays(GL_TRIANGLES, 0, (GLsizei)object->GetNumberOfElements());
+   glDrawArrays(object->GetPrimitive(), 0, (GLsizei)object->GetNumberOfElements());
 
    glDisableVertexAttribArray(0);
    glDisableVertexAttribArray(1);
@@ -110,7 +130,7 @@ GLuint OGLShader::Compile(GLenum type, const GLchar* source)
    GLint shaderOk = 0;
    glGetShaderiv(shader, GL_COMPILE_STATUS, &shaderOk);
    if (!shaderOk) {
-      LogError(shader, glGetProgramiv, glGetProgramInfoLog);
+      LogError(shader, glGetShaderiv, glGetShaderInfoLog);
       glDeleteShader(shader);
       shader = 0;
    }

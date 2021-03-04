@@ -13,25 +13,29 @@ private:
    GLuint _vboId;
 
 public:
-   OGLGraphicsObject(AbstractShader* shader);
+   OGLGraphicsObject();
 
    inline size_t GetBufferId() {
       return this->_vboId;
+   }
+
+   void SetBufferId(size_t bufferId) {
+      this->_vboId = (GLuint)bufferId;
    }
 
    void SendToGPU();
 };
 
 template<class T>
-OGLGraphicsObject<T>::OGLGraphicsObject(AbstractShader* shader) : AbstractVertexGraphicsObject<T>(shader)
+OGLGraphicsObject<T>::OGLGraphicsObject() : _vboId(0)
 {
-   this->_vboId = (GLuint)this->_shader->GenerateBuffer();
+   this->_primitive = GL_TRIANGLES;
 }
 
 template <class T>
 void OGLGraphicsObject<T>::SendToGPU()
 {
-   this->_shader->Select();
+   //this->_shader->Select();
    // Bind the object to the binding target
    glBindBuffer(GL_ARRAY_BUFFER, _vboId);
 
