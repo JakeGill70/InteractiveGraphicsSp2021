@@ -95,7 +95,7 @@ bool OGLGraphicsScene::Create()
    cube->AddVertexData(V8);
    cube->AddVertexData(V4);
    cube->AddVertexData(V5);
-   cube->frame.TranslateLocal(glm::vec3(-2, 0.5f, 0));
+   cube->frame.TranslateLocal(glm::vec3(-1, 0.5f, 0));
    cube->SendToGPU();
 
    OGLGraphicsObject<VertexPC>* surface = new OGLGraphicsObject<VertexPC>();
@@ -112,8 +112,22 @@ bool OGLGraphicsScene::Create()
    surface->AddVertexData(V4);
    surface->SendToGPU();
 
+   OGLGraphicsObject<VertexPC>* axis = new OGLGraphicsObject<VertexPC>();
+   AddGraphicsObject("axis", axis, "simple3DShader");
+   axis->SetPrimitive(GL_LINES);
+   // Line along X
+   axis->AddVertexData({ 0, 0, 0, 1, 0, 0 });
+   axis->AddVertexData({ 2.0f, 0, 0, 1, 0, 0 });
+   // Line along Y
+   axis->AddVertexData({ 0,    0, 0, 0, 1, 0 });
+   axis->AddVertexData({ 0, 2.0f, 0, 0, 1, 0 });
+   // Line along Z
+   axis->AddVertexData({ 0, 0,    0, 0, 0, 1 });
+   axis->AddVertexData({ 0, 0, 2.0f, 0, 0, 1 });
+   axis->SendToGPU();
+
    OGLGraphicsObject<VertexPC>* indexedCube = new OGLGraphicsObject<VertexPC>();
-   //AddGraphicsObject("indexedCube", indexedCube, "simple3DShader", true);
+   AddGraphicsObject("indexedCube", indexedCube, "simple3DShader", true);
    // Yellow vertices
    indexedCube->AddVertexData({ -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 0
    indexedCube->AddVertexData({ -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 1
@@ -133,8 +147,8 @@ bool OGLGraphicsScene::Create()
       7, 0, 3, 7, 3, 4  // Top face
    };
    indexedCube->SetIndices(indices, sizeof(indices) / sizeof(unsigned short));
-   indexedCube->frame.TranslateLocal(glm::vec3(2, 0, 0));
-   //indexedCube->SendToGPU();
+   indexedCube->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
+   indexedCube->SendToGPU();
 
    return true;
 }

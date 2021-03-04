@@ -33,6 +33,7 @@ void OGLShader::RenderObjects()
    SendGPUData();
    for (auto iterator = _objectsToRender.begin(); iterator != _objectsToRender.end(); iterator++) {
       AbstractGraphicsObject* object = iterator->second;
+      SelectProgram();
       SendMatrixToGPU("world", object->frame.orientation);
       Render(object);
    }
