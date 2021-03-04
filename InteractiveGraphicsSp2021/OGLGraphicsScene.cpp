@@ -95,11 +95,25 @@ bool OGLGraphicsScene::Create()
    cube->AddVertexData(V8);
    cube->AddVertexData(V4);
    cube->AddVertexData(V5);
-   cube->frame.TranslateLocal(glm::vec3(-2, 0, 0));
+   cube->frame.TranslateLocal(glm::vec3(-2, 0.5f, 0));
    cube->SendToGPU();
 
+   OGLGraphicsObject<VertexPC>* surface = new OGLGraphicsObject<VertexPC>();
+   AddGraphicsObject("surface", surface, "simple3DShader");
+   V1 = { -2.5f, 0, -2.5f, 0, 0.5f, 0 };
+   V2 = { -2.5f, 0,  2.5f, 0, 0.5f, 0 };
+   V3 = { 2.5f, 0,  2.5f, 0, 0.5f, 0 };
+   V4 = { 2.5f, 0, -2.5f, 0, 0.5f, 0 };
+   surface->AddVertexData(V1);
+   surface->AddVertexData(V2);
+   surface->AddVertexData(V3);
+   surface->AddVertexData(V1);
+   surface->AddVertexData(V3);
+   surface->AddVertexData(V4);
+   surface->SendToGPU();
+
    OGLGraphicsObject<VertexPC>* indexedCube = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("indexedCube", indexedCube, "simple3DShader", true);
+   //AddGraphicsObject("indexedCube", indexedCube, "simple3DShader", true);
    // Yellow vertices
    indexedCube->AddVertexData({ -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 0
    indexedCube->AddVertexData({ -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 1
@@ -120,7 +134,7 @@ bool OGLGraphicsScene::Create()
    };
    indexedCube->SetIndices(indices, sizeof(indices) / sizeof(unsigned short));
    indexedCube->frame.TranslateLocal(glm::vec3(2, 0, 0));
-   indexedCube->SendToGPU();
+   //indexedCube->SendToGPU();
 
    return true;
 }
