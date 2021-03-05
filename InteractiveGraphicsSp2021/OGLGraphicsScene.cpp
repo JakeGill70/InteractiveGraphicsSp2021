@@ -134,6 +134,19 @@ bool OGLGraphicsScene::Create()
    indexedCube->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
    indexedCube->SendToGPU();
 
+   OGLGraphicsObject<VertexPC>* purpleRectangle = new OGLGraphicsObject<VertexPC>();
+   AddGraphicsObject("redRectangle", purpleRectangle, "simple3DShader", true);
+   purpleRectangle->AddVertexData({ -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 0
+   purpleRectangle->AddVertexData({ -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 1
+   purpleRectangle->AddVertexData({  0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 2
+   purpleRectangle->AddVertexData({  0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 3
+   unsigned short indices2[] = {
+      0, 1, 2, 0, 2, 3
+   };
+   purpleRectangle->SetIndices(indices2, sizeof(indices2) / sizeof(unsigned short));
+   purpleRectangle->frame.TranslateLocal(glm::vec3(0, 0, 2.0f));
+   purpleRectangle->SendToGPU();
+
    return true;
 }
 
