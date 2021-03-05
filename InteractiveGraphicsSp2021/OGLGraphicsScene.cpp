@@ -10,24 +10,8 @@ OGLGraphicsScene::~OGLGraphicsScene()
 
 bool OGLGraphicsScene::Create()
 {
-   _sceneReader->Open();
-   _sceneReader->Read();
-   if (_sceneReader->HasError()) {
-      return false;
-   }
-   _sceneReader->Close();
-
+   if (!LoadScene()) return false;
    ReadCameraData();
-   //vector<CameraData>& cameraData = _sceneReader->GetCameraData();
-   //BaseCamera* camera = new BaseCamera();
-   //camera->frame.SetPosition(
-   //   cameraData[0].position.x, cameraData[0].position.y, cameraData[0].position.z);
-   //camera->fieldOfView = cameraData[0].fov;
-   //camera->nearPlane = cameraData[0].nearPlane;
-   //camera->farPlane = cameraData[0].farPlane;
-   //camera->UpdateView();
-   //AddCamera(cameraData[0].name, camera);
-
    if (!ReadShaderData()) return false;
 
    //OGLGraphicsObject<VertexPC>* triangle = new OGLGraphicsObject<VertexPC>();
@@ -150,6 +134,17 @@ bool OGLGraphicsScene::Create()
    indexedCube->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
    indexedCube->SendToGPU();
 
+   return true;
+}
+
+bool OGLGraphicsScene::LoadScene()
+{
+   _sceneReader->Open();
+   _sceneReader->Read();
+   if (_sceneReader->HasError()) {
+      return false;
+   }
+   _sceneReader->Close();
    return true;
 }
 
