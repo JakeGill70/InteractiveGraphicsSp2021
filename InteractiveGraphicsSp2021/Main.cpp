@@ -50,7 +50,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-   GLFWwindow* window = glfwCreateWindow(800, 600, "Lab Week 7 - Interactive Graphics", NULL, NULL);
+   GLFWwindow* window = glfwCreateWindow(800, 600, "Lecture Week 8 - Interactive Graphics", NULL, NULL);
    if (window == NULL) {
       std::cout << "Failed to create GLFW window" << std::endl;
       glfwTerminate();
@@ -81,11 +81,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    glCullFace(GL_BACK);
    glFrontFace(GL_CCW);
 
-   // Enable depth testing
-   //glEnable(GL_DEPTH_TEST);
-   //glDepthMask(GL_TRUE);
-   //glDepthFunc(GL_LEQUAL);
-   //glDepthRange(0.0f, 1.0f);
+   //Enable depth testing
+   glEnable(GL_DEPTH_TEST);
+   glDepthMask(GL_TRUE);
+   glDepthFunc(GL_LEQUAL);
+   glDepthRange(0.0f, 1.0f);
 
    int width, height;
    glfwShowWindow(window);
