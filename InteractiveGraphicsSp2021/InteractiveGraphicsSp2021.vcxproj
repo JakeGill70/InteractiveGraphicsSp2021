@@ -149,7 +149,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AbstractReader.cpp" />
-    <ClCompile Include="AbstractShader.cpp" />
     <ClCompile Include="BaseCamera.cpp" />
     <ClCompile Include="BaseGraphicsScene.cpp" />
     <ClCompile Include="BaseObject.cpp" />

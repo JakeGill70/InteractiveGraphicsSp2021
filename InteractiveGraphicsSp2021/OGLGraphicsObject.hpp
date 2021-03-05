@@ -44,7 +44,6 @@ OGLGraphicsObject<T>::OGLGraphicsObject() : _vboId(0), _eboId(0)
 template <class T>
 void OGLGraphicsObject<T>::SendToGPU()
 {
-   //this->_shader->Select();
    // Bind the object to the binding target
    glBindBuffer(GL_ARRAY_BUFFER, _vboId);
    // Allocate memory in the GPU for the buffer bound to the binding target and then

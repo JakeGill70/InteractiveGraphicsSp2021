@@ -39,9 +39,6 @@
     <ClCompile Include="OGLGraphicsScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbstractShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AbstractReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
