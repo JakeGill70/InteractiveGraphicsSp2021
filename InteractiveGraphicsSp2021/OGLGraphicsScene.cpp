@@ -17,15 +17,16 @@ bool OGLGraphicsScene::Create()
    }
    _sceneReader->Close();
 
-   vector<CameraData>& cameraData = _sceneReader->GetCameraData();
-   BaseCamera* camera = new BaseCamera();
-   camera->frame.SetPosition(
-      cameraData[0].position.x, cameraData[0].position.y, cameraData[0].position.z);
-   camera->fieldOfView = cameraData[0].fov;
-   camera->nearPlane = cameraData[0].nearPlane;
-   camera->farPlane = cameraData[0].farPlane;
-   camera->UpdateView();
-   AddCamera(cameraData[0].name, camera);
+   ReadCameraData();
+   //vector<CameraData>& cameraData = _sceneReader->GetCameraData();
+   //BaseCamera* camera = new BaseCamera();
+   //camera->frame.SetPosition(
+   //   cameraData[0].position.x, cameraData[0].position.y, cameraData[0].position.z);
+   //camera->fieldOfView = cameraData[0].fov;
+   //camera->nearPlane = cameraData[0].nearPlane;
+   //camera->farPlane = cameraData[0].farPlane;
+   //camera->UpdateView();
+   //AddCamera(cameraData[0].name, camera);
 
    if (!ReadShaderData()) return false;
 
@@ -149,6 +150,22 @@ bool OGLGraphicsScene::Create()
    indexedCube->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
    indexedCube->SendToGPU();
 
+   return true;
+}
+
+bool OGLGraphicsScene::ReadCameraData()
+{
+   vector<CameraData>& cameraData = _sceneReader->GetCameraData();
+   for (size_t i = 0; i < cameraData.size(); i++) {
+      BaseCamera* camera = new BaseCamera();
+      camera->frame.SetPosition(
+         cameraData[i].position.x, cameraData[i].position.y, cameraData[i].position.z);
+      camera->fieldOfView = cameraData[i].fov;
+      camera->nearPlane = cameraData[i].nearPlane;
+      camera->farPlane = cameraData[i].farPlane;
+      camera->UpdateView();
+      AddCamera(cameraData[i].name, camera);
+   }
    return true;
 }
 

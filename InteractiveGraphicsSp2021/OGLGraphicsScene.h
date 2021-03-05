@@ -19,6 +19,7 @@ public:
    bool Create();
 
 protected:
+   bool ReadCameraData();
    bool ReadShaderData();
 
 };
