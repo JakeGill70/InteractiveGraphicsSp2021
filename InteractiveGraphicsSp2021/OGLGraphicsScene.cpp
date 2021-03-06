@@ -22,91 +22,17 @@ bool OGLGraphicsScene::Create()
    //triangle->AddVertexData({  0.5f, -0.5f, 0, 0, 1, 0 });
    //triangle->SendToGPU();
 
-   OGLGraphicsObject<VertexPC>* cube = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("cube", cube, "simple3DShader");
-   // Red vertices
-   VertexPC V1 = { -0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V2 = { -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V3 = { 0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V4 = { 0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   // Mixed color vertices
-   VertexPC V5 = { 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f };
-   VertexPC V6 = { 0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f };
-   VertexPC V7 = { -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f };
-   VertexPC V8 = { -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f };
-   // Face 1
-   cube->AddVertexData(V1);
-   cube->AddVertexData(V2);
-   cube->AddVertexData(V3);
-   cube->AddVertexData(V1);
-   cube->AddVertexData(V3);
-   cube->AddVertexData(V4);
-   
-   // Face 2
-   cube->AddVertexData(V4);
-   cube->AddVertexData(V3);
-   cube->AddVertexData(V6);
-   cube->AddVertexData(V4);
-   cube->AddVertexData(V6);
-   cube->AddVertexData(V5);
-   
-   // Face 3
-   cube->AddVertexData(V5);
-   cube->AddVertexData(V6);
-   cube->AddVertexData(V7);
-   cube->AddVertexData(V5);
-   cube->AddVertexData(V7);
-   cube->AddVertexData(V8);
-   
-   // Face 4
-   cube->AddVertexData(V8);
-   cube->AddVertexData(V7);
-   cube->AddVertexData(V2);
-   cube->AddVertexData(V8);
-   cube->AddVertexData(V2);
-   cube->AddVertexData(V1);
-   
-   // Face 5
-   cube->AddVertexData(V6);
-   cube->AddVertexData(V3);
-   cube->AddVertexData(V2);
-   cube->AddVertexData(V6);
-   cube->AddVertexData(V2);
-   cube->AddVertexData(V7);
-   
-   // Face 6
-   cube->AddVertexData(V8);
-   cube->AddVertexData(V1);
-   cube->AddVertexData(V4);
-   cube->AddVertexData(V8);
-   cube->AddVertexData(V4);
-   cube->AddVertexData(V5);
-   cube->frame.TranslateLocal(glm::vec3(-1, 0.5f, 0));
-   cube->SendToGPU();
-
-   OGLGraphicsObject<VertexPC>* surface = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("surface", surface, "simple3DShader");
-   V1 = { -2.5f, 0, -2.5f, 0, 0.5f, 0 };
-   V2 = { -2.5f, 0,  2.5f, 0, 0.5f, 0 };
-   V3 = { 2.5f, 0,  2.5f, 0, 0.5f, 0 };
-   V4 = { 2.5f, 0, -2.5f, 0, 0.5f, 0 };
-   surface->AddVertexData(V1);
-   surface->AddVertexData(V2);
-   surface->AddVertexData(V3);
-   surface->AddVertexData(V1);
-   surface->AddVertexData(V3);
-   surface->AddVertexData(V4);
-   surface->SendToGPU();
+    _objects["cube"]->frame.TranslateLocal(glm::vec3(-1, 0.5f, 0));
 
    OGLGraphicsObject<VertexPC>* indexedCube = new OGLGraphicsObject<VertexPC>();
    AddGraphicsObject("indexedCube", indexedCube, "simple3DShader", true);
    // Yellow vertices
    indexedCube->AddVertexData({ -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 0
    indexedCube->AddVertexData({ -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 1
-   indexedCube->AddVertexData({  0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 2
-   indexedCube->AddVertexData({  0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 3
-   indexedCube->AddVertexData({  0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 4
-   indexedCube->AddVertexData({  0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 5
+   indexedCube->AddVertexData({ 0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 2
+   indexedCube->AddVertexData({ 0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 3
+   indexedCube->AddVertexData({ 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 4
+   indexedCube->AddVertexData({ 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 5
    indexedCube->AddVertexData({ -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 6
    indexedCube->AddVertexData({ -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 7
    unsigned short indices[] = {
@@ -125,8 +51,8 @@ bool OGLGraphicsScene::Create()
    AddGraphicsObject("redRectangle", purpleRectangle, "simple3DShader", true);
    purpleRectangle->AddVertexData({ -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 0
    purpleRectangle->AddVertexData({ -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 1
-   purpleRectangle->AddVertexData({  0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 2
-   purpleRectangle->AddVertexData({  0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 3
+   purpleRectangle->AddVertexData({ 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 2
+   purpleRectangle->AddVertexData({ 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 3
    unsigned short indices2[] = {
       0, 1, 2, 0, 2, 3
    };
@@ -208,7 +134,7 @@ bool OGLGraphicsScene::ReadObjectData()
    AbstractGraphicsObject* object;
    ObjectData data;
    map<string, ObjectData>& objectData = _sceneReader->GetObjectData();
-   for(auto it = objectData.begin(); it != objectData.end(); it++){
+   for (auto it = objectData.begin(); it != objectData.end(); it++) {
       object = nullptr;
       data = it->second;
       if (data.vertexType == "PC") {
@@ -220,7 +146,7 @@ bool OGLGraphicsScene::ReadObjectData()
          }
          if (data.vertexType == "PC") {
             if (!ReadPCObjectData(
-               (OGLGraphicsObject<VertexPC>*)object, data.vertexData)) {
+               (OGLGraphicsObject<VertexPC>*)object, data.vertexData, data.indexData)) {
                return false;
             }
             AddGraphicsObject(data.name, object, data.shaderName);
@@ -231,23 +157,38 @@ bool OGLGraphicsScene::ReadObjectData()
    return true;
 }
 
-bool OGLGraphicsScene::ReadPCObjectData(OGLGraphicsObject<VertexPC>* object, vector<float>& data)
+bool OGLGraphicsScene::ReadPCObjectData(
+   OGLGraphicsObject<VertexPC>* object,
+   vector<float>& vertexData,
+   vector<unsigned short>& indexData)
 {
-   size_t numbersLeftToRead = data.size();
+   size_t numbersLeftToRead = vertexData.size();
    float x, y, z, r, g, b;
-   for (size_t i = 0; i < data.size();) {
+   vector<VertexPC> vertices;
+   for (size_t i = 0; i < vertexData.size();) {
       if (numbersLeftToRead < 6) {
          _log << "Incorrect number of vertices for the object.";
          return false;
       }
-      x = data[i++];
-      y = data[i++];
-      z = data[i++];
-      r = data[i++];
-      g = data[i++];
-      b = data[i++];
-      object->AddVertexData({ x,  y, z, r, g, b });
+      x = vertexData[i++];
+      y = vertexData[i++];
+      z = vertexData[i++];
+      r = vertexData[i++];
+      g = vertexData[i++];
+      b = vertexData[i++];
+      if (indexData.size() > 0) {
+         vertices.push_back({ x,  y, z, r, g, b });
+      }
+      else { // No index data
+         object->AddVertexData({ x,  y, z, r, g, b });
+      }
       numbersLeftToRead -= 6;
+   }
+
+   VertexPC v;
+   for (size_t i = 0; i < indexData.size();i++) {
+      v = vertices[indexData[i]];
+      object->AddVertexData({ v.position, v.color });
    }
    return true;
 }

@@ -39,6 +39,9 @@ void SceneReader::ProcessLine(const string& line)
    else if (_state == "reading vertex data") {
       ProcessVertexDataLine(line);
    }
+   else if (_state == "reading index data") {
+      ProcessIndexDataLine(line);
+   }
 }
 
 void SceneReader::ProcessCameraLine(const string& line)
@@ -123,7 +126,7 @@ void SceneReader::ProcessObjectLine(const string& line)
 void SceneReader::ProcessVertexDataLine(const string& line)
 {
    if (line == "<endVertexData>") {
-      _state = "reading objects";
+      _state = "reading index data";
       return;
    }
    vector<string> tokens;
@@ -131,6 +134,20 @@ void SceneReader::ProcessVertexDataLine(const string& line)
    for (size_t i = 0; i < tokens.size(); i++) {
       Trim(tokens[i]);
       _objectData[_currentObjectName].vertexData.push_back(std::stof(tokens[i]));
+   }
+}
+
+void SceneReader::ProcessIndexDataLine(const string& line)
+{
+   if (line == "<endIndexData>") {
+      _state = "reading objects";
+      return;
+   }
+   vector<string> tokens;
+   Split(line, ',', tokens);
+   for (size_t i = 0; i < tokens.size(); i++) {
+      Trim(tokens[i]);
+      _objectData[_currentObjectName].indexData.push_back(std::stoi(tokens[i]));
    }
 }
 
