@@ -64,6 +64,10 @@ public:
       return _shaderData;
    }
 
+   map<string, ObjectData>& GetObjectData() {
+      return _objectData;
+   }
+
 protected:
    virtual void ProcessLine(const string& line);
    virtual void ProcessCameraLine(const string& line);

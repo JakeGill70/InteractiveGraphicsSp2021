@@ -13,6 +13,7 @@ bool OGLGraphicsScene::Create()
    if (!LoadScene()) return false;
    ReadCameraData();
    if (!ReadShaderData()) return false;
+   if (!ReadObjectData()) return false;
 
    //OGLGraphicsObject<VertexPC>* triangle = new OGLGraphicsObject<VertexPC>();
    //AddGraphicsObject("triangle", triangle, "defaultShader");
@@ -96,20 +97,6 @@ bool OGLGraphicsScene::Create()
    surface->AddVertexData(V3);
    surface->AddVertexData(V4);
    surface->SendToGPU();
-
-   OGLGraphicsObject<VertexPC>* axis = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("axis", axis, "simple3DShader");
-   axis->SetPrimitive(GL_LINES);
-   // Line along X
-   axis->AddVertexData({ 0, 0, 0, 1, 0, 0 });
-   axis->AddVertexData({ 2.0f, 0, 0, 1, 0, 0 });
-   // Line along Y
-   axis->AddVertexData({ 0,    0, 0, 0, 1, 0 });
-   axis->AddVertexData({ 0, 2.0f, 0, 0, 1, 0 });
-   // Line along Z
-   axis->AddVertexData({ 0, 0,    0, 0, 0, 1 });
-   axis->AddVertexData({ 0, 0, 2.0f, 0, 0, 1 });
-   axis->SendToGPU();
 
    OGLGraphicsObject<VertexPC>* indexedCube = new OGLGraphicsObject<VertexPC>();
    AddGraphicsObject("indexedCube", indexedCube, "simple3DShader", true);
@@ -213,6 +200,55 @@ bool OGLGraphicsScene::ReadShaderData()
       }
    }
 
+   return true;
+}
+
+bool OGLGraphicsScene::ReadObjectData()
+{
+   AbstractGraphicsObject* object;
+   ObjectData data;
+   map<string, ObjectData>& objectData = _sceneReader->GetObjectData();
+   for(auto it = objectData.begin(); it != objectData.end(); it++){
+      object = nullptr;
+      data = it->second;
+      if (data.vertexType == "PC") {
+         object = new OGLGraphicsObject<VertexPC>();
+      }
+      if (object != nullptr) {
+         if (data.primitiveType == "lines") {
+            object->SetPrimitive(GL_LINES);
+         }
+         if (data.vertexType == "PC") {
+            if (!ReadPCObjectData(
+               (OGLGraphicsObject<VertexPC>*)object, data.vertexData)) {
+               return false;
+            }
+            AddGraphicsObject(data.name, object, data.shaderName);
+            object->SendToGPU();
+         }
+      }
+   }
+   return true;
+}
+
+bool OGLGraphicsScene::ReadPCObjectData(OGLGraphicsObject<VertexPC>* object, vector<float>& data)
+{
+   size_t numbersLeftToRead = data.size();
+   float x, y, z, r, g, b;
+   for (size_t i = 0; i < data.size();) {
+      if (numbersLeftToRead < 6) {
+         _log << "Incorrect number of vertices for the object.";
+         return false;
+      }
+      x = data[i++];
+      y = data[i++];
+      z = data[i++];
+      r = data[i++];
+      g = data[i++];
+      b = data[i++];
+      object->AddVertexData({ x,  y, z, r, g, b });
+      numbersLeftToRead -= 6;
+   }
    return true;
 }
 
