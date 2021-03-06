@@ -5,3 +5,14 @@ camera,0,3,-3,60,0.1f,50
 defaultShader,default,default,none
 simple3DShader,Simple3DVertexShader.glsl,default,camera
 <endShaders>
+# vertex type, object name, shader name, primitive type
+PC,axis,simple3DShader,lines
+# x, y, z, r, g, b
+0, 0, 0, 1, 0, 0
+2.0f, 0, 0, 1, 0, 0
+0,    0, 0, 0, 1, 0
+0, 2.0f, 0, 0, 1, 0
+0, 0,    0, 0, 0, 1
+0, 0, 2.0f, 0, 0, 1
+<endVertexData>
+<endObjects>

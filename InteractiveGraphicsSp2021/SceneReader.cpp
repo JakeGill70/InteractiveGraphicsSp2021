@@ -33,6 +33,12 @@ void SceneReader::ProcessLine(const string& line)
    else if (_state == "reading shaders") {
       ProcessShaderLine(line);
    }
+   else if (_state == "reading objects") {
+      ProcessObjectLine(line);
+   }
+   else if (_state == "reading vertex data") {
+      ProcessVertexDataLine(line);
+   }
 }
 
 void SceneReader::ProcessCameraLine(const string& line)
@@ -86,6 +92,48 @@ void SceneReader::ProcessShaderLine(const string& line)
    data.cameraName = tokens[3];
    _shaderData.push_back(data);
 }
+
+void SceneReader::ProcessObjectLine(const string& line)
+{
+   if (line == "<endObjects>") {
+      _state = "end";
+      return;
+   }
+   vector<string> tokens;
+   Split(line, ',', tokens);
+   if (tokens.size() != 4) {
+      _errorOccurred = true;
+      _log << "This line is badly formatted: " << line << std::endl;
+      return;
+   }
+   for (size_t i = 0; i < tokens.size(); i++) {
+      Trim(tokens[i]);
+   }
+   // vertex type, object name, shader name, primitive type
+   ObjectData data;
+   data.vertexType = tokens[0];
+   data.name = tokens[1];
+   data.shaderName = tokens[2];
+   data.primitiveType = tokens[3];
+   _objectData[data.name] = data;
+   _currentObjectName = data.name;
+   _state = "reading vertex data";
+}
+
+void SceneReader::ProcessVertexDataLine(const string& line)
+{
+   if (line == "<endVertexData>") {
+      _state = "reading objects";
+      return;
+   }
+   vector<string> tokens;
+   Split(line, ',', tokens);
+   for (size_t i = 0; i < tokens.size(); i++) {
+      Trim(tokens[i]);
+      _objectData[_currentObjectName].vertexData.push_back(std::stof(tokens[i]));
+   }
+}
+
 
 void SceneReader::Close()
 {
