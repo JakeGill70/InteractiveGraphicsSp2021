@@ -100,7 +100,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
       glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-      scene.Update(timer.GetElapsedTimeInSeconds());
+      //scene.Update(timer.GetElapsedTimeInSeconds());
       scene.Render();
 
       glfwSwapBuffers(window);
