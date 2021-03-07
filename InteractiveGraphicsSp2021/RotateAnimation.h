@@ -4,7 +4,7 @@
 
 #include "AbstractAnimation.h"
 #include <glm\glm.hpp>
-#include "ReferenceFrame.h"
+
 
 class RotateAnimation :
     public AbstractAnimation
@@ -15,11 +15,10 @@ protected:
 
 public:
    RotateAnimation() : _axis({ 0, 1, 0 }), _degreesPerSecond(90.0f) {}
+   RotateAnimation(glm::vec3 axis, float degreesPerSecond) 
+      : _axis(axis), _degreesPerSecond(degreesPerSecond) {}
 
-   void Update(double elapsedSeconds) {
-      if (_object == nullptr) return;
-      float angleToRotate = _degreesPerSecond * (float)elapsedSeconds;
-   }
+   void Update(double elapsedSeconds);
 
 };
 

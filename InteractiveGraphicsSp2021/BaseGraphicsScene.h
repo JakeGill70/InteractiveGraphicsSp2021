@@ -52,6 +52,8 @@ public:
 
    virtual bool Create() { return true; }
 
+   virtual void Update(double elapsedSeconds);
+
    virtual void Render();
 };
 

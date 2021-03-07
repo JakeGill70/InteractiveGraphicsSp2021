@@ -26,6 +26,13 @@ void BaseGraphicsScene::UpdateCameraProjection(float aspectRatio)
    }
 }
 
+void BaseGraphicsScene::Update(double elapsedSeconds)
+{
+   for (auto iterator = _objects.begin(); iterator != _objects.end(); iterator++) {
+      iterator->second->Update(elapsedSeconds);
+   }
+}
+
 void BaseGraphicsScene::Render()
 {
    for (auto iterator = _shaders.begin(); iterator != _shaders.end(); iterator++) {

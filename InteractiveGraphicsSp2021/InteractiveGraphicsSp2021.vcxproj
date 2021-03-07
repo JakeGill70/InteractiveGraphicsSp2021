@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AbstractAnimation.cpp" />
+    <ClCompile Include="AbstractGraphicsObject.cpp" />
     <ClCompile Include="AbstractReader.cpp" />
     <ClCompile Include="AbstractTimer.cpp" />
     <ClCompile Include="BaseCamera.cpp" />

@@ -67,11 +67,11 @@ PC,purpleRectangle,simple3DShader,triangles,indexed
 <endVertexData>
 0, 1, 2, 0, 2, 3
 <endIndexData>
-PC,triangle,defaultShader,triangles
- 0.0f,  0.5f, 0, 1, 0, 0
--0.5f, -0.5f, 0, 0, 0, 1
- 0.5f, -0.5f, 0, 0, 1, 0
- <endVertexData>
- <endIndexData>
+# PC,triangle,defaultShader,triangles
+#  0.0f,  0.5f, 0, 1, 0, 0
+#-0.5f, -0.5f, 0, 0, 0, 1
+# 0.5f, -0.5f, 0, 0, 1, 0
+# <endVertexData>
+# <endIndexData>
 <endObjects>
 

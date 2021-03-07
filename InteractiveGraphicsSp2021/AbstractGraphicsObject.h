@@ -4,19 +4,22 @@
 
 #include "BaseObject.h"
 #include "ReferenceFrame.h"
+class AbstractAnimation;
 
 class AbstractGraphicsObject : 
    public BaseObject
 {
 protected:
    unsigned int _primitive;
+   AbstractAnimation* _animation;
 
 public:
    ReferenceFrame frame;
 
 public:
-   AbstractGraphicsObject() : _primitive(0) {}
-   virtual ~AbstractGraphicsObject() {}
+   AbstractGraphicsObject() : _primitive(0), _animation(nullptr) {}
+
+   virtual ~AbstractGraphicsObject();
 
    virtual inline void SetPrimitive(unsigned int primitive) {
       _primitive = primitive;
@@ -29,6 +32,10 @@ public:
    inline virtual bool IsIndexed() const {
       return false;
    }
+
+   virtual inline void SetAnimation(AbstractAnimation* animation);
+
+   virtual void Update(double elapsedSeconds);
 
    virtual void Render() = 0;
    virtual void SendToGPU() = 0;
