@@ -26,6 +26,12 @@ public:
 
    void TranslateLocal(const glm::vec3& vector);
 
+   void RotateLocal(float degrees, const glm::vec3& axis);
+
+   void RotateWorld(float degrees, const glm::vec3& axis);
+
+   void TranslateWorld(const glm::vec3& vector);
+
    inline glm::vec3 GetPosition() const { return glm::vec3(orientation[3]); }
    inline glm::vec3 GetXAxis() const { return glm::vec3(orientation[0]); }
    inline glm::vec3 GetYAxis() const { return glm::vec3(orientation[1]); }

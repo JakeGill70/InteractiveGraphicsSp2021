@@ -50,7 +50,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-   GLFWwindow* window = glfwCreateWindow(800, 600, "Lecture Week 8 - Interactive Graphics", NULL, NULL);
+   GLFWwindow* window = glfwCreateWindow(800, 600, "Lab Week 8 - Interactive Graphics", NULL, NULL);
    if (window == NULL) {
       std::cout << "Failed to create GLFW window" << std::endl;
       glfwTerminate();
@@ -97,7 +97,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
       glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
       scene.Render();
 
       glfwSwapBuffers(window);
