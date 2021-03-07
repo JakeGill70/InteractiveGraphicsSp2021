@@ -5,22 +5,42 @@
 #include "BaseObject.h"
 #include <glm\glm.hpp>
 #include <string>
-using std::string;
+#include <map>
+#include "BaseCamera.h"
+#include "AbstractGraphicsObject.h"
 
-class AbstractGraphicsObject;
+using std::string;
+using std::map;
+
+//class AbstractGraphicsObject;
 
 class AbstractShader :
    public BaseObject
 {
 protected:
    unsigned int _shaderProgram;
+   map<string, AbstractGraphicsObject*> _objectsToRender;
+   BaseCamera* _camera;
+   virtual void SendGPUData() = 0;
+   virtual void RenderObjects() = 0;
 
 public:
-   AbstractShader() : _shaderProgram(0) {}
+   AbstractShader() : _shaderProgram(0) {
+       _camera = nullptr;
+   }
    ~AbstractShader() {}
 
    inline void SetShaderProgram(unsigned int shaderProgram){
       _shaderProgram = shaderProgram;
+   }
+
+   inline void SetCamera(BaseCamera* cam) {
+       _camera = cam;
+   }
+
+   inline void AddObjectToRender(const string& objectName, AbstractGraphicsObject* object) {
+       _objectsToRender[objectName] = object;
+       object->SetBufferId(GenerateBuffer());
    }
 
    virtual inline void Select() = 0;

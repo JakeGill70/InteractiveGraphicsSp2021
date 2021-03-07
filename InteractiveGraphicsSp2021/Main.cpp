@@ -53,7 +53,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    shader.Create();
    shader.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
    shader.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
-   OGLGraphicsObject<VertexPC> triangle(&shader);
+   OGLGraphicsObject<VertexPC> triangle;
+   shader.AddObjectToRender("triangle", &triangle);
    triangle.AddVertex({     0,  0.5f, 0, 1, 0, 0 });
    triangle.AddVertex({ -0.5f, -0.5f, 0, 0, 0, 1 });
    triangle.AddVertex({  0.5f, -0.5f, 0, 0, 1, 0 });
@@ -79,7 +80,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    simple3DShader.SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
    simple3DShader.SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
 
-   OGLGraphicsObject<VertexPC> cube(&simple3DShader);
+   OGLGraphicsObject<VertexPC> cube;
+   simple3DShader.AddObjectToRender("cube", &cube);
    // Red vertices
    VertexPC V1 = { -0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
    VertexPC V2 = { -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
@@ -137,6 +139,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    BaseCamera camera;
    camera.frame.SetPosition(3, 3, 3);
    camera.UpdateView();
+   simple3DShader.SetCamera(&camera);
 
    // Cull back faces and use counter-clockwise winding of front faces
    glEnable(GL_CULL_FACE);
@@ -165,12 +168,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
       glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-      triangle.Render();
-
-      cube.frame.orientation = glm::rotate(cube.frame.orientation, glm::radians(1.0f), glm::vec3( 0, 1, 0 ));
-      simple3DShader.SelectProgram();
-      simple3DShader.SendMatrixToGPU("world", cube.frame.orientation);
-      cube.Render();
+      shader.RenderObjects();
+      simple3DShader.RenderObjects();
 
       glfwSwapBuffers(window);
       glfwPollEvents();

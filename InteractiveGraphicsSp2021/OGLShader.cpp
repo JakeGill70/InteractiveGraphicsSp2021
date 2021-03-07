@@ -142,3 +142,22 @@ void OGLShader::LogError(GLuint shader, PFNGLGETSHADERIVPROC glGet__iv, PFNGLGET
    Log(info);
    free(info);
 }
+
+void OGLShader::SendGPUData() {
+    if (_camera) {
+        SendMatrixToGPU("view", _camera->GetView());
+        SendMatrixToGPU("projection", _camera->GetProjection());
+    }
+}
+
+void OGLShader::RenderObjects() {
+    SelectProgram();
+    SendGPUData();
+    for (auto iterator = _objectsToRender.begin(); iterator != _objectsToRender.end(); iterator++) {
+        string key = iterator->first;
+        AbstractGraphicsObject* object = iterator->second;
+        
+        SendMatrixToGPU(key, object->frame.orientation);
+        Render(object);
+    }
+}

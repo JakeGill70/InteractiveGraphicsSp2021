@@ -53,6 +53,7 @@ public:
    void Render(AbstractGraphicsObject* object);
    bool Create();
    void SendMatrixToGPU(const string& name, const glm::mat4& matrix);
+   void RenderObjects();
 
 protected:
    void SetDefaultSource();
@@ -60,6 +61,7 @@ protected:
    GLuint Compile(GLenum type, const GLchar* source);
    GLuint Link(GLuint vertexShader, GLuint fragmentShader);
    void LogError(GLuint shader, PFNGLGETSHADERIVPROC glGet__iv, PFNGLGETSHADERINFOLOGPROC glGet__InfoLog);
+   void SendGPUData();
 };
 
 

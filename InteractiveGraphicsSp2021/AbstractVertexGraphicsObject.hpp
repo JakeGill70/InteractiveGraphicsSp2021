@@ -6,7 +6,7 @@
 #include <vector>
 using std::vector;
 #include "GraphicsStructures.h"
-#include "AbstractShader.h"
+//#include "AbstractShader.h"
 
 template <class T>
 class AbstractVertexGraphicsObject :
@@ -14,11 +14,12 @@ class AbstractVertexGraphicsObject :
 {
 protected:
    vector<T> _vertices;
-   AbstractShader* _shader;
+   //AbstractShader* _shader;
 
 public:
-   AbstractVertexGraphicsObject(AbstractShader* shader) {
-      this->_shader = shader;
+   //AbstractVertexGraphicsObject(AbstractShader* shader) {
+   AbstractVertexGraphicsObject() {
+      //this->_shader = shader;
    }
 
    virtual ~AbstractVertexGraphicsObject() {}
@@ -41,7 +42,7 @@ void AbstractVertexGraphicsObject<T>::AddVertex(const T& vertex)
 template <class T>
 void AbstractVertexGraphicsObject<T>::Render()
 {
-   this->_shader->Render(this);
+   //this->_shader->Render(this);
 }
 
 #endif
