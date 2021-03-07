@@ -14,7 +14,9 @@ protected:
    high_resolution_clock::time_point _start, _end;
 
 public:
-   HighResolutionTimer() {}
+   HighResolutionTimer() : AbstractTimer() {
+      StartTiming();
+   }
 
    void StartTiming() {
       _start = high_resolution_clock::now();

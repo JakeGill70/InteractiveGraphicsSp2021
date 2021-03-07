@@ -7,9 +7,7 @@ class AbstractTimer :
     public BaseObject
 {
 public:
-   AbstractTimer() {
-      StartTiming();
-   }
+   AbstractTimer() {}
    virtual ~AbstractTimer() {}
 
    virtual void StartTiming() = 0;

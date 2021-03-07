@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractAnimation.cpp" />
     <ClCompile Include="AbstractReader.cpp" />
     <ClCompile Include="AbstractTimer.cpp" />
     <ClCompile Include="BaseCamera.cpp" />
@@ -159,10 +160,12 @@
     <ClCompile Include="OGLGraphicsScene.cpp" />
     <ClCompile Include="OGLShader.cpp" />
     <ClCompile Include="ReferenceFrame.cpp" />
+    <ClCompile Include="RotateAnimation.cpp" />
     <ClCompile Include="SceneReader.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractAnimation.h" />
     <ClInclude Include="AbstractGraphicsObject.h" />
     <ClInclude Include="AbstractReader.h" />
     <ClInclude Include="AbstractTimer.h" />
@@ -177,6 +180,7 @@
     <ClInclude Include="OGLGraphicsScene.h" />
     <ClInclude Include="OGLShader.h" />
     <ClInclude Include="ReferenceFrame.h" />
+    <ClInclude Include="RotateAnimation.h" />
     <ClInclude Include="SceneReader.h" />
     <ClInclude Include="TextFileReader.h" />
   </ItemGroup>
