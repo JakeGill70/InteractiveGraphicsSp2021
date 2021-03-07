@@ -31,6 +31,7 @@ struct ObjectData {
    string name;
    string shaderName;
    string primitiveType;
+   bool isIndexed;
    vector<float> vertexData;
    vector<unsigned short> indexData;
 };

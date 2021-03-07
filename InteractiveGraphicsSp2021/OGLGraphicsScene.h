@@ -29,7 +29,8 @@ protected:
    bool ReadPCObjectData(
       OGLGraphicsObject<VertexPC>* object, 
       vector<float>& vertexData,
-      vector<unsigned short>& indexData);
+      vector<unsigned short>& indexData,
+      bool isIndexed);
 
 };
 

@@ -15,50 +15,9 @@ bool OGLGraphicsScene::Create()
    if (!ReadShaderData()) return false;
    if (!ReadObjectData()) return false;
 
-   //OGLGraphicsObject<VertexPC>* triangle = new OGLGraphicsObject<VertexPC>();
-   //AddGraphicsObject("triangle", triangle, "defaultShader");
-   //triangle->AddVertexData({  0.0f,  0.5f, 0, 1, 0, 0 });
-   //triangle->AddVertexData({ -0.5f, -0.5f, 0, 0, 0, 1 });
-   //triangle->AddVertexData({  0.5f, -0.5f, 0, 0, 1, 0 });
-   //triangle->SendToGPU();
-
     _objects["cube"]->frame.TranslateLocal(glm::vec3(-1, 0.5f, 0));
-
-   OGLGraphicsObject<VertexPC>* indexedCube = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("indexedCube", indexedCube, "simple3DShader", true);
-   // Yellow vertices
-   indexedCube->AddVertexData({ -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 0
-   indexedCube->AddVertexData({ -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 1
-   indexedCube->AddVertexData({ 0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 2
-   indexedCube->AddVertexData({ 0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 3
-   indexedCube->AddVertexData({ 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 4
-   indexedCube->AddVertexData({ 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 5
-   indexedCube->AddVertexData({ -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 6
-   indexedCube->AddVertexData({ -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 7
-   unsigned short indices[] = {
-      0, 1, 2, 0, 2, 3, // Front face
-      3, 2, 5, 3, 5, 4, // Right face
-      4, 5, 6, 4, 6, 7, // Back face
-      7, 6, 1, 7, 1, 0, // Left face
-      5, 2, 1, 5, 1, 6, // Bottom face
-      7, 0, 3, 7, 3, 4  // Top face
-   };
-   indexedCube->SetIndices(indices, sizeof(indices) / sizeof(unsigned short));
-   indexedCube->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
-   indexedCube->SendToGPU();
-
-   OGLGraphicsObject<VertexPC>* purpleRectangle = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("redRectangle", purpleRectangle, "simple3DShader", true);
-   purpleRectangle->AddVertexData({ -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 0
-   purpleRectangle->AddVertexData({ -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 1
-   purpleRectangle->AddVertexData({ 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 2
-   purpleRectangle->AddVertexData({ 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f }); // 3
-   unsigned short indices2[] = {
-      0, 1, 2, 0, 2, 3
-   };
-   purpleRectangle->SetIndices(indices2, sizeof(indices2) / sizeof(unsigned short));
-   purpleRectangle->frame.TranslateLocal(glm::vec3(0, 0, 2.0f));
-   purpleRectangle->SendToGPU();
+    _objects["indexedCube"]->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
+    _objects["purpleRectangle"]->frame.TranslateLocal(glm::vec3(0, 0, 2.0f));
 
    return true;
 }
@@ -146,10 +105,12 @@ bool OGLGraphicsScene::ReadObjectData()
          }
          if (data.vertexType == "PC") {
             if (!ReadPCObjectData(
-               (OGLGraphicsObject<VertexPC>*)object, data.vertexData, data.indexData)) {
+               (OGLGraphicsObject<VertexPC>*)object, 
+               data.vertexData, data.indexData, data.isIndexed)) {
                return false;
             }
-            AddGraphicsObject(data.name, object, data.shaderName);
+            AddGraphicsObject(
+               data.name, object, data.shaderName, data.isIndexed);
             object->SendToGPU();
          }
       }
@@ -160,7 +121,8 @@ bool OGLGraphicsScene::ReadObjectData()
 bool OGLGraphicsScene::ReadPCObjectData(
    OGLGraphicsObject<VertexPC>* object,
    vector<float>& vertexData,
-   vector<unsigned short>& indexData)
+   vector<unsigned short>& indexData,
+   bool isIndexed)
 {
    size_t numbersLeftToRead = vertexData.size();
    float x, y, z, r, g, b;
@@ -177,7 +139,12 @@ bool OGLGraphicsScene::ReadPCObjectData(
       g = vertexData[i++];
       b = vertexData[i++];
       if (indexData.size() > 0) {
-         vertices.push_back({ x,  y, z, r, g, b });
+         if (isIndexed) {
+            object->AddVertexData({ x,  y, z, r, g, b });
+         }
+         else {
+            vertices.push_back({ x,  y, z, r, g, b });
+         }
       }
       else { // No index data
          object->AddVertexData({ x,  y, z, r, g, b });
@@ -187,8 +154,13 @@ bool OGLGraphicsScene::ReadPCObjectData(
 
    VertexPC v;
    for (size_t i = 0; i < indexData.size();i++) {
-      v = vertices[indexData[i]];
-      object->AddVertexData({ v.position, v.color });
+      if (isIndexed) {
+         object->AddIndex(indexData[i]);
+      }
+      else {
+         v = vertices[indexData[i]];
+         object->AddVertexData({ v.position, v.color });
+      }
    }
    return true;
 }
