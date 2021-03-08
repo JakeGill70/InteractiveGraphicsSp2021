@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseCamera.cpp" />
+    <ClCompile Include="BaseGraphicsScene.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="AbstractVertexGraphicsObject.hpp" />
     <ClInclude Include="AbstractShader.h" />
     <ClInclude Include="BaseCamera.h" />
+    <ClInclude Include="BaseGraphicsScene.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="GraphicsStructures.h" />
     <ClInclude Include="OGLGraphicsObject.hpp" />
