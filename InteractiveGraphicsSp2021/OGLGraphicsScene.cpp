@@ -24,7 +24,9 @@ bool OGLGraphicsScene::Create() {
 
     OGLShader* simple3DShader = new OGLShader();
     simple3DShader->SetVertexSource(_textFileReader->GetContents());
-    simple3DShader->Create();
+    if (!simple3DShader->Create()) {
+        return false;
+    }
     simple3DShader->SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
     simple3DShader->SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
     AddShader("simple3DShader", simple3DShader);
