@@ -48,6 +48,10 @@ public:
       _vertexSource = source;
    }
 
+   inline void SetFragmentSource(string source) {
+       _fragmentSource = source;
+   }
+
    size_t GenerateBuffer();
 
    void Render(AbstractGraphicsObject* object);

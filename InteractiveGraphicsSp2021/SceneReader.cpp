@@ -48,6 +48,10 @@ vector<CameraData>& SceneReader::GetCameraData() {
 	return _cameraData;
 }
 
+vector<ShaderData>& SceneReader::GetShaderData() {
+	return _shaderData;
+}
+
 void SceneReader::ProcessLine(const string& line) {
 	if (line.substr(0, 1).compare("#") == 0) {
 		// Ignore comments
@@ -56,6 +60,9 @@ void SceneReader::ProcessLine(const string& line) {
 
 	if (_state.compare("reading cameras") == 0) {
 		ProcessCameraLine(line);
+	}
+	else if (_state.compare("reading shaders") == 0) {
+		ProcessShaderLine(line);
 	}
 }
 
@@ -87,4 +94,32 @@ void SceneReader::ProcessCameraLine(const string& line) {
 	data.farPlane = std::stof(tokens[6]);
 	_cameraData.push_back(data);
 
+}
+
+void SceneReader::ProcessShaderLine(const string& line) {
+	if (line.compare("<endShaders>") == 0) {
+		_state = "reading objects";
+		return;
+	}
+	//Split the line on ‘, ’ into tokens
+	vector<string> tokens;
+	Split(line, ',', tokens);
+	//If the number of tokens is not 7
+	if (tokens.size() != 4) {
+		_errorOccurred = true;
+		_log << "This line is badly formatted: " << line << std::endl;
+		return;
+	}
+
+	for (int i = 0; i < tokens.size(); i++)
+	{
+		Trim(tokens[i]);
+	}
+
+	ShaderData data;
+	data.name = tokens[0];
+	data.vertexShader_filepath = tokens[1];
+	data.fragmentShader_filepath = tokens[2];
+	data.cameraName = tokens[3];
+	_shaderData.push_back(data);
 }

@@ -4,7 +4,14 @@
 class OGLGraphicsScene :
 	public BaseGraphicsScene
 {
+protected:
+	SceneReader* _sceneReader;
+
+	bool ReadShaderData();
+
 public:
-	bool Create(SceneReader* sceneReader);
+	OGLGraphicsScene(SceneReader* sceneReader);
+	~OGLGraphicsScene();
+	bool Create();
 };
 
