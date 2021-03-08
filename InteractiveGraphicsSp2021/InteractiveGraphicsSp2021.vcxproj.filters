@@ -39,6 +39,12 @@
     <ClCompile Include="OGLGraphicsScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AbstractReader.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFileReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsStructures.h">
@@ -72,6 +78,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OGLGraphicsScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
