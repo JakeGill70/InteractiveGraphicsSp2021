@@ -14,6 +14,7 @@ protected:
 	bool _errorOccurred;
 
 public:
+	TextFileReader();
 	TextFileReader(const string& filePath);
 	~TextFileReader();
 	

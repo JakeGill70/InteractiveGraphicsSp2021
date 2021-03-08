@@ -1,7 +1,11 @@
 #include "TextFileReader.h"
 
 
-TextFileReader::TextFileReader(const string& filePath = "") : _errorOccurred(false) {
+TextFileReader::TextFileReader() : _errorOccurred(false) {
+	SetFilePath("");
+}
+
+TextFileReader::TextFileReader(const string& filePath) : _errorOccurred(false) {
 	SetFilePath(filePath);
 }
 
@@ -21,7 +25,10 @@ void TextFileReader::Open() {
 	_fin.open(_filePath);
 	if (_fin.fail()) {
 		_errorOccurred = true;
-		_stringBuffer << errno << std::endl;
+
+		char buffer[256];   
+		strerror_s(buffer, 256, errno);
+		_stringBuffer << buffer << std::endl;
 		Log(_stringBuffer.str());
 	}
 }
