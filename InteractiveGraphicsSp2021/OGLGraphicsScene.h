@@ -1,9 +1,10 @@
 #pragma once
 #include "BaseGraphicsScene.h"
+#include "SceneReader.h"
 class OGLGraphicsScene :
 	public BaseGraphicsScene
 {
 public:
-	bool Create();
+	bool Create(SceneReader* sceneReader);
 };
 

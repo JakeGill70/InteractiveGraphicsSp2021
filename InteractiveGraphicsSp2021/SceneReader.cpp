@@ -35,7 +35,7 @@ void SceneReader::Read() {
 		std::getline(_fin, line);
 		Trim(line);
 		if (!line.empty()) {
-
+			ProcessLine(line);
 		}
 	}
 }

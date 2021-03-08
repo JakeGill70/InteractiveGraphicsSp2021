@@ -3,8 +3,31 @@
 #include "GraphicsStructures.h"
 #include "OGLGraphicsObject.hpp"
 
+bool OGLGraphicsScene::Create(SceneReader* sceneReader) {
 
-bool OGLGraphicsScene::Create() {
+    sceneReader->Open();
+    sceneReader->Read();
+    if (sceneReader->HasError()) {
+        return false;
+    }
+    sceneReader->Close();
+
+    /*======================================\\
+    ||            Create Cameras            ||
+    \\=====================================*/
+    for (int i = 0; i < sceneReader->GetCameraData().size(); i++)
+    {
+        auto camData = sceneReader->GetCameraData()[i];
+        BaseCamera* cam = new BaseCamera();
+        cam->frame.SetPosition(camData.position.x, camData.position.y, camData.position.z);
+        cam->farPlane = camData.farPlane;
+        cam->nearPlane = camData.nearPlane;
+        cam->fieldOfView = camData.fov;
+        cam->UpdateView();
+        addCamera(camData.name, cam);
+    }
+    
+
     /*======================================\\
     ||            Create Shaders            ||
     \\=====================================*/
@@ -30,6 +53,7 @@ bool OGLGraphicsScene::Create() {
     simple3DShader->SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
     simple3DShader->SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
     AddShader("simple3DShader", simple3DShader);
+    simple3DShader->SetCamera(_cameras["camera"]);
 
     /*======================================\\
     ||            Create Objects            ||
@@ -102,13 +126,6 @@ bool OGLGraphicsScene::Create() {
     cube->AddVertex(V5);
     cube->SendToGPU();
 
-    /*======================================\\
-    ||            Create Cameras            ||
-    \\=====================================*/
-
-    BaseCamera* camera = new BaseCamera();
-    camera->frame.SetPosition(3, 3, 3);
-    camera->UpdateView();
-    addCamera("mainCamera", camera);
-    simple3DShader->SetCamera(camera);
+    // Deallocate the injected Scene Reader
+    delete sceneReader;
 }

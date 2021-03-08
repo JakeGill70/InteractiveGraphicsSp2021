@@ -64,7 +64,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    auto textFileReader = new TextFileReader();
    OGLGraphicsScene scene;
    scene.SetTextFileReader(textFileReader);
-   auto created = scene.Create();
+   auto created = scene.Create(new SceneReader("sceneFile.txt"));
    if (!created) {
        ReportMessage(scene.GetLog());
        glfwTerminate();
