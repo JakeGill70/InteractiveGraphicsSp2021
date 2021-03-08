@@ -81,11 +81,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    glCullFace(GL_BACK);
    glFrontFace(GL_CCW);
 
-   // Enable depth testing
-   //glEnable(GL_DEPTH_TEST);
-   //glDepthMask(GL_TRUE);
-   //glDepthFunc(GL_LEQUAL);
-   //glDepthRange(0.0f, 1.0f);
+   //Enable depth testing
+   glEnable(GL_DEPTH_TEST);
+   glDepthMask(GL_TRUE);
+   glDepthFunc(GL_LEQUAL);
+   glDepthRange(0.0f, 1.0f);
 
    int width, height;
    glfwShowWindow(window);

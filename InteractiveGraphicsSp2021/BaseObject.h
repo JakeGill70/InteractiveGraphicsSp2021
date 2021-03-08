@@ -19,10 +19,7 @@ protected:
 
 public:
    inline string GetLog() {
-      string log;
-      // Send the string stream into a string
-      getline(_log, log);
-      return log;
+      return _log.str();
    }
 
    void Log(const string& message) {
