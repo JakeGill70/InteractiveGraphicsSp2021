@@ -10,9 +10,12 @@ BaseGraphicsScene::~BaseGraphicsScene() {
 	clearMap(_objects);
 	clearMap(_cameras);
 	_currentCamera = nullptr;
+	delete _textFileReader;
 }
 
-void BaseGraphicsScene::Create() {};
+bool BaseGraphicsScene::Create() {
+	return false;
+};
 
 void BaseGraphicsScene::AddShader(string name, AbstractShader* shader) {
 	_shaders[name] = shader;
@@ -43,4 +46,8 @@ void BaseGraphicsScene::UpdateCameraProjection(float aspectRatio) {
 		BaseCamera* camera = iterator->second;
 		camera->UpdateProjection(aspectRatio);
 	}
+}
+
+void BaseGraphicsScene::SetTextFileReader(TextFileReader* reader) {
+	_textFileReader = reader;
 }

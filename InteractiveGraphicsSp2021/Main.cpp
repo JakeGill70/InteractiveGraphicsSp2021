@@ -25,6 +25,17 @@ void ProcessUserInput(GLFWwindow* window)
    }
 }
 
+void ReportMessage(const string& message)
+{
+    // Quick way to convert from string to wstring
+    std::wstring errorString(message.begin(), message.end());
+    MessageBox(
+        NULL,
+        errorString.c_str(),
+        L"An Error Occurred",
+        MB_OK);
+}
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    _In_opt_ HINSTANCE hPrevInstance,
    _In_ LPWSTR    lpCmdLine,
@@ -50,8 +61,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
    glfwSetFramebufferSizeCallback(window, OnWindowResize_Callback);
 
+   auto textFileReader = new TextFileReader();
    OGLGraphicsScene scene;
-   scene.Create();
+   scene.SetTextFileReader(textFileReader);
+   auto created = scene.Create();
+   if (!created) {
+       ReportMessage(scene.GetLog());
+       glfwTerminate();
+       return 0;
+   }
 
    // Cull back faces and use counter-clockwise winding of front faces
    glEnable(GL_CULL_FACE);

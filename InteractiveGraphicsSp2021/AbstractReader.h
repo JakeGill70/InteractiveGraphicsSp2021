@@ -4,6 +4,8 @@
 
 #include "BaseObject.h"
 #include <string>
+#include <algorithm>
+#include <iostream>
 
 using std::string;
 
@@ -12,7 +14,11 @@ class AbstractReader :
 {
 
 protected:
-    virtual void Trim(const string& str)=0;
+    virtual void Trim(string& str) {
+        const string delimiters = " \f\n\r\t\v";
+        str.erase(str.find_last_not_of(delimiters) + 1);   
+        str.erase(0, str.find_first_not_of(delimiters)); 
+    }
 
 public:
     virtual ~AbstractReader() {};

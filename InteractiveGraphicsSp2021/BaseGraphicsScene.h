@@ -7,6 +7,7 @@
 #include "BaseObject.h"
 #include "AbstractShader.h"
 #include <map>
+#include "TextFileReader.h"
 
 using std::string;
 using std::map;
@@ -21,18 +22,20 @@ protected:
 	map<string, AbstractGraphicsObject*> _objects;
 	map<string, BaseCamera*> _cameras;
 	BaseCamera* _currentCamera;
+	TextFileReader* _textFileReader;
 
 public:
 	BaseGraphicsScene();
 	~BaseGraphicsScene();
 
-	virtual void Create();
+	virtual bool Create();
 	virtual void AddShader(string name, AbstractShader* shader);
 	virtual void AddGraphicsObject(string name, AbstractGraphicsObject* object, string shaderName);
 	virtual void addCamera(string name, BaseCamera* camera);
 	virtual void SetCurrentCamera(string cameraName);
 	virtual void Render();
 	virtual void UpdateCameraProjection(float aspectRatio);
+	virtual void SetTextFileReader(TextFileReader* reader);
 
 private:
 	template<class T>

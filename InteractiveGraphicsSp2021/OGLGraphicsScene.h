@@ -4,6 +4,6 @@ class OGLGraphicsScene :
 	public BaseGraphicsScene
 {
 public:
-	void Create();
+	bool Create();
 };
 

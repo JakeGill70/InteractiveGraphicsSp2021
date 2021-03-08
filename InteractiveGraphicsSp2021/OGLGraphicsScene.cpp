@@ -4,7 +4,7 @@
 #include "OGLGraphicsObject.hpp"
 
 
-void OGLGraphicsScene::Create() {
+bool OGLGraphicsScene::Create() {
     /*======================================\\
     ||            Create Shaders            ||
     \\=====================================*/
@@ -14,21 +14,16 @@ void OGLGraphicsScene::Create() {
     shader->SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
     AddShader("defaultShader", shader);
 
+    _textFileReader->SetFilePath("Simple3DVertexShader.glsl");
+    _textFileReader->Open();
+    _textFileReader->Read();
+    _textFileReader->Close();
+    if (_textFileReader->HasError()) {
+        return false;
+    }
+
     OGLShader* simple3DShader = new OGLShader();
-    simple3DShader->SetVertexSource(
-        "#version 400\n"\
-        "layout(location = 0) in vec3 position;\n"\
-        "layout(location = 1) in vec3 vertexColor;\n"\
-        "out vec4 fragColor;\n"\
-        "uniform mat4 world;\n"\
-        "uniform mat4 view;\n"\
-        "uniform mat4 projection;\n"\
-        "void main()\n"\
-        "{\n"\
-        "   gl_Position = projection * view * world * vec4(position, 1.0);\n"\
-        "   fragColor = vec4(vertexColor, 1.0);\n"\
-        "}\n"
-    );
+    simple3DShader->SetVertexSource(_textFileReader->GetContents());
     simple3DShader->Create();
     simple3DShader->SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
     simple3DShader->SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
