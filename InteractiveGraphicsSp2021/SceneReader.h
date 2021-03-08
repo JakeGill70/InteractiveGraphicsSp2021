@@ -27,6 +27,10 @@ protected:
 	ifstream _fin;
 	bool _errorOccurred;
 	vector<CameraData> _cameraData;
+	string _state;
+
+	void ProcessLine(const string& line);
+	void ProcessCameraLine(const string& line);
 
 public:
 	SceneReader(const string& filePath);
