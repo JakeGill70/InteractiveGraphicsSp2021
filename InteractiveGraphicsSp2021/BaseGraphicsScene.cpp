@@ -18,7 +18,7 @@ void BaseGraphicsScene::AddShader(string name, AbstractShader* shader) {
 	_shaders[name] = shader;
 }
 
-void  BaseGraphicsScene::AddGraphicObject(string name, AbstractGraphicsObject* object, string shaderName) {
+void  BaseGraphicsScene::AddGraphicsObject(string name, AbstractGraphicsObject* object, string shaderName) {
 	_objects[name] = object;
 	_shaders[shaderName]->AddObjectToRender(name, object);
 }

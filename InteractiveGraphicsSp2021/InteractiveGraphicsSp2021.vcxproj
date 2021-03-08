@@ -157,6 +157,7 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="OGLGraphicsScene.cpp" />
     <ClCompile Include="OGLShader.cpp" />
     <ClCompile Include="ReferenceFrame.cpp" />
   </ItemGroup>
@@ -169,6 +170,7 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="GraphicsStructures.h" />
     <ClInclude Include="OGLGraphicsObject.hpp" />
+    <ClInclude Include="OGLGraphicsScene.h" />
     <ClInclude Include="OGLShader.h" />
     <ClInclude Include="ReferenceFrame.h" />
   </ItemGroup>

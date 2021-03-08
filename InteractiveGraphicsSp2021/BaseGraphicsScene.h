@@ -28,7 +28,7 @@ public:
 
 	virtual void Create();
 	virtual void AddShader(string name, AbstractShader* shader);
-	virtual void  AddGraphicObject(string name, AbstractGraphicsObject* object, string shaderName);
+	virtual void AddGraphicsObject(string name, AbstractGraphicsObject* object, string shaderName);
 	virtual void addCamera(string name, BaseCamera* camera);
 	virtual void SetCurrentCamera(string cameraName);
 	virtual void Render();
