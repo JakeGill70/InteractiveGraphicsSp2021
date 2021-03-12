@@ -111,18 +111,18 @@ bool OGLGraphicsScene::Create()
    axis->AddVertexData({ 0, 0, 2.0f, 0, 0, 1 });
    axis->SendToGPU();
 
-   OGLGraphicsObject<VertexPC>* indexedCube = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("indexedCube", indexedCube, "simple3DShader", true);
+   OGLGraphicsObject<VertexPC>* yelloCube = new OGLGraphicsObject<VertexPC>();
+   AddGraphicsObject("yellowCube", yelloCube, "simple3DShader", true);
    // Yellow vertices
-   indexedCube->AddVertexData({ -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 0
-   indexedCube->AddVertexData({ -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 1
-   indexedCube->AddVertexData({  0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 2
-   indexedCube->AddVertexData({  0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 3
-   indexedCube->AddVertexData({  0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 4
-   indexedCube->AddVertexData({  0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 5
-   indexedCube->AddVertexData({ -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 6
-   indexedCube->AddVertexData({ -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 7
-   unsigned short indices[] = {
+   yelloCube->AddVertexData({ -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 0
+   yelloCube->AddVertexData({ -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 1
+   yelloCube->AddVertexData({  0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 2
+   yelloCube->AddVertexData({  0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 3
+   yelloCube->AddVertexData({  0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 4
+   yelloCube->AddVertexData({  0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 5
+   yelloCube->AddVertexData({ -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 6
+   yelloCube->AddVertexData({ -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 7
+   unsigned short yellowCubeIndices[] = {
       0, 1, 2, 0, 2, 3, // Front face
       3, 2, 5, 3, 5, 4, // Right face
       4, 5, 6, 4, 6, 7, // Back face
@@ -130,9 +130,35 @@ bool OGLGraphicsScene::Create()
       5, 2, 1, 5, 1, 6, // Bottom face
       7, 0, 3, 7, 3, 4  // Top face
    };
-   indexedCube->SetIndices(indices, sizeof(indices) / sizeof(unsigned short));
-   indexedCube->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
-   indexedCube->SendToGPU();
+   yelloCube->SetIndices(yellowCubeIndices, sizeof(yellowCubeIndices) / sizeof(unsigned short));
+   yelloCube->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
+   yelloCube->SendToGPU();
+
+   // Create Purple Cube
+   OGLGraphicsObject<VertexPC>* purpleCube = new OGLGraphicsObject<VertexPC>();
+   AddGraphicsObject("purpleCube", purpleCube, "simple3DShader", true);
+   // Purple vertices
+   purpleCube->AddVertexData({ -0.5f,  0.5f, 0.5f,  0.5f, 0.0f, 0.5f }); // 0
+   purpleCube->AddVertexData({ -0.5f, -0.5f, 0.5f,  0.5f, 0.0f, 0.5f }); // 1
+   purpleCube->AddVertexData({ 0.5f, -0.5f, 0.5f,  0.5f, 0.0f, 0.5f }); // 2
+   purpleCube->AddVertexData({ 0.5f,  0.5f, 0.5f,  0.5f, 0.0f, 0.5f }); // 3
+   purpleCube->AddVertexData({ 0.5f,  0.5f, -0.5f, 0.5f, 0.0f, 0.5f }); // 4
+   purpleCube->AddVertexData({ 0.5f, -0.5f, -0.5f, 0.5f, 0.0f, 0.5f }); // 5
+   purpleCube->AddVertexData({ -0.5f, -0.5f, -0.5f, 0.5f, 0.0f, 0.5f }); // 6
+   purpleCube->AddVertexData({ -0.5f,  0.5f, -0.5f, 0.5f, 0.0f, 0.5f }); // 7
+
+   unsigned short purpleCubeIndices[] = {
+       0, 1, 2, 0, 2, 3, // Front face   
+       3, 2, 5, 3, 5, 4, // Right face   
+       4, 5, 6, 4, 6, 7, // Back face   
+       7, 6, 1, 7, 1, 0, // Left face  
+       5, 2, 1, 5, 1, 6, // Bottom face
+       7, 0, 3, 7, 3, 4  // Top face
+   };
+   purpleCube->SetIndices(purpleCubeIndices, sizeof(purpleCubeIndices) / sizeof(unsigned short));
+   // Position the purple cube to match the yellow cube
+   purpleCube->frame.TranslateLocal(glm::vec3(0, 0, 2));
+   purpleCube->SendToGPU();
 
    return true;
 }
