@@ -14,6 +14,7 @@ void TextFileReader::Open()
 void TextFileReader::Read()
 {
    if (_errorOccurred) return;
+   _stringBuffer.str(""); // Clear the string buffer
    string line;
    while (!_fin.eof()) {
       getline(_fin, line);

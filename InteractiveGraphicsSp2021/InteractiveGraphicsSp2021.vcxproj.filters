@@ -63,6 +63,9 @@
     <ClCompile Include="AbstractGraphicsObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OGLTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsStructures.h">
@@ -119,10 +122,21 @@
     <ClInclude Include="RotateAnimation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="labweek07.ig" />
     <None Include="Simple3DVertexShader.glsl" />
+    <None Include="PCT3DVertexShader.glsl" />
+    <None Include="TexFragmentShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="scene.txt" />

@@ -4,6 +4,7 @@
 
 #include "BaseObject.h"
 #include "ReferenceFrame.h"
+#include "AbstractTexture.h"
 class AbstractAnimation;
 
 class AbstractGraphicsObject : 
@@ -12,12 +13,14 @@ class AbstractGraphicsObject :
 protected:
    unsigned int _primitive;
    AbstractAnimation* _animation;
+   AbstractTexture* _texture;
 
 public:
    ReferenceFrame frame;
 
 public:
-   AbstractGraphicsObject() : _primitive(0), _animation(nullptr) {}
+   AbstractGraphicsObject() 
+      : _primitive(0), _animation(nullptr), _texture(nullptr) {}
 
    virtual ~AbstractGraphicsObject();
 
@@ -31,6 +34,18 @@ public:
 
    inline virtual bool IsIndexed() const {
       return false;
+   }
+
+   inline virtual void SetTexture(AbstractTexture* texture) {
+      _texture = texture;
+   }
+
+   inline virtual AbstractTexture* GetTexture() {
+      return _texture;
+   }
+
+   inline virtual bool IsTextured() const {
+      return _texture != nullptr;
    }
 
    virtual inline void SetAnimation(AbstractAnimation* animation);

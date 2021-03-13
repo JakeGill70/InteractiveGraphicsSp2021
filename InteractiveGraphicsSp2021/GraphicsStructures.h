@@ -16,4 +16,18 @@ struct VertexPC {
    RGB color;
 };
 
+struct RGBA {
+   GLfloat red, green, blue, alpha;
+};
+
+struct TexCoord {
+   GLfloat S, T;
+};
+
+struct VertexPCT {
+   Vector3D position;
+   RGBA color;
+   TexCoord tex;
+};
+
 #endif
