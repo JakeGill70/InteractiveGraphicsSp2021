@@ -148,32 +148,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractAnimation.cpp" />
+    <ClCompile Include="AbstractGraphicsObject.cpp" />
     <ClCompile Include="AbstractReader.cpp" />
-    <ClCompile Include="AbstractShader.cpp" />
+    <ClCompile Include="AbstractTimer.cpp" />
     <ClCompile Include="BaseCamera.cpp" />
     <ClCompile Include="BaseGraphicsScene.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="HighResolutionTimer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="OGLGraphicsScene.cpp" />
     <ClCompile Include="OGLShader.cpp" />
     <ClCompile Include="ReferenceFrame.cpp" />
+    <ClCompile Include="RotateAnimation.cpp" />
     <ClCompile Include="SceneReader.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractAnimation.h" />
     <ClInclude Include="AbstractGraphicsObject.h" />
     <ClInclude Include="AbstractReader.h" />
+    <ClInclude Include="AbstractTimer.h" />
     <ClInclude Include="AbstractVertexGraphicsObject.hpp" />
     <ClInclude Include="AbstractShader.h" />
     <ClInclude Include="BaseCamera.h" />
     <ClInclude Include="BaseGraphicsScene.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="GraphicsStructures.h" />
+    <ClInclude Include="HighResolutionTimer.h" />
     <ClInclude Include="OGLGraphicsObject.hpp" />
     <ClInclude Include="OGLGraphicsScene.h" />
     <ClInclude Include="OGLShader.h" />
     <ClInclude Include="ReferenceFrame.h" />
+    <ClInclude Include="RotateAnimation.h" />
     <ClInclude Include="SceneReader.h" />
     <ClInclude Include="TextFileReader.h" />
   </ItemGroup>

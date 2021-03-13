@@ -28,9 +28,13 @@ public:
       _shaderProgram = shaderProgram;
    }
 
-   virtual inline void AddObjectToRender(const string& objectName, AbstractGraphicsObject* object) {
+   virtual inline void AddObjectToRender(
+      const string& objectName, AbstractGraphicsObject* object, bool isIndexed) {
       _objectsToRender[objectName] = object;
       _objectsToRender[objectName]->SetBufferId(GenerateBuffer());
+      if (isIndexed) {
+         _objectsToRender[objectName]->SetIndexedBufferId(GenerateBuffer());
+      }
    }
 
    virtual inline void SetCamera(BaseCamera* camera) {

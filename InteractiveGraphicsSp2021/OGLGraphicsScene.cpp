@@ -2,6 +2,7 @@
 #include "OGLShader.h"
 #include "OGLGraphicsObject.hpp"
 #include "TextFileReader.h"
+#include "RotateAnimation.h"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
@@ -10,88 +11,47 @@ OGLGraphicsScene::~OGLGraphicsScene()
 
 bool OGLGraphicsScene::Create()
 {
+   if (!LoadScene()) return false;
+   ReadCameraData();
+   if (!ReadShaderData()) return false;
+   if (!ReadObjectData()) return false;
+
+    _objects["cube"]->frame.TranslateLocal(glm::vec3(-1, 0.5f, 0));
+    _objects["indexedCube"]->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
+    _objects["purpleRectangle"]->frame.TranslateLocal(glm::vec3(0, 0, 2.0f));
+
+    RotateAnimation* defaultRot = new RotateAnimation();
+    RotateAnimation* otherRot = new RotateAnimation(glm::vec3(0, 0, 1), 180.0f);
+    _objects["cube"]->SetAnimation(defaultRot);
+    _objects["indexedCube"]->SetAnimation(otherRot);
+
+   return true;
+}
+
+bool OGLGraphicsScene::LoadScene()
+{
    _sceneReader->Open();
    _sceneReader->Read();
    if (_sceneReader->HasError()) {
       return false;
    }
    _sceneReader->Close();
+   return true;
+}
 
+bool OGLGraphicsScene::ReadCameraData()
+{
    vector<CameraData>& cameraData = _sceneReader->GetCameraData();
-   BaseCamera* camera = new BaseCamera();
-   camera->frame.SetPosition(
-      cameraData[0].position.x, cameraData[0].position.y, cameraData[0].position.z);
-   camera->fieldOfView = cameraData[0].fov;
-   camera->nearPlane = cameraData[0].nearPlane;
-   camera->farPlane = cameraData[0].farPlane;
-   camera->UpdateView();
-   AddCamera(cameraData[0].name, camera);
-
-   if (!ReadShaderData()) return false;
-
-   OGLGraphicsObject<VertexPC>* triangle = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("triangle", triangle, "defaultShader");
-   triangle->AddVertex({  0.0f,  0.5f, 0, 1, 0, 0 });
-   triangle->AddVertex({ -0.5f, -0.5f, 0, 0, 0, 1 });
-   triangle->AddVertex({  0.5f, -0.5f, 0, 0, 1, 0 });
-   triangle->SendToGPU();
-
-   OGLGraphicsObject<VertexPC>* cube = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("cube", cube, "simple3DShader");
-   // Red vertices
-   VertexPC V1 = { -0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V2 = { -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V3 = { 0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   VertexPC V4 = { 0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f };
-   // Mixed color vertices
-   VertexPC V5 = { 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f };
-   VertexPC V6 = { 0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f };
-   VertexPC V7 = { -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f };
-   VertexPC V8 = { -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f };
-   // Face 1
-   cube->AddVertex(V1);
-   cube->AddVertex(V2);
-   cube->AddVertex(V3);
-   cube->AddVertex(V1);
-   cube->AddVertex(V3);
-   cube->AddVertex(V4);
-   // Face 2
-   cube->AddVertex(V4);
-   cube->AddVertex(V3);
-   cube->AddVertex(V6);
-   cube->AddVertex(V4);
-   cube->AddVertex(V6);
-   cube->AddVertex(V5);
-   // Face 3
-   cube->AddVertex(V5);
-   cube->AddVertex(V6);
-   cube->AddVertex(V7);
-   cube->AddVertex(V5);
-   cube->AddVertex(V7);
-   cube->AddVertex(V8);
-   // Face 4
-   cube->AddVertex(V8);
-   cube->AddVertex(V7);
-   cube->AddVertex(V2);
-   cube->AddVertex(V8);
-   cube->AddVertex(V2);
-   cube->AddVertex(V1);
-   // Face 5
-   cube->AddVertex(V6);
-   cube->AddVertex(V3);
-   cube->AddVertex(V2);
-   cube->AddVertex(V6);
-   cube->AddVertex(V2);
-   cube->AddVertex(V7);
-   // Face 6
-   cube->AddVertex(V8);
-   cube->AddVertex(V1);
-   cube->AddVertex(V4);
-   cube->AddVertex(V8);
-   cube->AddVertex(V4);
-   cube->AddVertex(V5);
-   cube->SendToGPU();
-  
+   for (size_t i = 0; i < cameraData.size(); i++) {
+      BaseCamera* camera = new BaseCamera();
+      camera->frame.SetPosition(
+         cameraData[i].position.x, cameraData[i].position.y, cameraData[i].position.z);
+      camera->fieldOfView = cameraData[i].fov;
+      camera->nearPlane = cameraData[i].nearPlane;
+      camera->farPlane = cameraData[i].farPlane;
+      camera->UpdateView();
+      AddCamera(cameraData[i].name, camera);
+   }
    return true;
 }
 
@@ -131,6 +91,83 @@ bool OGLGraphicsScene::ReadShaderData()
       }
    }
 
+   return true;
+}
+
+bool OGLGraphicsScene::ReadObjectData()
+{
+   AbstractGraphicsObject* object;
+   ObjectData data;
+   map<string, ObjectData>& objectData = _sceneReader->GetObjectData();
+   for (auto it = objectData.begin(); it != objectData.end(); it++) {
+      object = nullptr;
+      data = it->second;
+      if (data.vertexType == "PC") {
+         object = new OGLGraphicsObject<VertexPC>();
+      }
+      if (object != nullptr) {
+         if (data.primitiveType == "lines") {
+            object->SetPrimitive(GL_LINES);
+         }
+         if (data.vertexType == "PC") {
+            if (!ReadPCObjectData(
+               (OGLGraphicsObject<VertexPC>*)object, 
+               data.vertexData, data.indexData, data.isIndexed)) {
+               return false;
+            }
+            AddGraphicsObject(
+               data.name, object, data.shaderName, data.isIndexed);
+            object->SendToGPU();
+         }
+      }
+   }
+   return true;
+}
+
+bool OGLGraphicsScene::ReadPCObjectData(
+   OGLGraphicsObject<VertexPC>* object,
+   vector<float>& vertexData,
+   vector<unsigned short>& indexData,
+   bool isIndexed)
+{
+   size_t numbersLeftToRead = vertexData.size();
+   float x, y, z, r, g, b;
+   vector<VertexPC> vertices;
+   for (size_t i = 0; i < vertexData.size();) {
+      if (numbersLeftToRead < 6) {
+         _log << "Incorrect number of vertices for the object.";
+         return false;
+      }
+      x = vertexData[i++];
+      y = vertexData[i++];
+      z = vertexData[i++];
+      r = vertexData[i++];
+      g = vertexData[i++];
+      b = vertexData[i++];
+      if (indexData.size() > 0) {
+         if (isIndexed) {
+            object->AddVertexData({ x,  y, z, r, g, b });
+         }
+         else {
+            vertices.push_back({ x,  y, z, r, g, b });
+         }
+      }
+      else { // No index data
+         object->AddVertexData({ x,  y, z, r, g, b });
+      }
+      numbersLeftToRead -= 6;
+   }
+
+   VertexPC v;
+   for (size_t i = 0; i < indexData.size();i++) {
+      if (isIndexed) {
+         object->AddIndex(indexData[i]);
+      }
+      else {
+         v = vertices[indexData[i]];
+         object->AddVertexData({ v.position, v.color });
+      }
+   }
    return true;
 }
 
