@@ -3,6 +3,7 @@
 #include "OGLGraphicsObject.hpp"
 #include "TextFileReader.h"
 #include "RotateAnimation.h"
+#include "OGLTexture.h"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
@@ -16,7 +17,7 @@ bool OGLGraphicsScene::Create()
    if (!ReadShaderData()) return false;
    if (!ReadObjectData()) return false;
 
-    _objects["cube"]->frame.TranslateLocal(glm::vec3(-1, 0.5f, 0));
+    _objects["cube"]->frame.TranslateLocal(glm::vec3(-2, 0.5f, 0));
     _objects["indexedCube"]->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
     _objects["purpleRectangle"]->frame.TranslateLocal(glm::vec3(0, 0, 2.0f));
 
@@ -24,6 +25,56 @@ bool OGLGraphicsScene::Create()
     RotateAnimation* otherRot = new RotateAnimation(glm::vec3(0, 0, 1), 180.0f);
     _objects["cube"]->SetAnimation(defaultRot);
     _objects["indexedCube"]->SetAnimation(otherRot);
+
+    OGLShader* texShader = new OGLShader();
+    _textFileReader->SetFilePath("PCT3DVertexShader.glsl");
+    _textFileReader->Open();
+    _textFileReader->Read();
+    _textFileReader->Close();
+    if (_textFileReader->HasError()) {
+       return false;
+    }
+    texShader->SetVertexSource(_textFileReader->GetContents());
+    _textFileReader->SetFilePath("TexFragmentShader.glsl");
+    _textFileReader->Open();
+    _textFileReader->Read();
+    _textFileReader->Close();
+    if (_textFileReader->HasError()) {
+       return false;
+    }
+    texShader->SetFragmentSource(_textFileReader->GetContents());
+    if(!texShader->Create()) {
+       return false;
+    }
+    texShader->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
+    texShader->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
+    texShader->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
+    AddShader("simpleTextureShader", texShader);
+    _shaders["simpleTextureShader"]->SetCamera(_cameras["camera"]);
+
+
+    unsigned char* textureData = new unsigned char[] {
+      255, 255, 255, 255,   0,   0, 255, 255,   0,   0, 255, 255, 255, 255, 255, 255,
+        0, 255,   0, 255, 255, 255, 255, 255, 255, 255, 255, 255,   0, 255,   0, 255,
+        0, 255,   0, 255, 255, 255, 255, 255, 255, 255, 255, 255,   0, 255,   0, 255,
+      255, 255, 255, 255, 255,   0,   0, 255, 255,   0,   0, 255, 255, 255, 255, 255
+    };
+    OGLTexture* texture = new OGLTexture();
+    texture->LoadFromArray(textureData, 64, 4, 4);
+    //texture->LoadFromFile("brickwall.jpg");
+
+    OGLGraphicsObject<VertexPCT>* wall = new OGLGraphicsObject<VertexPCT>();
+    //                     x,  y, z, r, g, b, a, s, t
+    wall->AddVertexData({ -1,  1, 0, 1, 1, 1, 1, 0, 1 });
+    wall->AddVertexData({ -1, -1, 0, 1, 1, 1, 1, 0, 0 });
+    wall->AddVertexData({  1, -1, 0, 1, 1, 1, 1, 1, 0 });
+    wall->AddVertexData({  1,  1, 0, 1, 1, 1, 1, 1, 1 });
+    unsigned short indices[] = { 0, 1, 2, 0, 2, 3 };
+    wall->SetIndices(indices, 6);
+    wall->SetTexture(texture);
+    wall->frame.TranslateLocal(glm::vec3(0, 1.0f, -2.0f));
+    AddGraphicsObject("wall", wall, "simpleTextureShader", true);
+    _objects["wall"]->SendToGPU();
 
    return true;
 }

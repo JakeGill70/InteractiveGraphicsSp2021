@@ -141,4 +141,9 @@
   <ItemGroup>
     <Text Include="scene.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="brickwall.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

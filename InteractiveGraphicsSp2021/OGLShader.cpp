@@ -2,6 +2,7 @@
 #include "AbstractGraphicsObject.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "BaseCamera.h"
+#include "AbstractTexture.h"
 
 OGLShader::OGLShader() : AbstractShader(), _vaoId(0)
 {
@@ -47,6 +48,9 @@ void OGLShader::Render(AbstractGraphicsObject* object)
    glUseProgram((GLuint)_shaderProgram);
    GLuint vbo = (GLuint)object->GetBufferId();
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+   if (object->IsTextured()) {
+      object->GetTexture()->Select();
+   }
    SetUpBufferInterpretation();
    if (!object->IsIndexed()) {
       glDrawArrays(object->GetPrimitive(), 0, (GLsizei)object->GetNumberOfElements());
@@ -106,6 +110,16 @@ void OGLShader::SetUpBufferInterpretation()
       GL_FALSE,
       (GLsizei)_colorAttribute.bytesToNext,
       (void*)_colorAttribute.offsetToFirst
+   );
+   // Textures
+   glEnableVertexAttribArray(_textureAttribute.index);
+   glVertexAttribPointer(
+      _textureAttribute.index,
+      (GLint)_textureAttribute.count,
+      GL_FLOAT,
+      GL_FALSE,
+      (GLsizei)_textureAttribute.bytesToNext,
+      (void*)_textureAttribute.offsetToFirst
    );
 }
 

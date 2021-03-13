@@ -4,7 +4,6 @@ camera,0,3,5,60,0.1f,50
 # shader name, file path of vertex shader, file path of fragment shader, camera name
 defaultShader,default,default,none
 simple3DShader,Simple3DVertexShader.glsl,default,camera
-simple3DTextureShader,PCT3DVertexShader.glsl,TexFragmentShader.glsl,camera
 <endShaders>
 # vertex type, object name, shader name, primitive type
 PC,axis,simple3DShader,lines

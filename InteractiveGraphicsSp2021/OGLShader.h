@@ -19,7 +19,7 @@ private:
       int count;
       size_t bytesToNext;
       size_t offsetToFirst;
-   } _positionAttribute, _colorAttribute;
+   } _positionAttribute, _colorAttribute, _textureAttribute;
    string _vertexSource;
    string _fragmentSource;
 
@@ -36,6 +36,10 @@ public:
 
    inline void SetColorAttribute(VertexAttribute ca) {
       this->_colorAttribute = ca;
+   }
+
+   inline void SetTextureAttribute(VertexAttribute ta) {
+      this->_textureAttribute = ta;
    }
 
    inline void Select() {

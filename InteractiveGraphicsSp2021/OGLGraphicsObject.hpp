@@ -52,14 +52,15 @@ void OGLGraphicsObject<T>::SendToGPU()
       this->_vertices.size() * sizeof(T), 
       &this->_vertices[0], 
       GL_STATIC_DRAW);
-
    if (this->IsIndexed()) {
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _eboId);
       glBufferData(GL_ELEMENT_ARRAY_BUFFER,
          this->_indices.size() * sizeof(unsigned short),
          &this->_indices[0],
          GL_STATIC_DRAW);
-      
+   }
+   if (this->IsTextured()) {
+      this->_texture->Setup();
    }
    // Good practice to cleanup by unbinding 
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

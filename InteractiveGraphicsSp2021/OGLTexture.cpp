@@ -54,14 +54,15 @@ void OGLTexture::Setup()
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrapT);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _minFilter);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _magFilter);
-      glGenerateMipmap(GL_TEXTURE_2D);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, _textureData);
       if (_loadedFromFile) {
+         glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, _textureData);
          stbi_image_free(_textureData);
       }
       else {
+         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _textureData);
          delete[] _textureData;
       }
+      glGenerateMipmap(GL_TEXTURE_2D);
       _textureData = nullptr;
    }
 }
