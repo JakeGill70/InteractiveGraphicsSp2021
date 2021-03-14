@@ -2,24 +2,24 @@
 #ifndef ABSTRACT_VERTEX_GRAPHICS_OBJECT
 #define ABSTRACT_VERTEX_GRAPHICS_OBJECT
 
-#include "AbstractGraphicsObject.h"
+#include "AbstractMesh.h"
 #include <vector>
 using std::vector;
 #include "GraphicsStructures.h"
 
-
 template <class T>
-class AbstractVertexGraphicsObject :
-   public AbstractGraphicsObject
+class AbstractVertexMesh :
+   public AbstractMesh
 {
 protected:
    vector<T> _vertices;
    vector<unsigned short> _indices;
 
-public:
-   AbstractVertexGraphicsObject() {}
 
-   virtual ~AbstractVertexGraphicsObject() {}
+public:
+   AbstractVertexMesh() {}
+
+   virtual ~AbstractVertexMesh() {}
 
    void AddVertexData(const T& vertex);
 
@@ -39,23 +39,19 @@ public:
       return numberOfElements;
    }
 
-   virtual void Render();
+
+   virtual void Render() = 0;
 };
 
 template<class T>
-void AbstractVertexGraphicsObject<T>::AddVertexData(const T& vertex)
+void AbstractVertexMesh<T>::AddVertexData(const T& vertex)
 {
    this->_vertices.push_back(vertex);
 }
 
-template <class T>
-void AbstractVertexGraphicsObject<T>::Render()
-{
-   //this->_shader->Render(this);
-}
 
 template <class T>
-void AbstractVertexGraphicsObject<T>::SetIndices(unsigned short indices[], int count)
+void AbstractVertexMesh<T>::SetIndices(unsigned short indices[], int count)
 {
    for (int i = 0; i < count; i++) {
       this->_indices.push_back(indices[i]);

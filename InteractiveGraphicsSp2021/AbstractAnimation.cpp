@@ -1,7 +1,7 @@
 #include "AbstractAnimation.h"
-#include "AbstractGraphicsObject.h"
+#include "GraphicsObject.h"
 
-void AbstractAnimation::SetObject(AbstractGraphicsObject* object)
+void AbstractAnimation::SetObject(GraphicsObject* object)
 {
    _object = object;
 }

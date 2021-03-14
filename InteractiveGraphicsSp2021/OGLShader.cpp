@@ -1,13 +1,13 @@
 #include "OGLShader.h"
-#include "AbstractGraphicsObject.h"
+#include "GraphicsObject.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "BaseCamera.h"
 #include "AbstractTexture.h"
+#include "AbstractMesh.h"
 
 OGLShader::OGLShader() : AbstractShader(), _vaoId(0)
 {
-   _positionAttribute = { 0, 3, 0, 0 };
-   _colorAttribute = { 1, 3, 0, 0 };
+
    glGenVertexArrays(1, &_vaoId);
    SetDefaultSource();
 }
@@ -35,31 +35,38 @@ void OGLShader::RenderObjects()
    for (auto iterator = _objectsToRender.begin(); 
       iterator != _objectsToRender.end(); 
       iterator++) {
-      AbstractGraphicsObject* object = iterator->second;
+      GraphicsObject* object = iterator->second;
       SelectProgram();
       SendMatrixToGPU("world", object->frame.orientation);
       Render(object);
    }
 }
 
-void OGLShader::Render(AbstractGraphicsObject* object)
+void OGLShader::Render(GraphicsObject* object)
 {
    glBindVertexArray(_vaoId);
    glUseProgram((GLuint)_shaderProgram);
-   GLuint vbo = (GLuint)object->GetBufferId();
-   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-   if (object->IsTextured()) {
-      object->GetTexture()->Select();
+   vector<AbstractMesh*> meshes = object->GetMeshes();
+   AbstractMesh* mesh;
+   GLuint vbo;
+   for (auto it = meshes.begin(); it != meshes.end(); it++) {
+      mesh = *it;
+      vbo = (GLuint)mesh->GetBufferId();
+      glBindBuffer(GL_ARRAY_BUFFER, vbo);
+      if (mesh->IsTextured()) {
+         mesh->GetTexture()->Select();
+      }
+      mesh->SetupBufferInterpretation();
+      if (!mesh->IsIndexed()) {
+         glDrawArrays(mesh->GetPrimitive(), 0, (GLsizei)mesh->GetNumberOfElements());
+      }
+      else {
+         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (GLuint)mesh->GetIndexedBufferId());
+         glDrawElements(mesh->GetPrimitive(), (GLsizei)mesh->GetNumberOfElements(),
+            GL_UNSIGNED_SHORT, 0);
+      }
    }
-   SetUpBufferInterpretation();
-   if (!object->IsIndexed()) {
-      glDrawArrays(object->GetPrimitive(), 0, (GLsizei)object->GetNumberOfElements());
-   }
-   else {
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (GLuint)object->GetIndexedBufferId());
-      glDrawElements(object->GetPrimitive(), (GLsizei)object->GetNumberOfElements(), 
-         GL_UNSIGNED_SHORT, 0);
-   }
+
    glDisableVertexAttribArray(0);
    glDisableVertexAttribArray(1);
    glUseProgram(0);
@@ -89,39 +96,7 @@ void OGLShader::SetDefaultSource()
       "}\n";
 }
 
-void OGLShader::SetUpBufferInterpretation()
-{
-   // Positions
-   glEnableVertexAttribArray(_positionAttribute.index);
-   glVertexAttribPointer(
-      _positionAttribute.index,
-      (GLint)_positionAttribute.count,
-      GL_FLOAT,
-      GL_FALSE,
-      (GLsizei)_positionAttribute.bytesToNext,
-      (void*)_positionAttribute.offsetToFirst
-   );
-   // Colors
-   glEnableVertexAttribArray(_colorAttribute.index);
-   glVertexAttribPointer(
-      _colorAttribute.index,
-      (GLint)_colorAttribute.count,
-      GL_FLOAT,
-      GL_FALSE,
-      (GLsizei)_colorAttribute.bytesToNext,
-      (void*)_colorAttribute.offsetToFirst
-   );
-   // Textures
-   glEnableVertexAttribArray(_textureAttribute.index);
-   glVertexAttribPointer(
-      _textureAttribute.index,
-      (GLint)_textureAttribute.count,
-      GL_FLOAT,
-      GL_FALSE,
-      (GLsizei)_textureAttribute.bytesToNext,
-      (void*)_textureAttribute.offsetToFirst
-   );
-}
+
 
 bool OGLShader::Create()
 {

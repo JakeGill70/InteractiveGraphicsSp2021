@@ -3,19 +3,19 @@
 #define ABSTRACT_ANIMATION
 
 #include "BaseObject.h"
-class AbstractGraphicsObject;
+class GraphicsObject;
 
 class AbstractAnimation :
     public BaseObject
 {
 protected:
-   AbstractGraphicsObject* _object;
+   GraphicsObject* _object;
 
 public:
    AbstractAnimation() : _object(nullptr) {}
    virtual ~AbstractAnimation() {}
 
-   void SetObject(AbstractGraphicsObject* object);
+   void SetObject(GraphicsObject* object);
 
    virtual void Update(double elapsedSeconds) {}
 };

@@ -1,9 +1,9 @@
 #include "OGLGraphicsScene.h"
 #include "OGLShader.h"
-#include "OGLGraphicsObject.hpp"
 #include "TextFileReader.h"
 #include "RotateAnimation.h"
 #include "OGLTexture.h"
+#include "OGLVertexMesh.hpp"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
@@ -46,9 +46,6 @@ bool OGLGraphicsScene::Create()
     if(!texShader->Create()) {
        return false;
     }
-    texShader->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
-    texShader->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
-    texShader->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
     AddShader("simpleTextureShader", texShader);
     _shaders["simpleTextureShader"]->SetCamera(_cameras["camera"]);
 
@@ -60,20 +57,25 @@ bool OGLGraphicsScene::Create()
       255, 255, 255, 255, 255,   0,   0, 255, 255,   0,   0, 255, 255, 255, 255, 255
     };
     OGLTexture* texture = new OGLTexture();
-    texture->LoadFromArray(textureData, 64, 4, 4);
-    //texture->LoadFromFile("brickwall.jpg");
+    //texture->LoadFromArray(textureData, 64, 4, 4);
+    texture->LoadFromFile("brickwall.jpg");
 
-    OGLGraphicsObject<VertexPCT>* wall = new OGLGraphicsObject<VertexPCT>();
+    GraphicsObject* wall = new GraphicsObject();
+    wall->AddMesh(new OGLVertexMesh<VertexPCT>());
+    OGLVertexMesh<VertexPCT>* mesh = (OGLVertexMesh<VertexPCT>*)wall->GetMesh(0);
+    mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
+    mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
+    mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
     //                     x,  y, z, r, g, b, a, s, t
-    wall->AddVertexData({ -1,  1, 0, 1, 1, 1, 1, 0, 1 });
-    wall->AddVertexData({ -1, -1, 0, 1, 1, 1, 1, 0, 0 });
-    wall->AddVertexData({  1, -1, 0, 1, 1, 1, 1, 1, 0 });
-    wall->AddVertexData({  1,  1, 0, 1, 1, 1, 1, 1, 1 });
+    mesh->AddVertexData({ -1,  1, 0, 1, 1, 1, 1, 0, 1 });
+    mesh->AddVertexData({ -1, -1, 0, 1, 1, 1, 1, 0, 0 });
+    mesh->AddVertexData({  1, -1, 0, 1, 1, 1, 1, 1, 0 });
+    mesh->AddVertexData({  1,  1, 0, 1, 1, 1, 1, 1, 1 });
     unsigned short indices[] = { 0, 1, 2, 0, 2, 3 };
-    wall->SetIndices(indices, 6);
-    wall->SetTexture(texture);
+    mesh->SetIndices(indices, 6);
+    mesh->SetTexture(texture);
     wall->frame.TranslateLocal(glm::vec3(0, 1.0f, -2.0f));
-    AddGraphicsObject("wall", wall, "simpleTextureShader", true);
+    AddGraphicsObject("wall", wall, "simpleTextureShader");
     _objects["wall"]->SendToGPU();
 
    return true;
@@ -134,8 +136,6 @@ bool OGLGraphicsScene::ReadShaderData()
       if (!shader->Create()) {
          return false;
       }
-      shader->SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
-      shader->SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
       AddShader(shaderData[i].name, shader);
       if (shaderData[i].cameraName != "none") {
          _shaders[shaderData[i].name]->SetCamera(_cameras[shaderData[i].cameraName]);
@@ -147,36 +147,53 @@ bool OGLGraphicsScene::ReadShaderData()
 
 bool OGLGraphicsScene::ReadObjectData()
 {
-   AbstractGraphicsObject* object;
+   AbstractMesh* mesh = nullptr;
+   GraphicsObject* object;
    ObjectData data;
+   MeshData meshData;
    map<string, ObjectData>& objectData = _sceneReader->GetObjectData();
    for (auto it = objectData.begin(); it != objectData.end(); it++) {
-      object = nullptr;
+      object = new GraphicsObject();
       data = it->second;
-      if (data.vertexType == "PC") {
-         object = new OGLGraphicsObject<VertexPC>();
-      }
-      if (object != nullptr) {
-         if (data.primitiveType == "lines") {
-            object->SetPrimitive(GL_LINES);
+      for (auto mit = data.meshData.begin(); mit != data.meshData.end(); mit++) {
+         meshData = *mit;
+         if (meshData.vertexType == "PC") {
+            mesh = CreatePCMesh(meshData);
          }
-         if (data.vertexType == "PC") {
-            if (!ReadPCObjectData(
-               (OGLGraphicsObject<VertexPC>*)object, 
-               data.vertexData, data.indexData, data.isIndexed)) {
-               return false;
-            }
-            AddGraphicsObject(
-               data.name, object, data.shaderName, data.isIndexed);
-            object->SendToGPU();
+         if (mesh) {
+            object->AddMesh(mesh);
+         }
+         else {
+            _log << "Could not create " << data.name << std::endl;
+            delete object;
+            return false;
          }
       }
+      AddGraphicsObject(data.name, object, data.shaderName);
+      object->SendToGPU();
    }
    return true;
 }
 
-bool OGLGraphicsScene::ReadPCObjectData(
-   OGLGraphicsObject<VertexPC>* object,
+AbstractMesh* OGLGraphicsScene::CreatePCMesh(MeshData& meshData)
+{
+   OGLVertexMesh<VertexPC>* mesh = new OGLVertexMesh<VertexPC>();
+   if (meshData.primitiveType == "lines") {
+      mesh->SetPrimitive(GL_LINES);
+   }
+   if (!ReadPCMeshData(
+      (OGLVertexMesh<VertexPC>*)mesh,
+      meshData.vertexData, meshData.indexData, meshData.isIndexed)) {
+      delete mesh;
+      return nullptr;
+   }
+   mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
+   mesh->SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
+   return mesh;
+}
+
+bool OGLGraphicsScene::ReadPCMeshData(
+   OGLVertexMesh<VertexPC>* mesh,
    vector<float>& vertexData,
    vector<unsigned short>& indexData,
    bool isIndexed)
@@ -186,7 +203,7 @@ bool OGLGraphicsScene::ReadPCObjectData(
    vector<VertexPC> vertices;
    for (size_t i = 0; i < vertexData.size();) {
       if (numbersLeftToRead < 6) {
-         _log << "Incorrect number of vertices for the object.";
+         _log << "Incorrect number of vertices for the mesh.";
          return false;
       }
       x = vertexData[i++];
@@ -197,14 +214,14 @@ bool OGLGraphicsScene::ReadPCObjectData(
       b = vertexData[i++];
       if (indexData.size() > 0) {
          if (isIndexed) {
-            object->AddVertexData({ x,  y, z, r, g, b });
+            mesh->AddVertexData({ x,  y, z, r, g, b });
          }
          else {
             vertices.push_back({ x,  y, z, r, g, b });
          }
       }
       else { // No index data
-         object->AddVertexData({ x,  y, z, r, g, b });
+         mesh->AddVertexData({ x,  y, z, r, g, b });
       }
       numbersLeftToRead -= 6;
    }
@@ -212,11 +229,11 @@ bool OGLGraphicsScene::ReadPCObjectData(
    VertexPC v;
    for (size_t i = 0; i < indexData.size();i++) {
       if (isIndexed) {
-         object->AddIndex(indexData[i]);
+         mesh->AddIndex(indexData[i]);
       }
       else {
          v = vertices[indexData[i]];
-         object->AddVertexData({ v.position, v.color });
+         mesh->AddVertexData({ v.position, v.color });
       }
    }
    return true;

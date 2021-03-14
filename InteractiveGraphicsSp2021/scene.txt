@@ -6,7 +6,8 @@ defaultShader,default,default,none
 simple3DShader,Simple3DVertexShader.glsl,default,camera
 <endShaders>
 # vertex type, object name, shader name, primitive type
-PC,axis,simple3DShader,lines
+axis,simple3DShader
+PC,lines
 # x, y, z, r, g, b
 0, 0, 0, 1, 0, 0
 2.0f, 0, 0, 1, 0, 0
@@ -16,7 +17,9 @@ PC,axis,simple3DShader,lines
 0, 0, 2.0f, 0, 0, 1
 <endVertexData>
 <endIndexData>
-PC,surface,simple3DShader,triangles
+<endMesh>
+surface,simple3DShader
+PC,triangles
 -2.5f, 0, -2.5f, 0, 0.5f, 0
 -2.5f, 0,  2.5f, 0, 0.5f, 0
 2.5f, 0,  2.5f, 0, 0.5f, 0 
@@ -25,7 +28,9 @@ PC,surface,simple3DShader,triangles
 0, 1, 2
 0, 2, 3
 <endIndexData>
-PC,cube,simple3DShader,triangles
+<endMesh>
+cube,simple3DShader
+PC,triangles
 -0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f 
 -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f 
 0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f  
@@ -42,7 +47,9 @@ PC,cube,simple3DShader,triangles
 5, 2, 1, 5, 1, 6
 7, 0, 3, 7, 3, 4
 <endIndexData>
-PC,indexedCube,simple3DShader,triangles,indexed
+<endMesh>
+indexedCube,simple3DShader
+PC,triangles,indexed
 -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
 -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
 0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f  
@@ -59,7 +66,9 @@ PC,indexedCube,simple3DShader,triangles,indexed
 5, 2, 1, 5, 1, 6
 7, 0, 3, 7, 3, 4
 <endIndexData>
-PC,purpleRectangle,simple3DShader,triangles,indexed
+<endMesh>
+purpleRectangle,simple3DShader
+PC,triangles,indexed
 -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f
 -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f
 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f 
@@ -67,11 +76,14 @@ PC,purpleRectangle,simple3DShader,triangles,indexed
 <endVertexData>
 0, 1, 2, 0, 2, 3
 <endIndexData>
-# PC,triangle,defaultShader,triangles
+<endMesh>
+# triangle,defaultShader
+# PC,triangles
 #  0.0f,  0.5f, 0, 1, 0, 0
 #-0.5f, -0.5f, 0, 0, 0, 1
 # 0.5f, -0.5f, 0, 0, 1, 0
 # <endVertexData>
 # <endIndexData>
+# <endMesh>
 <endObjects>
 

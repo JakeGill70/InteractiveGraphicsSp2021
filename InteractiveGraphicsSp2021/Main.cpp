@@ -5,7 +5,6 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "GraphicsStructures.h"
-#include "OGLGraphicsObject.hpp"
 #include "OGLShader.h"
 #include "BaseCamera.h"
 #include "ReferenceFrame.h"

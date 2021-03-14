@@ -21,11 +21,13 @@ public:
    inline void SetWrapT(GLint wrapT) { _wrapT = wrapT; }
    inline void SetMinFilter(GLint minFilter) { _minFilter = minFilter; }
    inline void SetMagFilter(GLint magFilter) { _magFilter = magFilter; }
+   void ApplyFilters();
 
    void LoadFromFile(const string& filename);
-   void LoadFromArray(unsigned char* data, unsigned int size, int width, int height);
+   void LoadFromArray(unsigned char* data, unsigned int numberOfElements, 
+      int width, int height, int numberOfChannels=3);
    void Select();
-   void Setup();
+   void SendToGPU();
 };
 
 #endif

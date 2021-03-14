@@ -36,6 +36,9 @@ void SceneReader::ProcessLine(const string& line)
    else if (_state == "reading objects") {
       ProcessObjectLine(line);
    }
+   else if (_state == "reading mesh data") {
+      ProcessMeshDataLine(line);
+   }
    else if (_state == "reading vertex data") {
       ProcessVertexDataLine(line);
    }
@@ -104,28 +107,43 @@ void SceneReader::ProcessObjectLine(const string& line)
    }
    vector<string> tokens;
    Split(line, ',', tokens);
-   if (tokens.size() == 4) {
-      tokens.push_back(""); // For the indexed 
-   }
-   else {
-      if (tokens.size() != 5) {
-         _errorOccurred = true;
-         _log << "This line is badly formatted: " << line << std::endl;
-         return;
-      }
+   if (tokens.size() != 2) {
+      _errorOccurred = true;
+      _log << "This line is badly formatted: " << line << std::endl;
+      return;
    }
    for (size_t i = 0; i < tokens.size(); i++) {
       Trim(tokens[i]);
    }
    // vertex type, object name, shader name, primitive type
    ObjectData data;
-   data.vertexType = tokens[0];
-   data.name = tokens[1];
-   data.shaderName = tokens[2];
-   data.primitiveType = tokens[3];
-   data.isIndexed = (tokens[4] == "indexed");
+   data.name = tokens[0];
+   data.shaderName = tokens[1];
    _objectData[data.name] = data;
    _currentObjectName = data.name;
+   _state = "reading mesh data";
+}
+
+void SceneReader::ProcessMeshDataLine(const string& line)
+{
+   if (line == "<endMesh>") {
+      _state = "reading objects";
+      _currentMeshIndex = 0;
+      return;
+   }
+   vector<string> tokens;
+   Split(line, ',', tokens);
+   if (tokens.size() == 2) tokens.push_back("not indexed");
+   if (tokens.size() != 3) {
+      _errorOccurred = true;
+      _log << "This line is badly formatted: " << line << std::endl;
+      return;
+   }
+   MeshData data;
+   data.vertexType = tokens[0];
+   data.primitiveType = tokens[1];
+   data.isIndexed = (tokens[2] == "indexed");
+   _objectData[_currentObjectName].meshData.push_back(data);
    _state = "reading vertex data";
 }
 
@@ -139,24 +157,26 @@ void SceneReader::ProcessVertexDataLine(const string& line)
    Split(line, ',', tokens);
    for (size_t i = 0; i < tokens.size(); i++) {
       Trim(tokens[i]);
-      _objectData[_currentObjectName].vertexData.push_back(std::stof(tokens[i]));
+      MeshData& meshData = _objectData[_currentObjectName].meshData[_currentMeshIndex];
+      meshData.vertexData.push_back(std::stof(tokens[i]));
    }
 }
 
 void SceneReader::ProcessIndexDataLine(const string& line)
 {
    if (line == "<endIndexData>") {
-      _state = "reading objects";
+      _state = "reading mesh data";
+      _currentMeshIndex++;
       return;
    }
    vector<string> tokens;
    Split(line, ',', tokens);
    for (size_t i = 0; i < tokens.size(); i++) {
       Trim(tokens[i]);
-      _objectData[_currentObjectName].indexData.push_back(std::stoi(tokens[i]));
+      MeshData& meshData = _objectData[_currentObjectName].meshData[_currentMeshIndex];
+      meshData.indexData.push_back(std::stoi(tokens[i]));
    }
 }
-
 
 void SceneReader::Close()
 {

@@ -26,14 +26,18 @@ struct ShaderData {
    string cameraName;
 };
 
-struct ObjectData {
+struct MeshData {
    string vertexType;
-   string name;
-   string shaderName;
    string primitiveType;
    bool isIndexed;
    vector<float> vertexData;
    vector<unsigned short> indexData;
+};
+
+struct ObjectData {
+   string name;
+   string shaderName;
+   vector<MeshData> meshData;
 };
 
 class SceneReader :
@@ -48,10 +52,11 @@ protected:
    map<string, ObjectData> _objectData;
    string _currentObjectName;
    string _state;
+   int _currentMeshIndex;
 
 public:
    SceneReader(string filePath) : _filePath(filePath), _errorOccurred(false), 
-      _currentObjectName(""), _state("reading cameras")
+      _currentObjectName(""), _currentMeshIndex(0), _state("reading cameras")
    {}
    void Open();
    void Read();
@@ -75,6 +80,7 @@ protected:
    virtual void ProcessCameraLine(const string& line);
    virtual void ProcessShaderLine(const string& line);
    virtual void ProcessObjectLine(const string& line);
+   virtual void ProcessMeshDataLine(const string& line);
    virtual void ProcessVertexDataLine(const string& line);
    virtual void ProcessIndexDataLine(const string& line);
 };

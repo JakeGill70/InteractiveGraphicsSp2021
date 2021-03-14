@@ -1,6 +1,6 @@
 #include "RotateAnimation.h"
 #include "ReferenceFrame.h"
-#include "AbstractGraphicsObject.h"
+#include "GraphicsObject.h"
 
 void RotateAnimation::Update(double elapsedSeconds) {
    if (_object == nullptr) return;

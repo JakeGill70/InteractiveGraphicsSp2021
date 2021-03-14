@@ -6,11 +6,13 @@ OGLTexture::OGLTexture() :
    AbstractTexture(), _id(0)
 {
    _wrapS = _wrapT = GL_REPEAT;
-   _minFilter = _magFilter = GL_NEAREST;
+   _minFilter = _magFilter = GL_LINEAR;
+   glGenTextures(1, &_id);
 }
 
 OGLTexture::~OGLTexture()
 {
+   if(_textureData) delete[] _textureData;
 }
 
 void OGLTexture::LoadFromFile(const string& filename)
@@ -22,6 +24,7 @@ void OGLTexture::LoadFromFile(const string& filename)
    if (_textureData) {
       _width = width;
       _height = height;
+      _numberOfChannels = nrChannels;
       _loadedFromFile = true;
    }
    else {
@@ -29,12 +32,14 @@ void OGLTexture::LoadFromFile(const string& filename)
    }
 }
 
-void OGLTexture::LoadFromArray(unsigned char* data, unsigned int size, int width, int height)
+void OGLTexture::LoadFromArray(unsigned char* data, unsigned int numberOfElements,
+   int width, int height, int numberOfChannels)
 {
    _width = width;
    _height = height;
-   _textureData = new unsigned char[size];
-   for (unsigned int i = 0; i < size; i++) {
+   _numberOfChannels = numberOfChannels;
+   _textureData = new unsigned char[numberOfElements];
+   for (unsigned int i = 0; i < numberOfElements; i++) {
       _textureData[i] = data[i];
    }
    _loadedFromFile = false;
@@ -45,25 +50,38 @@ void OGLTexture::Select()
    glBindTexture(GL_TEXTURE_2D, _id);
 }
 
-void OGLTexture::Setup()
+void OGLTexture::SendToGPU()
 {
    if (_textureData != nullptr) {
-      glGenTextures(1, &_id);
+      ApplyFilters();
       glBindTexture(GL_TEXTURE_2D, _id);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrapS);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrapT);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _minFilter);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _magFilter);
+      GLenum internalTextureFormat = GL_RGB, sourceFormat = GL_RGB;
+      if (_numberOfChannels == 4) {
+         internalTextureFormat = GL_RGBA;
+         sourceFormat = GL_RGBA;
+      }
+      // Send the texture data
+      glTexImage2D(GL_TEXTURE_2D, 
+         0, internalTextureFormat, _width, _height, 
+         0, sourceFormat, GL_UNSIGNED_BYTE, _textureData);
+      glGenerateMipmap(GL_TEXTURE_2D);
+      // We don't need the texture data anymore
       if (_loadedFromFile) {
-         glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, _textureData);
          stbi_image_free(_textureData);
       }
       else {
-         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _textureData);
          delete[] _textureData;
       }
-      glGenerateMipmap(GL_TEXTURE_2D);
       _textureData = nullptr;
    }
+}
+
+void OGLTexture::ApplyFilters()
+{
+   glBindTexture(GL_TEXTURE_2D, _id);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrapS);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrapT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _minFilter);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _magFilter);
 }
 

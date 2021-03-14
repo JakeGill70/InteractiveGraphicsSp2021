@@ -6,7 +6,7 @@
 #include <map>
 using std::map;
 #include "AbstractShader.h"
-#include "AbstractGraphicsObject.h"
+#include "GraphicsObject.h"
 #include "BaseCamera.h"
 #include "TextFileReader.h"
 
@@ -15,7 +15,7 @@ class BaseGraphicsScene :
 {
 protected:
    map<string, AbstractShader*> _shaders;
-   map<string, AbstractGraphicsObject*> _objects;
+   map<string, GraphicsObject*> _objects;
    map<string, BaseCamera*> _cameras;
    BaseCamera* _currentCamera;
    TextFileReader* _textFileReader;
@@ -29,11 +29,11 @@ public:
    }
 
    virtual void AddGraphicsObject(
-      const string& name, AbstractGraphicsObject* object, 
-      const string& shaderName, bool isIndexed=false)
+      const string& name, GraphicsObject* object, 
+      const string& shaderName)
    {
       _objects[name] = object;
-      _shaders[shaderName]->AddObjectToRender(name, object, isIndexed);
+      _shaders[shaderName]->AddObjectToRender(name, object);
    }
 
    virtual void AddCamera(const string& name, BaseCamera* camera) {

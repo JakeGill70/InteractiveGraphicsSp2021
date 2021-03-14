@@ -151,6 +151,7 @@
     <ClCompile Include="AbstractAnimation.cpp" />
     <ClCompile Include="AbstractGraphicsObject.cpp" />
     <ClCompile Include="AbstractReader.cpp" />
+    <ClCompile Include="AbstractShader.cpp" />
     <ClCompile Include="AbstractTimer.cpp" />
     <ClCompile Include="BaseCamera.cpp" />
     <ClCompile Include="BaseGraphicsScene.cpp" />
@@ -168,18 +169,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAnimation.h" />
-    <ClInclude Include="AbstractGraphicsObject.h" />
+    <ClInclude Include="GraphicsObject.h" />
+    <ClInclude Include="AbstractMesh.h" />
     <ClInclude Include="AbstractReader.h" />
     <ClInclude Include="AbstractTexture.h" />
     <ClInclude Include="AbstractTimer.h" />
-    <ClInclude Include="AbstractVertexGraphicsObject.hpp" />
+    <ClInclude Include="AbstractVertexMesh.hpp" />
     <ClInclude Include="AbstractShader.h" />
     <ClInclude Include="BaseCamera.h" />
     <ClInclude Include="BaseGraphicsScene.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="GraphicsStructures.h" />
     <ClInclude Include="HighResolutionTimer.h" />
-    <ClInclude Include="OGLGraphicsObject.hpp" />
     <ClInclude Include="OGLGraphicsScene.h" />
     <ClInclude Include="OGLShader.h" />
     <ClInclude Include="OGLTexture.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="SceneReader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TextFileReader.h" />
+    <ClInclude Include="OGLVertexMesh.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="labweek07.ig" />
