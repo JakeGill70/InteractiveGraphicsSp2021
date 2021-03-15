@@ -47,53 +47,46 @@ public:
 
    inline void SetPositionAttribute(VertexAttribute pa) {
       this->_positionAttribute = pa;
+      this->_hasPosition = true;
    }
 
    inline void SetColorAttribute(VertexAttribute ca) {
       this->_colorAttribute = ca;
+      this->_hasColor = true;
    }
 
    inline void SetTextureAttribute(VertexAttribute ta) {
       this->_textureAttribute = ta;
+      this->_hasTexture = true;
    }
 
-   void SetupBufferInterpretation();
+   void SetUpBufferInterpretation();
 
    void SendToGPU();
+
+protected:
+   void SetUpBufferInterpretation(const VertexAttribute& attr);
 };
 
 template <class T>
-void OGLVertexMesh<T>::SetupBufferInterpretation()
+void OGLVertexMesh<T>::SetUpBufferInterpretation()
 {
-   // Positions
-   glEnableVertexAttribArray(this->_positionAttribute.index);
+   if (this->_hasPosition) this->SetUpBufferInterpretation(this->_positionAttribute);
+   if (this->_hasColor) this->SetUpBufferInterpretation(this->_colorAttribute);
+   if (this->_hasTexture) this->SetUpBufferInterpretation(this->_textureAttribute);
+}
+
+template <class T>
+void OGLVertexMesh<T>::SetUpBufferInterpretation(const VertexAttribute& attr)
+{
+   glEnableVertexAttribArray(attr.index);
    glVertexAttribPointer(
-      this->_positionAttribute.index,
-      (GLint)this->_positionAttribute.count,
+      attr.index,
+      (GLint)attr.count,
       GL_FLOAT,
       GL_FALSE,
-      (GLsizei)this->_positionAttribute.bytesToNext,
-      (void*)this->_positionAttribute.offsetToFirst
-   );
-   // Colors
-   glEnableVertexAttribArray(this->_colorAttribute.index);
-   glVertexAttribPointer(
-      this->_colorAttribute.index,
-      (GLint)this->_colorAttribute.count,
-      GL_FLOAT,
-      GL_FALSE,
-      (GLsizei)this->_colorAttribute.bytesToNext,
-      (void*)this->_colorAttribute.offsetToFirst
-   );
-   // Textures
-   glEnableVertexAttribArray(this->_textureAttribute.index);
-   glVertexAttribPointer(
-      this->_textureAttribute.index,
-      (GLint)this->_textureAttribute.count,
-      GL_FLOAT,
-      GL_FALSE,
-      (GLsizei)this->_textureAttribute.bytesToNext,
-      (void*)this->_textureAttribute.offsetToFirst
+      (GLsizei)attr.bytesToNext,
+      (void*)attr.offsetToFirst
    );
 }
 

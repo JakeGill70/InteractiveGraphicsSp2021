@@ -15,7 +15,6 @@ protected:
    vector<T> _vertices;
    vector<unsigned short> _indices;
 
-
 public:
    AbstractVertexMesh() {}
 
@@ -39,7 +38,6 @@ public:
       return numberOfElements;
    }
 
-
    virtual void Render() = 0;
 };
 
@@ -48,7 +46,6 @@ void AbstractVertexMesh<T>::AddVertexData(const T& vertex)
 {
    this->_vertices.push_back(vertex);
 }
-
 
 template <class T>
 void AbstractVertexMesh<T>::SetIndices(unsigned short indices[], int count)

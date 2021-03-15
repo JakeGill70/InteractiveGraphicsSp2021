@@ -10,9 +10,13 @@ class AbstractMesh :
 protected:
    unsigned int _primitive;
    AbstractTexture* _texture;
+   bool _hasPosition, _hasColor, _hasTexture;
 
 public:
-   AbstractMesh() : _texture(nullptr), _primitive(0) {}
+   AbstractMesh() 
+      : _texture(nullptr), _primitive(0) {
+      _hasPosition = _hasColor = _hasTexture = false;
+   }
 
    virtual inline void SetPrimitive(unsigned int primitive) {
       _primitive = primitive;
@@ -40,7 +44,7 @@ public:
    virtual void SetBufferId(size_t bufferId) = 0;
    virtual size_t GetIndexedBufferId() = 0;
    virtual void SetIndexedBufferId(size_t bufferId) = 0;
-   virtual void SetupBufferInterpretation() = 0;
+   virtual void SetUpBufferInterpretation() = 0;
    virtual void SendToGPU() = 0;
 };
 

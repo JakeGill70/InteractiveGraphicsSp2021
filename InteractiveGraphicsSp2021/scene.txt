@@ -18,17 +18,17 @@ PC,lines
 <endVertexData>
 <endIndexData>
 <endMesh>
-surface,simple3DShader
-PC,triangles
--2.5f, 0, -2.5f, 0, 0.5f, 0
--2.5f, 0,  2.5f, 0, 0.5f, 0
-2.5f, 0,  2.5f, 0, 0.5f, 0 
-2.5f, 0, -2.5f, 0, 0.5f, 0
-<endVertexData>
-0, 1, 2
-0, 2, 3
-<endIndexData>
-<endMesh>
+#surface,simple3DShader
+#PC,triangles
+#-2.5f, 0, -2.5f, 0, 0.5f, 0
+#-2.5f, 0,  2.5f, 0, 0.5f, 0
+#2.5f, 0,  2.5f, 0, 0.5f, 0 
+#2.5f, 0, -2.5f, 0, 0.5f, 0
+#<endVertexData>
+#0, 1, 2
+#0, 2, 3
+#<endIndexData>
+#<endMesh>
 cube,simple3DShader
 PC,triangles
 -0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f 

@@ -4,6 +4,7 @@
 #include "RotateAnimation.h"
 #include "OGLTexture.h"
 #include "OGLVertexMesh.hpp"
+#include "MeshFactory.hpp"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
@@ -56,27 +57,60 @@ bool OGLGraphicsScene::Create()
         0, 255,   0, 255, 255, 255, 255, 255, 255, 255, 255, 255,   0, 255,   0, 255,
       255, 255, 255, 255, 255,   0,   0, 255, 255,   0,   0, 255, 255, 255, 255, 255
     };
-    OGLTexture* texture = new OGLTexture();
-    //texture->LoadFromArray(textureData, 64, 4, 4);
-    texture->LoadFromFile("brickwall.jpg");
+    OGLTexture* customTexture = new OGLTexture();
+    customTexture->SetMinFilter(GL_NEAREST);
+    customTexture->SetMagFilter(GL_NEAREST);
+    customTexture->LoadFromArray(textureData, 64, 4, 4, 4);
+
+    OGLTexture* brickWallTexture = new OGLTexture();
+    brickWallTexture->LoadFromFile("brickwall.jpg");
 
     GraphicsObject* wall = new GraphicsObject();
+    wall->AddMesh(new OGLVertexMesh<VertexPCT>());
     wall->AddMesh(new OGLVertexMesh<VertexPCT>());
     OGLVertexMesh<VertexPCT>* mesh = (OGLVertexMesh<VertexPCT>*)wall->GetMesh(0);
     mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
     mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
     mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
     //                     x,  y, z, r, g, b, a, s, t
-    mesh->AddVertexData({ -1,  1, 0, 1, 1, 1, 1, 0, 1 });
-    mesh->AddVertexData({ -1, -1, 0, 1, 1, 1, 1, 0, 0 });
-    mesh->AddVertexData({  1, -1, 0, 1, 1, 1, 1, 1, 0 });
-    mesh->AddVertexData({  1,  1, 0, 1, 1, 1, 1, 1, 1 });
-    unsigned short indices[] = { 0, 1, 2, 0, 2, 3 };
-    mesh->SetIndices(indices, 6);
-    mesh->SetTexture(texture);
+    mesh->AddVertexData({ -2,  1, 0, 1, 1, 1, 1, 0, 1 });
+    mesh->AddVertexData({ -2, -1, 0, 1, 1, 1, 1, 0, 0 });
+    mesh->AddVertexData({  0, -1, 0, 1, 1, 1, 1, 1, 0 });
+    mesh->AddVertexData({  0,  1, 0, 1, 1, 1, 1, 1, 1 });
+    unsigned short indices1[] = { 0, 1, 2, 0, 2, 3 };
+    mesh->SetIndices(indices1, 6);
+    mesh->SetTexture(customTexture);
+
+    mesh = (OGLVertexMesh<VertexPCT>*)wall->GetMesh(1);
+    mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
+    mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
+    mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
+    mesh->AddVertexData({ 0,  1, 0, 1, 1, 1, 1, 0, 1 });
+    mesh->AddVertexData({ 0, -1, 0, 1, 1, 1, 1, 0, 0 });
+    mesh->AddVertexData({ 2, -1, 0, 1, 1, 1, 1, 1, 0 });
+    mesh->AddVertexData({ 2,  1, 0, 1, 1, 1, 1, 1, 1 });
+    unsigned short indices2[] = { 0, 1, 2, 0, 2, 3 };
+    mesh->SetIndices(indices2, 6);
+    mesh->SetTexture(brickWallTexture);
+
     wall->frame.TranslateLocal(glm::vec3(0, 1.0f, -2.0f));
     AddGraphicsObject("wall", wall, "simpleTextureShader");
     _objects["wall"]->SendToGPU();
+
+    OGLTexture* smileyTexture = new OGLTexture();
+    smileyTexture->LoadFromFile("smiley.jpg");
+
+    MeshFactory<VertexPCT, RGBA> pctFactory;
+    mesh = (OGLVertexMesh<VertexPCT>*)
+       pctFactory.FlatTexturedSurfaceXZ(-5, -5, 5, 5, { 1, 1, 1, 1 }, 5, 5);
+    mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
+    mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
+    mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
+    mesh->SetTexture(smileyTexture);
+    GraphicsObject* floor = new GraphicsObject();
+    floor->AddMesh(mesh);
+    AddGraphicsObject("floor", floor, "simpleTextureShader");
+    _objects["floor"]->SendToGPU();
 
    return true;
 }

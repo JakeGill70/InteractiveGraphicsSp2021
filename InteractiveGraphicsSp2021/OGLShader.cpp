@@ -56,7 +56,7 @@ void OGLShader::Render(GraphicsObject* object)
       if (mesh->IsTextured()) {
          mesh->GetTexture()->Select();
       }
-      mesh->SetupBufferInterpretation();
+      mesh->SetUpBufferInterpretation();
       if (!mesh->IsIndexed()) {
          glDrawArrays(mesh->GetPrimitive(), 0, (GLsizei)mesh->GetNumberOfElements());
       }

@@ -181,6 +181,7 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="GraphicsStructures.h" />
     <ClInclude Include="HighResolutionTimer.h" />
+    <ClInclude Include="MeshFactory.hpp" />
     <ClInclude Include="OGLGraphicsScene.h" />
     <ClInclude Include="OGLShader.h" />
     <ClInclude Include="OGLTexture.h" />
@@ -202,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="brickwall.jpg" />
+    <Image Include="smiley.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
