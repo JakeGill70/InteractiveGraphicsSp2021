@@ -10,6 +10,7 @@ using std::string;
 using std::ifstream;
 #include <vector>
 using std::vector;
+#include <map>
 
 struct CameraData{
    string name;
@@ -24,6 +25,15 @@ struct ShaderData {
    string cameraName;
 };
 
+struct ObjectData {
+    string vertexType;
+    string name;
+    string shaderName;
+    string primitiveType;
+    vector<float> vertexData;
+};
+
+
 class SceneReader :
     public AbstractReader
 {
@@ -33,7 +43,9 @@ protected:
    bool _errorOccurred;
    vector<CameraData> _cameraData;
    vector<ShaderData> _shaderData;
+   std::map<string, ObjectData> _objectData;
    string _state;
+   string _currentObjectName;
 
 public:
    SceneReader(string filePath) : _filePath(filePath), _errorOccurred(false), _state("reading cameras")
@@ -51,10 +63,17 @@ public:
       return _shaderData;
    }
 
+   std::map<string, ObjectData>& GetObjectData() {
+       return _objectData;
+   }
+
+
 protected:
    virtual void ProcessLine(const string& line);
    virtual void ProcessCameraLine(const string& line);
    virtual void ProcessShaderLine(const string& line);
+   virtual void ProcessObjectLine(const string& line);
+   virtual void ProcessVertexDataLine(const string& line);
 };
 
 #endif
