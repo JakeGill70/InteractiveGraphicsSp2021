@@ -16,55 +16,8 @@ bool OGLGraphicsScene::Create()
    if (!ReadObjectData()) return false;
    
    _objects["cube"]->frame.TranslateLocal(glm::vec3(-1, 0.5f, 0));
-
-   OGLGraphicsObject<VertexPC>* yelloCube = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("yellowCube", yelloCube, "simple3DShader", true);
-   // Yellow vertices
-   yelloCube->AddVertexData({ -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 0
-   yelloCube->AddVertexData({ -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 1
-   yelloCube->AddVertexData({  0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 2
-   yelloCube->AddVertexData({  0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f }); // 3
-   yelloCube->AddVertexData({  0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 4
-   yelloCube->AddVertexData({  0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 5
-   yelloCube->AddVertexData({ -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 6
-   yelloCube->AddVertexData({ -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f }); // 7
-   unsigned short yellowCubeIndices[] = {
-      0, 1, 2, 0, 2, 3, // Front face
-      3, 2, 5, 3, 5, 4, // Right face
-      4, 5, 6, 4, 6, 7, // Back face
-      7, 6, 1, 7, 1, 0, // Left face
-      5, 2, 1, 5, 1, 6, // Bottom face
-      7, 0, 3, 7, 3, 4  // Top face
-   };
-   yelloCube->SetIndices(yellowCubeIndices, sizeof(yellowCubeIndices) / sizeof(unsigned short));
-   yelloCube->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
-   yelloCube->SendToGPU();
-
-   // Create Purple Cube
-   OGLGraphicsObject<VertexPC>* purpleCube = new OGLGraphicsObject<VertexPC>();
-   AddGraphicsObject("purpleCube", purpleCube, "simple3DShader", true);
-   // Purple vertices
-   purpleCube->AddVertexData({ -0.5f,  0.5f, 0.5f,  0.5f, 0.0f, 0.5f }); // 0
-   purpleCube->AddVertexData({ -0.5f, -0.5f, 0.5f,  0.5f, 0.0f, 0.5f }); // 1
-   purpleCube->AddVertexData({ 0.5f, -0.5f, 0.5f,  0.5f, 0.0f, 0.5f }); // 2
-   purpleCube->AddVertexData({ 0.5f,  0.5f, 0.5f,  0.5f, 0.0f, 0.5f }); // 3
-   purpleCube->AddVertexData({ 0.5f,  0.5f, -0.5f, 0.5f, 0.0f, 0.5f }); // 4
-   purpleCube->AddVertexData({ 0.5f, -0.5f, -0.5f, 0.5f, 0.0f, 0.5f }); // 5
-   purpleCube->AddVertexData({ -0.5f, -0.5f, -0.5f, 0.5f, 0.0f, 0.5f }); // 6
-   purpleCube->AddVertexData({ -0.5f,  0.5f, -0.5f, 0.5f, 0.0f, 0.5f }); // 7
-
-   unsigned short purpleCubeIndices[] = {
-       0, 1, 2, 0, 2, 3, // Front face   
-       3, 2, 5, 3, 5, 4, // Right face   
-       4, 5, 6, 4, 6, 7, // Back face   
-       7, 6, 1, 7, 1, 0, // Left face  
-       5, 2, 1, 5, 1, 6, // Bottom face
-       7, 0, 3, 7, 3, 4  // Top face
-   };
-   purpleCube->SetIndices(purpleCubeIndices, sizeof(purpleCubeIndices) / sizeof(unsigned short));
-   // Position the purple cube to match the yellow cube
-   purpleCube->frame.TranslateLocal(glm::vec3(0, 0, 2));
-   purpleCube->SendToGPU();
+   _objects["indexedCube"]->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
+   _objects["purpleRectangle"]->frame.TranslateLocal(glm::vec3(0, 0, 2));
 
    return true;
 }
@@ -152,10 +105,10 @@ bool OGLGraphicsScene::ReadObjectData()
             }
             if (data.vertexType == "PC") {
                 if (!ReadPCObjectData(
-                    (OGLGraphicsObject<VertexPC>*)object, data.vertexData, data.indexData)) {
+                    (OGLGraphicsObject<VertexPC>*)object, data.vertexData, data.indexData, data.isIndexed)) {
                     return false;
                 }
-                AddGraphicsObject(data.name, object, data.shaderName);
+                AddGraphicsObject(data.name, object, data.shaderName, data.isIndexed);
                 object->SendToGPU();
             }
         }
@@ -163,7 +116,7 @@ bool OGLGraphicsScene::ReadObjectData()
     return true;
 }
 
-bool OGLGraphicsScene::ReadPCObjectData(OGLGraphicsObject<VertexPC>* object, vector<float>& vertexData, vector<unsigned short>& indexData)
+bool OGLGraphicsScene::ReadPCObjectData(OGLGraphicsObject<VertexPC>* object, vector<float>& vertexData, vector<unsigned short>& indexData, bool isIndexed)
 {
     size_t numbersLeftToRead = vertexData.size();
     float x, y, z, r, g, b;
@@ -180,18 +133,29 @@ bool OGLGraphicsScene::ReadPCObjectData(OGLGraphicsObject<VertexPC>* object, vec
         g = vertexData[i++];
         b = vertexData[i++];
         if (indexData.size() > 0) {
-            vertices.push_back({ x,  y, z, r, g, b });
+            if (isIndexed) {
+                object->AddVertexData({ x,  y, z, r, g, b });
+            }
+            else {
+                vertices.push_back({ x,  y, z, r, g, b });
+            }
         }
-        else { // No index data
+        else {
             object->AddVertexData({ x,  y, z, r, g, b });
         }
+
         numbersLeftToRead -= 6;
     }
 
     VertexPC v;
     for (size_t i = 0; i < indexData.size(); i++) {
-        v = vertices[indexData[i]];
-        object->AddVertexData({ v.position, v.color });
+        if (isIndexed) {
+            object->AddIndex(indexData[i]);
+        }
+        else {
+            v = vertices[indexData[i]];
+            object->AddVertexData({ v.position, v.color });
+        }
     }
 
     return true;

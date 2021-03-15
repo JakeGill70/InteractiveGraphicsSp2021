@@ -27,14 +27,50 @@ PC,surface,simple3DShader,triangles
 <endIndexData>
 # Cube stuff
 PC,cube,simple3DShader,triangles
- -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
- -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
-  0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
-  0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
-  0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f
-  0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f
- -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f
- -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+-0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
+-0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
+0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
+0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
+0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+<endVertexData>
+0, 1, 2, 0, 2, 3
+3, 2, 5, 3, 5, 4
+4, 5, 6, 4, 6, 7
+7, 6, 1, 7, 1, 0
+5, 2, 1, 5, 1, 6
+7, 0, 3, 7, 3, 4
+<endIndexData>
+# Indexed cube stuff
+PC,indexedCube,simple3DShader,triangles,indexed
+-0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
+-0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
+0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
+0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
+0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+<endVertexData>
+0, 1, 2, 0, 2, 3
+3, 2, 5, 3, 5, 4
+4, 5, 6, 4, 6, 7
+7, 6, 1, 7, 1, 0
+5, 2, 1, 5, 1, 6
+7, 0, 3, 7, 3, 4
+<endIndexData>
+# Purple Rectangle Stuff
+PC,purpleRectangle,simple3DShader,triangles,indexed
+-0.5f,  0.5f, 0.5f,  0.5f, 0.0f, 0.5f
+-0.5f, -0.5f, 0.5f,  0.5f, 0.0f, 0.5f
+0.5f, -0.5f, 0.5f,  0.5f, 0.0f, 0.5f 
+0.5f,  0.5f, 0.5f,  0.5f, 0.0f, 0.5f 
+0.5f,  0.5f, -0.5f, 0.5f, 0.0f, 0.5f 
+0.5f, -0.5f, -0.5f, 0.5f, 0.0f, 0.5f 
+-0.5f, -0.5f, -0.5f, 0.5f, 0.0f, 0.5f
+-0.5f,  0.5f, -0.5f, 0.5f, 0.0f, 0.5f
 <endVertexData>
 0, 1, 2, 0, 2, 3
 3, 2, 5, 3, 5, 4

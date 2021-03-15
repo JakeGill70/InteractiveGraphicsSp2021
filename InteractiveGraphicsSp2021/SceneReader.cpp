@@ -104,11 +104,17 @@ void SceneReader::ProcessObjectLine(const string& line) {
     }
     vector<string> tokens;
     Split(line, ',', tokens);
-    if (tokens.size() != 4) {
-        _errorOccurred = true;
-        _log << "This line is badly formatted: " << line << std::endl;
-        return;
+    if (tokens.size() == 4) {
+        tokens.push_back(""); // For the indexed 
     }
+    else {
+        if (tokens.size() != 5) {
+            _errorOccurred = true;
+            _log << "This line is badly formatted: " << line << std::endl;
+            return;
+        }
+    }
+
     for (size_t i = 0; i < tokens.size(); i++) {
         Trim(tokens[i]);
     }
@@ -118,6 +124,7 @@ void SceneReader::ProcessObjectLine(const string& line) {
     data.name = tokens[1];
     data.shaderName = tokens[2];
     data.primitiveType = tokens[3];
+    data.isIndexed = (tokens[4] == "indexed");
 
     _objectData[data.name] = data;
     _currentObjectName = data.name;
