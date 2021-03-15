@@ -4,6 +4,7 @@
 
 #include "BaseGraphicsScene.h"
 #include "SceneReader.h"
+#include "OGLGraphicsObject.hpp"
 
 class OGLGraphicsScene :
     public BaseGraphicsScene
@@ -22,7 +23,8 @@ protected:
    bool LoadScene();
    bool ReadCameraData();
    bool ReadShaderData();
-
+   bool ReadObjectData();
+   bool ReadPCObjectData(OGLGraphicsObject<VertexPC>* object, vector<float>& data);
 };
 
 #endif
