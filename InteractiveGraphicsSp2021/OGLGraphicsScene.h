@@ -24,7 +24,7 @@ protected:
    bool ReadCameraData();
    bool ReadShaderData();
    bool ReadObjectData();
-   bool ReadPCObjectData(OGLGraphicsObject<VertexPC>* object, vector<float>& data);
+   bool ReadPCObjectData(OGLGraphicsObject<VertexPC>* object, vector<float>& vertexData, vector<unsigned short>& indexData);
 };
 
 #endif

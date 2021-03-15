@@ -31,6 +31,7 @@ struct ObjectData {
     string shaderName;
     string primitiveType;
     vector<float> vertexData;
+    vector<unsigned short> indexData;
 };
 
 
@@ -74,6 +75,7 @@ protected:
    virtual void ProcessShaderLine(const string& line);
    virtual void ProcessObjectLine(const string& line);
    virtual void ProcessVertexDataLine(const string& line);
+   virtual void ProcessIndexDataLine(const string& line);
 };
 
 #endif
