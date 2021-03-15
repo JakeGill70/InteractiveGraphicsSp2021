@@ -28,6 +28,5 @@ AbstractVertexMesh<V>* MeshFactory<V,C>::FlatTexturedSurfaceXZ(
    return mesh;
 }
 
-
 #endif
 
