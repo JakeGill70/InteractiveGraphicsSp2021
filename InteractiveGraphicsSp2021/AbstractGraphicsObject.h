@@ -5,18 +5,25 @@
 #include "BaseObject.h"
 #include "ReferenceFrame.h"
 
+class AbstractAnimation;
+
 class AbstractGraphicsObject : 
    public BaseObject
 {
 protected:
    unsigned int _primitive;
+   AbstractAnimation* _animation;
 
 public:
    ReferenceFrame frame;
 
 public:
-   AbstractGraphicsObject() : _primitive(0) {}
-   virtual ~AbstractGraphicsObject() {}
+   AbstractGraphicsObject() : _primitive(0), _animation(nullptr) {}
+   virtual ~AbstractGraphicsObject() {
+       if (_animation) {
+           delete _animation;
+       }
+   }
 
    virtual inline void SetPrimitive(unsigned int primitive) {
       _primitive = primitive;
@@ -37,5 +44,7 @@ public:
    virtual size_t GetNumberOfElements() = 0;
    virtual size_t GetIndexedBufferId() = 0;
    virtual void SetIndexedBufferId(size_t bufferId) = 0;
+   virtual void Update(double elapsedSeconds);
+   virtual void SetAnimation(AbstractAnimation* animation);
 };
 #endif

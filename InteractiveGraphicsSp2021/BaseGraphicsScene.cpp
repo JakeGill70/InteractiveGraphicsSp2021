@@ -32,3 +32,10 @@ void BaseGraphicsScene::Render()
       iterator->second->RenderObjects();
    }
 }
+
+void BaseGraphicsScene::Update(double elapsedSeconds) {
+    for (auto iterator = _objects.begin(); iterator != _objects.end(); iterator++) {
+        auto thing = iterator->second;
+        thing->Update(elapsedSeconds);
+    }
+}

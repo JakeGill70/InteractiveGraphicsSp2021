@@ -2,6 +2,7 @@
 #include "OGLShader.h"
 #include "OGLGraphicsObject.hpp"
 #include "TextFileReader.h"
+#include "RotateAnimation.h"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
@@ -18,6 +19,9 @@ bool OGLGraphicsScene::Create()
    _objects["cube"]->frame.TranslateLocal(glm::vec3(-1, 0.5f, 0));
    _objects["indexedCube"]->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
    _objects["purpleRectangle"]->frame.TranslateLocal(glm::vec3(0, 0, 2));
+
+   _objects["cube"]->SetAnimation(new RotateAnimation());
+   _objects["indexedCube"]->SetAnimation(new RotateAnimation(glm::vec3(0, 0, 1), 180));
 
    return true;
 }
