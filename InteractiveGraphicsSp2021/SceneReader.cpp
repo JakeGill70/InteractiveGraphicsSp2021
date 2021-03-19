@@ -194,7 +194,7 @@ void SceneReader::ProcessObjectLine(const string& line)
    Split(line, ',', tokens);
    if (tokens.size() != 2) {
       _errorOccurred = true;
-      _log << "This line is badly formatted: " << line << std::endl;
+      _log << "This object line is badly formatted: " << line << std::endl;
       return;
    }
    for (size_t i = 0; i < tokens.size(); i++) {
@@ -212,22 +212,34 @@ void SceneReader::ProcessObjectLine(const string& line)
 void SceneReader::ProcessMeshDataLine(const string& line)
 {
    if (line == "<endMesh>") {
+      _state = "reading mesh data";
+      _currentMeshIndex++;
+      return;
+   }
+   if (line == "<endObject>") {
       _state = "reading objects";
       _currentMeshIndex = 0;
       return;
    }
    vector<string> tokens;
    Split(line, ',', tokens);
-   if (tokens.size() == 2) tokens.push_back("not indexed");
-   if (tokens.size() != 3) {
+   if (tokens.size() < 2 || tokens.size() > 4) {
       _errorOccurred = true;
-      _log << "This line is badly formatted: " << line << std::endl;
+      _log << "This mesh data line is badly formatted: " << line << std::endl;
       return;
+   }
+   if (tokens.size() == 2) {
+      tokens.push_back("not indexed");
+      tokens.push_back("no texture");
+   }
+   if (tokens.size() == 3) {
+      tokens.push_back("no texture");
    }
    MeshData data;
    data.vertexType = tokens[0];
    data.primitiveType = tokens[1];
    data.isIndexed = (tokens[2] == "indexed");
+   data.textureName = tokens[3];
    _objectData[_currentName].meshData.push_back(data);
    _state = "reading vertex data";
 }
@@ -251,7 +263,6 @@ void SceneReader::ProcessIndexDataLine(const string& line)
 {
    if (line == "<endIndexData>") {
       _state = "reading mesh data";
-      _currentMeshIndex++;
       return;
    }
    vector<string> tokens;

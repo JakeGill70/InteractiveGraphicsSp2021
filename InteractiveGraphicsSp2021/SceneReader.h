@@ -29,6 +29,7 @@ struct ShaderData {
 struct MeshData {
    string vertexType;
    string primitiveType;
+   string textureName;
    bool isIndexed;
    vector<float> vertexData;
    vector<unsigned short> indexData;

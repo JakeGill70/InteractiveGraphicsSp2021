@@ -25,7 +25,7 @@ smiley.jpg
 <endTexture>
 <endTextures>
 
-# vertex type, object name, shader name, primitive type
+# object name, shader name
 axis,simple3DShader
 PC,lines
 # x, y, z, r, g, b
@@ -38,6 +38,8 @@ PC,lines
 <endVertexData>
 <endIndexData>
 <endMesh>
+<endObject>
+
 #surface,simple3DShader
 #PC,triangles
 #-2.5f, 0, -2.5f, 0, 0.5f, 0
@@ -49,6 +51,8 @@ PC,lines
 #0, 2, 3
 #<endIndexData>
 #<endMesh>
+# <endObject>
+
 cube,simple3DShader
 PC,triangles
 -0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f 
@@ -68,6 +72,8 @@ PC,triangles
 7, 0, 3, 7, 3, 4
 <endIndexData>
 <endMesh>
+<endObject>
+
 indexedCube,simple3DShader
 PC,triangles,indexed
 -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
@@ -87,6 +93,8 @@ PC,triangles,indexed
 7, 0, 3, 7, 3, 4
 <endIndexData>
 <endMesh>
+<endObject>
+
 purpleRectangle,simple3DShader
 PC,triangles,indexed
 -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f
@@ -97,6 +105,29 @@ PC,triangles,indexed
 0, 1, 2, 0, 2, 3
 <endIndexData>
 <endMesh>
+<endObject>
+
+wall,simpleTextureShader
+PCT,triangles,indexed,customTexture
+-2,  1, 0, 1, 1, 1, 1, 0, 1
+-2, -1, 0, 1, 1, 1, 1, 0, 0
+ 0, -1, 0, 1, 1, 1, 1, 1, 0
+ 0,  1, 0, 1, 1, 1, 1, 1, 1
+<endVertexData>
+0, 1, 2, 0, 2, 3
+<endIndexData>
+<endMesh>
+PCT,triangles,indexed,brickwallTexture
+0,  1, 0, 1, 1, 1, 1, 0, 1
+0, -1, 0, 1, 1, 1, 1, 0, 0
+2, -1, 0, 1, 1, 1, 1, 1, 0
+2,  1, 0, 1, 1, 1, 1, 1, 1
+<endVertexData>
+0, 1, 2, 0, 2, 3
+<endIndexData>
+<endMesh>
+<endObject>
+
 # triangle,defaultShader
 # PC,triangles
 #  0.0f,  0.5f, 0, 1, 0, 0
@@ -105,5 +136,6 @@ PC,triangles,indexed
 # <endVertexData>
 # <endIndexData>
 # <endMesh>
+# <endObject>
 <endObjects>
 

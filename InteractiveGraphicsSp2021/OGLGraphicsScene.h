@@ -28,11 +28,9 @@ protected:
    bool ReadTextureData();
    bool ReadObjectData();
    AbstractMesh* CreatePCMesh(MeshData& meshData);
-   bool ReadPCMeshData(
-      OGLVertexMesh<VertexPC>* mesh, 
-      vector<float>& vertexData,
-      vector<unsigned short>& indexData,
-      bool isIndexed);
+   bool ReadPCMeshData(OGLVertexMesh<VertexPC>* mesh, MeshData& meshData);
+   AbstractMesh* CreatePCTMesh(MeshData& meshData);
+   bool ReadPCTMeshData(OGLVertexMesh<VertexPCT>* mesh, MeshData& meshData);
 
 };
 

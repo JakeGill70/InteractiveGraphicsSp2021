@@ -22,46 +22,15 @@ bool OGLGraphicsScene::Create()
     _objects["cube"]->frame.TranslateLocal(glm::vec3(-2, 0.5f, 0));
     _objects["indexedCube"]->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
     _objects["purpleRectangle"]->frame.TranslateLocal(glm::vec3(0, 0, 2.0f));
+    _objects["wall"]->frame.TranslateLocal(glm::vec3(0, 1.0f, -2.0f));
 
     RotateAnimation* defaultRot = new RotateAnimation();
     RotateAnimation* otherRot = new RotateAnimation(glm::vec3(0, 0, 1), 180.0f);
     _objects["cube"]->SetAnimation(defaultRot);
     _objects["indexedCube"]->SetAnimation(otherRot);
 
-    GraphicsObject* wall = new GraphicsObject();
-    wall->AddMesh(new OGLVertexMesh<VertexPCT>());
-    wall->AddMesh(new OGLVertexMesh<VertexPCT>());
-    OGLVertexMesh<VertexPCT>* mesh = (OGLVertexMesh<VertexPCT>*)wall->GetMesh(0);
-    mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
-    mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
-    mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
-    //                     x,  y, z, r, g, b, a, s, t
-    mesh->AddVertexData({ -2,  1, 0, 1, 1, 1, 1, 0, 1 });
-    mesh->AddVertexData({ -2, -1, 0, 1, 1, 1, 1, 0, 0 });
-    mesh->AddVertexData({  0, -1, 0, 1, 1, 1, 1, 1, 0 });
-    mesh->AddVertexData({  0,  1, 0, 1, 1, 1, 1, 1, 1 });
-    unsigned short indices1[] = { 0, 1, 2, 0, 2, 3 };
-    mesh->SetIndices(indices1, 6);
-    mesh->SetTexture(_textures["customTexture"]);
-
-    mesh = (OGLVertexMesh<VertexPCT>*)wall->GetMesh(1);
-    mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
-    mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
-    mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
-    mesh->AddVertexData({ 0,  1, 0, 1, 1, 1, 1, 0, 1 });
-    mesh->AddVertexData({ 0, -1, 0, 1, 1, 1, 1, 0, 0 });
-    mesh->AddVertexData({ 2, -1, 0, 1, 1, 1, 1, 1, 0 });
-    mesh->AddVertexData({ 2,  1, 0, 1, 1, 1, 1, 1, 1 });
-    unsigned short indices2[] = { 0, 1, 2, 0, 2, 3 };
-    mesh->SetIndices(indices2, 6);
-    mesh->SetTexture(_textures["brickwallTexture"]);
-
-    wall->frame.TranslateLocal(glm::vec3(0, 1.0f, -2.0f));
-    AddGraphicsObject("wall", wall, "simpleTextureShader");
-    _objects["wall"]->SendToGPU();
-
     MeshFactory<VertexPCT, RGBA> pctFactory;
-    mesh = (OGLVertexMesh<VertexPCT>*)
+    OGLVertexMesh<VertexPCT>* mesh = (OGLVertexMesh<VertexPCT>*)
        pctFactory.FlatTexturedSurfaceXZ(-5, -5, 5, 5, { 1, 1, 1, 1 }, 5, 5);
     mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
     mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
@@ -187,6 +156,8 @@ bool OGLGraphicsScene::ReadObjectData()
          meshData = *mit;
          if (meshData.vertexType == "PC") {
             mesh = CreatePCMesh(meshData);
+         }else if (meshData.vertexType == "PCT") {
+            mesh = CreatePCTMesh(meshData);
          }
          if (mesh) {
             object->AddMesh(mesh);
@@ -209,9 +180,7 @@ AbstractMesh* OGLGraphicsScene::CreatePCMesh(MeshData& meshData)
    if (meshData.primitiveType == "lines") {
       mesh->SetPrimitive(GL_LINES);
    }
-   if (!ReadPCMeshData(
-      (OGLVertexMesh<VertexPC>*)mesh,
-      meshData.vertexData, meshData.indexData, meshData.isIndexed)) {
+   if (!ReadPCMeshData((OGLVertexMesh<VertexPC>*)mesh, meshData)) {
       delete mesh;
       return nullptr;
    }
@@ -220,28 +189,44 @@ AbstractMesh* OGLGraphicsScene::CreatePCMesh(MeshData& meshData)
    return mesh;
 }
 
-bool OGLGraphicsScene::ReadPCMeshData(
-   OGLVertexMesh<VertexPC>* mesh,
-   vector<float>& vertexData,
-   vector<unsigned short>& indexData,
-   bool isIndexed)
+AbstractMesh* OGLGraphicsScene::CreatePCTMesh(MeshData& meshData)
 {
-   size_t numbersLeftToRead = vertexData.size();
+   OGLVertexMesh<VertexPCT>* mesh = new OGLVertexMesh<VertexPCT>();
+   if (meshData.primitiveType == "lines") {
+      mesh->SetPrimitive(GL_LINES);
+   }
+   if (!ReadPCTMeshData((OGLVertexMesh<VertexPCT>*)mesh, meshData)) {
+      delete mesh;
+      return nullptr;
+   }
+   mesh->SetTexture(_textures[meshData.textureName]);
+   mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
+   mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
+   mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
+   return mesh;
+}
+
+bool OGLGraphicsScene::ReadPCMeshData(OGLVertexMesh<VertexPC>* mesh, MeshData& meshData)
+{
+   size_t numberOfVertices = meshData.vertexData.size();
+   size_t numberOfIndices = meshData.indexData.size();
+   size_t numbersLeftToRead = numberOfVertices;
+   const int SIZE = 6;
    float x, y, z, r, g, b;
    vector<VertexPC> vertices;
-   for (size_t i = 0; i < vertexData.size();) {
-      if (numbersLeftToRead < 6) {
-         _log << "Incorrect number of vertices for the mesh.";
+   for (size_t i = 0; i < numberOfVertices;) {
+      if (numbersLeftToRead < SIZE) {
+         _log << "Incorrect number of vertices for the mesh (expected 6 for VertexPC).";
          return false;
       }
-      x = vertexData[i++];
-      y = vertexData[i++];
-      z = vertexData[i++];
-      r = vertexData[i++];
-      g = vertexData[i++];
-      b = vertexData[i++];
-      if (indexData.size() > 0) {
-         if (isIndexed) {
+      x = meshData.vertexData[i++];
+      y = meshData.vertexData[i++];
+      z = meshData.vertexData[i++];
+      r = meshData.vertexData[i++];
+      g = meshData.vertexData[i++];
+      b = meshData.vertexData[i++];
+      if (numberOfIndices > 0) {
+         if (meshData.isIndexed) {
             mesh->AddVertexData({ x,  y, z, r, g, b });
          }
          else {
@@ -251,16 +236,65 @@ bool OGLGraphicsScene::ReadPCMeshData(
       else { // No index data
          mesh->AddVertexData({ x,  y, z, r, g, b });
       }
-      numbersLeftToRead -= 6;
+      numbersLeftToRead -= SIZE;
    }
 
    VertexPC v;
-   for (size_t i = 0; i < indexData.size();i++) {
-      if (isIndexed) {
-         mesh->AddIndex(indexData[i]);
+   for (size_t i = 0; i < numberOfIndices; i++) {
+      if (meshData.isIndexed) {
+         mesh->AddIndex(meshData.indexData[i]);
       }
       else {
-         v = vertices[indexData[i]];
+         v = vertices[meshData.indexData[i]];
+         mesh->AddVertexData({ v.position, v.color });
+      }
+   }
+   return true;
+}
+
+bool OGLGraphicsScene::ReadPCTMeshData(OGLVertexMesh<VertexPCT>* mesh, MeshData& meshData)
+{
+   size_t numberOfVertices = meshData.vertexData.size();
+   size_t numberOfIndices = meshData.indexData.size();
+   size_t numbersLeftToRead = numberOfVertices;
+   float x, y, z, r, g, b, a, s, t;
+   vector<VertexPCT> vertices;
+   const int SIZE = 9;
+   for (size_t i = 0; i < numberOfVertices;) {
+      if (numbersLeftToRead < SIZE) {
+         _log << "Incorrect number of vertices for the mesh (expected 8 for VertexPCT).";
+         return false;
+      }
+      x = meshData.vertexData[i++];
+      y = meshData.vertexData[i++];
+      z = meshData.vertexData[i++];
+      r = meshData.vertexData[i++];
+      g = meshData.vertexData[i++];
+      b = meshData.vertexData[i++];
+      a = meshData.vertexData[i++];
+      s = meshData.vertexData[i++];
+      t = meshData.vertexData[i++];
+      if (numberOfIndices > 0) {
+         if (meshData.isIndexed) {
+            mesh->AddVertexData({ x,  y, z, r, g, b, a, s, t });
+         }
+         else {
+            vertices.push_back({ x,  y, z, r, g, b, a, s, t });
+         }
+      }
+      else { // No index data
+         mesh->AddVertexData({ x,  y, z, r, g, b, a, s, t });
+      }
+      numbersLeftToRead -= SIZE;
+   }
+
+   VertexPCT v;
+   for (size_t i = 0; i < numberOfIndices; i++) {
+      if (meshData.isIndexed) {
+         mesh->AddIndex(meshData.indexData[i]);
+      }
+      else {
+         v = vertices[meshData.indexData[i]];
          mesh->AddVertexData({ v.position, v.color });
       }
    }
