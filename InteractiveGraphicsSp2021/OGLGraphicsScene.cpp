@@ -28,29 +28,6 @@ bool OGLGraphicsScene::Create()
     _objects["cube"]->SetAnimation(defaultRot);
     _objects["indexedCube"]->SetAnimation(otherRot);
 
-    OGLShader* texShader = new OGLShader();
-    _textFileReader->SetFilePath("PCT3DVertexShader.glsl");
-    _textFileReader->Open();
-    _textFileReader->Read();
-    _textFileReader->Close();
-    if (_textFileReader->HasError()) {
-       return false;
-    }
-    texShader->SetVertexSource(_textFileReader->GetContents());
-    _textFileReader->SetFilePath("TexFragmentShader.glsl");
-    _textFileReader->Open();
-    _textFileReader->Read();
-    _textFileReader->Close();
-    if (_textFileReader->HasError()) {
-       return false;
-    }
-    texShader->SetFragmentSource(_textFileReader->GetContents());
-    if(!texShader->Create()) {
-       return false;
-    }
-    AddShader("simpleTextureShader", texShader);
-    _shaders["simpleTextureShader"]->SetCamera(_cameras["camera"]);
-
     GraphicsObject* wall = new GraphicsObject();
     wall->AddMesh(new OGLVertexMesh<VertexPCT>());
     wall->AddMesh(new OGLVertexMesh<VertexPCT>());
