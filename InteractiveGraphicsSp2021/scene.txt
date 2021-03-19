@@ -5,6 +5,25 @@ camera,0,3,5,60,0.1f,50
 defaultShader,default,default,none
 simple3DShader,Simple3DVertexShader.glsl,default,camera
 <endShaders>
+
+# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
+customTexture, repeat, repeat, nearest, nearest, 4, 4, 4
+<array>
+255, 255, 255, 255,   0,   0, 255, 255,   0,   0, 255, 255, 255, 255, 255, 255
+  0, 255,   0, 255, 255, 255, 255, 255, 255, 255, 255, 255,   0, 255,   0, 255
+  0, 255,   0, 255, 255, 255, 255, 255, 255, 255, 255, 255,   0, 255,   0, 255
+255, 255, 255, 255, 255,   0,   0, 255, 255,   0,   0, 255, 255, 255, 255, 255
+<endTexture>
+brickwallTexture
+<file>
+brickwall.jpg
+<endTexture>
+smileyTexture
+<file>
+smiley.jpg
+<endTexture>
+<endTextures>
+
 # vertex type, object name, shader name, primitive type
 axis,simple3DShader
 PC,lines

@@ -40,6 +40,15 @@ struct ObjectData {
    vector<MeshData> meshData;
 };
 
+// texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
+struct TextureData {
+   string name;
+   int width, height, numberOfChannels;
+   string wrapS, wrapT, minFilter, maxFilter;
+   vector<unsigned char> arrayData;
+   string filePath;
+};
+
 class SceneReader :
     public AbstractReader
 {
@@ -50,13 +59,14 @@ protected:
    vector<CameraData> _cameraData;
    vector<ShaderData> _shaderData;
    map<string, ObjectData> _objectData;
-   string _currentObjectName;
+   map<string, TextureData> _textureData;
+   string _currentName;
    string _state;
    int _currentMeshIndex;
 
 public:
    SceneReader(string filePath) : _filePath(filePath), _errorOccurred(false), 
-      _currentObjectName(""), _currentMeshIndex(0), _state("reading cameras")
+      _currentName(""), _currentMeshIndex(0), _state("reading cameras")
    {}
    void Open();
    void Read();
@@ -75,6 +85,10 @@ public:
       return _objectData;
    }
 
+   map<string, TextureData>& GetTextureData() {
+      return _textureData;
+   }
+
 protected:
    virtual void ProcessLine(const string& line);
    virtual void ProcessCameraLine(const string& line);
@@ -83,6 +97,9 @@ protected:
    virtual void ProcessMeshDataLine(const string& line);
    virtual void ProcessVertexDataLine(const string& line);
    virtual void ProcessIndexDataLine(const string& line);
+   virtual void ProcessTextureLine(const string& line);
+   virtual void ProcessTextureArrayLine(const string& line);
+   virtual void ProcessTextureFileLine(const string& line);
 };
 
 #endif

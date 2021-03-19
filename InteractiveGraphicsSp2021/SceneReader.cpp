@@ -33,6 +33,15 @@ void SceneReader::ProcessLine(const string& line)
    else if (_state == "reading shaders") {
       ProcessShaderLine(line);
    }
+   else if (_state == "reading textures") {
+      ProcessTextureLine(line);
+   }
+   else if (_state == "reading texture array") {
+      ProcessTextureArrayLine(line);
+   }
+   else if (_state == "reading texture file") {
+      ProcessTextureFileLine(line);
+   }
    else if (_state == "reading objects") {
       ProcessObjectLine(line);
    }
@@ -77,7 +86,7 @@ void SceneReader::ProcessCameraLine(const string& line)
 void SceneReader::ProcessShaderLine(const string& line)
 {
    if (line == "<endShaders>") {
-      _state = "reading objects";
+      _state = "reading textures";
       return;
    }
    vector<string> tokens;
@@ -97,6 +106,82 @@ void SceneReader::ProcessShaderLine(const string& line)
    data.fragmentShaderFilePath = tokens[2];
    data.cameraName = tokens[3];
    _shaderData.push_back(data);
+}
+
+void SceneReader::ProcessTextureLine(const string& line)
+{
+   if (line == "<endTextures>") {
+      _state = "reading objects";
+      return;
+   }
+   if (line == "<array>") {
+      _state = "reading texture array";
+      return;
+   }
+   if (line == "<file>") {
+      _state = "reading texture file";
+      return;
+   }
+   vector<string> tokens;
+   Split(line, ',', tokens);
+   if (tokens.size() < 1 || tokens.size() > 8) {
+      _errorOccurred = true;
+      _log << "This texture line is badly formatted: " << line << std::endl;
+      return;
+   }
+   for (size_t i = 0; i < tokens.size(); i++) {
+      Trim(tokens[i]);
+   }
+   // Texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
+   TextureData data;
+   data.name = tokens[0];
+   if (tokens.size() > 1) {
+      data.wrapS = tokens[1];
+      data.wrapT = tokens[2];
+      data.minFilter = tokens[3];
+      data.maxFilter = tokens[4];
+      if (tokens.size() > 5) {
+         data.width = std::stoi(tokens[5]);
+         data.height = std::stoi(tokens[6]);
+         data.numberOfChannels = std::stoi(tokens[7]);
+      }
+   }
+   else {
+      data.wrapS = "default";
+      data.wrapT = "default";
+      data.minFilter = "default";
+      data.maxFilter = "default";
+   }
+   
+   _textureData[data.name] = data;
+   _currentName = data.name;
+}
+
+void SceneReader::ProcessTextureArrayLine(const string& line)
+{
+   if (line == "<endTexture>") {
+      _state = "reading textures";
+      _currentName = "";
+      return;
+   }
+   vector<string> tokens;
+   Split(line, ',', tokens);
+   for (size_t i = 0; i < tokens.size(); i++) {
+      Trim(tokens[i]);
+      _textureData[_currentName].arrayData.push_back(std::stoi(tokens[i]));
+   }
+}
+
+void SceneReader::ProcessTextureFileLine(const string& line)
+{
+   if (line == "<endTexture>") {
+      _state = "reading textures";
+      _currentName = "";
+      return;
+   }
+   string filePath = line;
+   Trim(filePath);
+   _textureData[_currentName].filePath = filePath;
 }
 
 void SceneReader::ProcessObjectLine(const string& line)
@@ -120,7 +205,7 @@ void SceneReader::ProcessObjectLine(const string& line)
    data.name = tokens[0];
    data.shaderName = tokens[1];
    _objectData[data.name] = data;
-   _currentObjectName = data.name;
+   _currentName = data.name;
    _state = "reading mesh data";
 }
 
@@ -143,7 +228,7 @@ void SceneReader::ProcessMeshDataLine(const string& line)
    data.vertexType = tokens[0];
    data.primitiveType = tokens[1];
    data.isIndexed = (tokens[2] == "indexed");
-   _objectData[_currentObjectName].meshData.push_back(data);
+   _objectData[_currentName].meshData.push_back(data);
    _state = "reading vertex data";
 }
 
@@ -157,7 +242,7 @@ void SceneReader::ProcessVertexDataLine(const string& line)
    Split(line, ',', tokens);
    for (size_t i = 0; i < tokens.size(); i++) {
       Trim(tokens[i]);
-      MeshData& meshData = _objectData[_currentObjectName].meshData[_currentMeshIndex];
+      MeshData& meshData = _objectData[_currentName].meshData[_currentMeshIndex];
       meshData.vertexData.push_back(std::stof(tokens[i]));
    }
 }
@@ -173,7 +258,7 @@ void SceneReader::ProcessIndexDataLine(const string& line)
    Split(line, ',', tokens);
    for (size_t i = 0; i < tokens.size(); i++) {
       Trim(tokens[i]);
-      MeshData& meshData = _objectData[_currentObjectName].meshData[_currentMeshIndex];
+      MeshData& meshData = _objectData[_currentName].meshData[_currentMeshIndex];
       meshData.indexData.push_back(std::stoi(tokens[i]));
    }
 }

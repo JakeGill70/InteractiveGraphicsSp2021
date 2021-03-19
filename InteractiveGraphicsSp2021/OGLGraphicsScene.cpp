@@ -16,6 +16,7 @@ bool OGLGraphicsScene::Create()
    if (!LoadScene()) return false;
    ReadCameraData();
    if (!ReadShaderData()) return false;
+   if (!ReadTextureData()) return false;
    if (!ReadObjectData()) return false;
 
     _objects["cube"]->frame.TranslateLocal(glm::vec3(-2, 0.5f, 0));
@@ -50,21 +51,6 @@ bool OGLGraphicsScene::Create()
     AddShader("simpleTextureShader", texShader);
     _shaders["simpleTextureShader"]->SetCamera(_cameras["camera"]);
 
-
-    unsigned char* textureData = new unsigned char[] {
-      255, 255, 255, 255,   0,   0, 255, 255,   0,   0, 255, 255, 255, 255, 255, 255,
-        0, 255,   0, 255, 255, 255, 255, 255, 255, 255, 255, 255,   0, 255,   0, 255,
-        0, 255,   0, 255, 255, 255, 255, 255, 255, 255, 255, 255,   0, 255,   0, 255,
-      255, 255, 255, 255, 255,   0,   0, 255, 255,   0,   0, 255, 255, 255, 255, 255
-    };
-    OGLTexture* customTexture = new OGLTexture();
-    customTexture->SetMinFilter(GL_NEAREST);
-    customTexture->SetMagFilter(GL_NEAREST);
-    customTexture->LoadFromArray(textureData, 64, 4, 4, 4);
-
-    OGLTexture* brickWallTexture = new OGLTexture();
-    brickWallTexture->LoadFromFile("brickwall.jpg");
-
     GraphicsObject* wall = new GraphicsObject();
     wall->AddMesh(new OGLVertexMesh<VertexPCT>());
     wall->AddMesh(new OGLVertexMesh<VertexPCT>());
@@ -79,7 +65,7 @@ bool OGLGraphicsScene::Create()
     mesh->AddVertexData({  0,  1, 0, 1, 1, 1, 1, 1, 1 });
     unsigned short indices1[] = { 0, 1, 2, 0, 2, 3 };
     mesh->SetIndices(indices1, 6);
-    mesh->SetTexture(customTexture);
+    mesh->SetTexture(_textures["customTexture"]);
 
     mesh = (OGLVertexMesh<VertexPCT>*)wall->GetMesh(1);
     mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
@@ -91,14 +77,11 @@ bool OGLGraphicsScene::Create()
     mesh->AddVertexData({ 2,  1, 0, 1, 1, 1, 1, 1, 1 });
     unsigned short indices2[] = { 0, 1, 2, 0, 2, 3 };
     mesh->SetIndices(indices2, 6);
-    mesh->SetTexture(brickWallTexture);
+    mesh->SetTexture(_textures["brickwallTexture"]);
 
     wall->frame.TranslateLocal(glm::vec3(0, 1.0f, -2.0f));
     AddGraphicsObject("wall", wall, "simpleTextureShader");
     _objects["wall"]->SendToGPU();
-
-    OGLTexture* smileyTexture = new OGLTexture();
-    smileyTexture->LoadFromFile("smiley.jpg");
 
     MeshFactory<VertexPCT, RGBA> pctFactory;
     mesh = (OGLVertexMesh<VertexPCT>*)
@@ -106,7 +89,7 @@ bool OGLGraphicsScene::Create()
     mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
     mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
     mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
-    mesh->SetTexture(smileyTexture);
+    mesh->SetTexture(_textures["smileyTexture"]);
     GraphicsObject* floor = new GraphicsObject();
     floor->AddMesh(mesh);
     AddGraphicsObject("floor", floor, "simpleTextureShader");
@@ -176,6 +159,40 @@ bool OGLGraphicsScene::ReadShaderData()
       }
    }
 
+   return true;
+}
+
+bool OGLGraphicsScene::ReadTextureData()
+{
+   OGLTexture* texture;
+   TextureData data;
+   size_t numberOfElements;
+   unsigned char* array;
+   map<string, TextureData>& textureData = _sceneReader->GetTextureData();
+   for (auto it = textureData.begin(); it != textureData.end(); it++) {
+      data = it->second;
+      texture = new OGLTexture();
+      if (data.minFilter == "nearest") {
+         texture->SetMinFilter(GL_NEAREST);
+      }
+      if (data.maxFilter == "nearest") {
+         texture->SetMagFilter(GL_NEAREST);
+      }
+      numberOfElements = data.arrayData.size();
+      if (numberOfElements > 0) {
+         array = new unsigned char[numberOfElements];
+         for (int i = 0; i < numberOfElements; i++) {
+            array[i] = data.arrayData[i];
+         }
+         texture->LoadFromArray(
+            array, (unsigned int)numberOfElements, 
+            data.width, data.height, data.numberOfChannels);
+      }
+      else {
+         texture->LoadFromFile(data.filePath);
+      }
+      AddTexture(data.name, texture);
+   }
    return true;
 }
 

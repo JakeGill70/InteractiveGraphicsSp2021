@@ -146,5 +146,113 @@ namespace InteractiveGraphicsUnitTesting
          std::remove("TestFile.txt");
       }
 
+      TEST_METHOD(ShouldReportOneArrayTexture)
+      {
+         ofstream fout("TestFile.txt");
+         fout << "# camera name, pos x, pos y, pos z, fov, near plane, far plane" << std::endl;
+         fout << "camera,1,2,3,60,0.1f,50" << std::endl;
+         fout << "<endCameras>" << std::endl;
+         fout << "defaultShader,  default,default,none" << std::endl;
+         fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
+         fout << "<endShaders>" << std::endl;
+         fout << "# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter" << std::endl;
+         fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
+         fout << "<array>" << std::endl;
+         fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255,255" << std::endl;
+         fout << "<endTexture>" << std::endl;
+         fout << "<endTextures>" << std::endl;
+         fout.close();
+
+         SceneReader sut("TestFile.txt");
+         sut.Open();
+         Assert::IsFalse(sut.HasError());
+         sut.Read();
+         map<string, TextureData>& data = sut.GetTextureData();
+         Assert::AreEqual(1, (int)data.size());
+         TextureData texData = data.begin()->second;
+         Assert::AreEqual(16, (int)texData.arrayData.size());
+
+         std::remove("TestFile.txt");
+      }
+
+      TEST_METHOD(ShouldReportTwoArrayTextures)
+      {
+         ofstream fout("TestFile.txt");
+         fout << "# camera name, pos x, pos y, pos z, fov, near plane, far plane" << std::endl;
+         fout << "camera,1,2,3,60,0.1f,50" << std::endl;
+         fout << "<endCameras>" << std::endl;
+         fout << "defaultShader,  default,default,none" << std::endl;
+         fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
+         fout << "<endShaders>" << std::endl;
+         fout << "# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter" << std::endl;
+         fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
+         fout << "<array>" << std::endl;
+         fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255,255" << std::endl;
+         fout << "<endTexture>" << std::endl;
+         fout << "customTexture2, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
+         fout << "<array>" << std::endl;
+         fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255" << std::endl;
+         fout << "<endTexture>" << std::endl;
+         fout << "<endTextures>" << std::endl;
+         fout.close();
+
+         SceneReader sut("TestFile.txt");
+         sut.Open();
+         Assert::IsFalse(sut.HasError());
+         sut.Read();
+         map<string, TextureData>& data = sut.GetTextureData();
+         Assert::AreEqual(2, (int)data.size());
+         TextureData texData;
+         auto it = data.begin();
+         texData = it->second;
+         Assert::AreEqual(16, (int)texData.arrayData.size());
+         it++;
+         texData = it->second;
+         Assert::AreEqual(15, (int)texData.arrayData.size());
+         it++;
+
+         std::remove("TestFile.txt");
+      }
+
+      TEST_METHOD(ShouldReportTwoArrayTexturesOneFromFile)
+      {
+         ofstream fout("TestFile.txt");
+         fout << "# camera name, pos x, pos y, pos z, fov, near plane, far plane" << std::endl;
+         fout << "camera,1,2,3,60,0.1f,50" << std::endl;
+         fout << "<endCameras>" << std::endl;
+         fout << "defaultShader,  default,default,none" << std::endl;
+         fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
+         fout << "<endShaders>" << std::endl;
+         fout << "# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter" << std::endl;
+         fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
+         fout << "<array>" << std::endl;
+         fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255,255" << std::endl;
+         fout << "<endTexture>" << std::endl;
+         fout << "someTexture" << std::endl;
+         fout << "<file>" << std::endl;
+         fout << "somefile.jpg" << std::endl;
+         fout << "<endTexture>" << std::endl;
+         fout << "<endTextures>" << std::endl;
+         fout.close();
+
+         SceneReader sut("TestFile.txt");
+         sut.Open();
+         Assert::IsFalse(sut.HasError());
+         sut.Read();
+         Assert::IsFalse(sut.HasError());
+         map<string, TextureData>& data = sut.GetTextureData();
+         Assert::AreEqual(2, (int)data.size());
+         TextureData texData;
+         auto it = data.begin();
+         texData = it->second;
+         Assert::AreEqual(16, (int)texData.arrayData.size());
+         it++;
+         texData = it->second;
+         Assert::AreEqual("somefile.jpg", texData.filePath.c_str());
+         it++;
+
+         std::remove("TestFile.txt");
+      }
+
    };
 }

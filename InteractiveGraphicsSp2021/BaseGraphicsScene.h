@@ -17,6 +17,7 @@ protected:
    map<string, AbstractShader*> _shaders;
    map<string, GraphicsObject*> _objects;
    map<string, BaseCamera*> _cameras;
+   map<string, AbstractTexture*> _textures;
    BaseCamera* _currentCamera;
    TextFileReader* _textFileReader;
 
@@ -26,6 +27,10 @@ public:
 
    virtual void AddShader(const string& name, AbstractShader* shader) {
       _shaders[name] = shader;
+   }
+
+   virtual void AddTexture(const string& name, AbstractTexture* texture) {
+      _textures[name] = texture;
    }
 
    virtual void AddGraphicsObject(

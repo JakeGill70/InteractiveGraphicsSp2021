@@ -16,6 +16,12 @@ BaseGraphicsScene::~BaseGraphicsScene()
       delete iterator->second;
    }
    _cameras.clear();
+
+   for (auto iterator = _textures.begin(); iterator != _textures.end(); iterator++) {
+      delete iterator->second;
+   }
+   _textures.clear();
+
    delete _textFileReader;
 }
 
