@@ -41,13 +41,13 @@ AbstractVertexMesh<V>* MeshFactory<V, C>::CuboidMeshPCT(
    // +Z
    V vA = { -halfWidth, halfHeight, halfDepth, color};
    V vB = { -halfWidth, -halfHeight, halfDepth, color};
-   V vC = { halfWidth, halfHeight, halfDepth, color};
-   V vD = { halfWidth, -halfHeight, halfDepth, color};
+   V vC = { halfWidth, -halfHeight, halfDepth, color};
+   V vD = { halfWidth, halfHeight, halfDepth, color};
    // -Z
    V vE = { halfWidth, halfHeight, -halfDepth, color };
    V vF = { halfWidth, -halfHeight, -halfDepth, color };
-   V vG = { -halfWidth, halfHeight, -halfDepth, color };
-   V vH = { -halfWidth, -halfHeight, -halfDepth, color };
+   V vG = { -halfWidth, -halfHeight, -halfDepth, color };
+   V vH = { -halfWidth, halfHeight, -halfDepth, color };
 
    // Looking from the front
 
@@ -117,6 +117,9 @@ AbstractVertexMesh<V>* MeshFactory<V, C>::CuboidMeshPCT(
    mesh->AddVertexData(vB);
    mesh->AddVertexData(vF);
    mesh->AddVertexData(vC);
+   mesh->SetPositionAttribute({ 0,  3, sizeof(V), 0 });
+   mesh->SetColorAttribute({ 1, 4, sizeof(V), sizeof(GLfloat) * 3 });
+   mesh->SetTextureAttribute({ 2, 2, sizeof(V), sizeof(GLfloat) * 7 });
    return mesh;
 }
 

@@ -32,29 +32,22 @@ bool OGLGraphicsScene::Create()
    //_objects["rightWall"]->frame.RotateWorld(-90, glm::vec3(0, 1, 0));
    //_objects["rightWall"]->frame.TranslateWorld(glm::vec3(5, 2.5f, 0));
 
-   //_objects["frontWall"]->frame.RotateWorld(-90, glm::vec3(1, 0, 0));
-   //_objects["frontWall"]->frame.TranslateWorld(glm::vec3(0, 2.5f, 5));
-
    //RotateAnimation* defaultRot = new RotateAnimation();
    //RotateAnimation* otherRot = new RotateAnimation(glm::vec3(0, 0, 1), 180.0f);
    //_objects["cube"]->SetAnimation(defaultRot);
    //_objects["indexedCube"]->SetAnimation(otherRot);
 
-   //_cameras["camera"]->frame.SetPosition(10, 5, 0);
-   //_cameras["camera"]->UpdateView();
-
-   GraphicsObject* c1 = new GraphicsObject();
    MeshFactory<VertexPCT, RGBA> meshFactory;
-   OGLVertexMesh< VertexPCT>* mesh = (OGLVertexMesh<VertexPCT>*)
-      meshFactory.CuboidMeshPCT(2, 2, 2, { 1, 1, 1, 1 }, 1, 1);
-   mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
-   mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
-   mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
+   OGLVertexMesh<VertexPCT>* mesh = (OGLVertexMesh<VertexPCT>*)
+      meshFactory.CuboidMeshPCT(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
    mesh->SetTexture(_textures["smileyTexture"]);
+   GraphicsObject* c1 = new GraphicsObject();
    c1->AddMesh(mesh);
-   AddGraphicsObject("cube1", c1, "ambientShader");
-   _objects["cube1"]->SendToGPU();
+   AddGraphicsObject("smileyCube", c1, "ambientShader");
+   c1->SendToGPU();
 
+   RotateAnimation* defaultRot = new RotateAnimation();
+   _objects["smileyCube"]->SetAnimation(defaultRot);
 
    return true;
 }
