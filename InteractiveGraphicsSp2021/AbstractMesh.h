@@ -20,7 +20,7 @@ public:
    AbstractMesh() 
       : _texture(nullptr), _primitive(0) {
       _hasPosition = _hasColor = _hasTexture = false;
-      material.ambientIntensity = 0.1f;
+      material.ambientIntensity = 0.9f;
    }
 
    virtual inline void SetPrimitive(unsigned int primitive) {

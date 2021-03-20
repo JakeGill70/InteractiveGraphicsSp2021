@@ -43,6 +43,15 @@ bool OGLGraphicsScene::Create()
    //_cameras["camera"]->frame.SetPosition(10, 5, 0);
    //_cameras["camera"]->UpdateView();
 
+   GraphicsObject* c1 = new GraphicsObject();
+   MeshFactory<VertexPCT, RGBA> meshFactory;
+   AbstractMesh* mesh = meshFactory.CuboidMeshPCT(2, 2, 2, { 1, 1, 1, 1 }, 1, 1);
+   mesh->SetTexture(_textures["smileyTexture"]);
+   c1->AddMesh(mesh);
+   AddGraphicsObject("cube1", c1, "ambientShader");
+   _objects["cube1"]->SendToGPU();
+
+
    return true;
 }
 

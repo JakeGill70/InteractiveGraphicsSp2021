@@ -117,6 +117,7 @@ AbstractVertexMesh<V>* MeshFactory<V, C>::CuboidMeshPCT(
    mesh->AddVertexData(vB);
    mesh->AddVertexData(vF);
    mesh->AddVertexData(vC);
+   return mesh;
 }
 
 #endif
