@@ -11,7 +11,7 @@ class AbstractMesh :
 protected:
    unsigned int _primitive;
    AbstractTexture* _texture;
-   bool _hasPosition, _hasColor, _hasTexture;
+   bool _hasPosition, _hasColor, _hasTexture, _hasNormal;
 
 public:
    Material material;
@@ -19,7 +19,7 @@ public:
 public:
    AbstractMesh() 
       : _texture(nullptr), _primitive(0) {
-      _hasPosition = _hasColor = _hasTexture = false;
+      _hasPosition = _hasColor = _hasTexture = _hasNormal = false;
       material.ambientIntensity = 0.1f;
    }
 

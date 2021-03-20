@@ -147,6 +147,8 @@
     <None Include="PCT3DVertexShader.glsl" />
     <None Include="TexFragmentShader.glsl" />
     <None Include="PCTAmbientFragmentShader.glsl" />
+    <None Include="PCNTLightingVertexShader.glsl" />
+    <None Include="PCNTDiffuseFragmentShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="scene.txt" />

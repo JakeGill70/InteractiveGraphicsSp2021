@@ -17,7 +17,7 @@ protected:
       int count;
       size_t bytesToNext;
       size_t offsetToFirst;
-   } _positionAttribute, _colorAttribute, _textureAttribute;
+   } _positionAttribute, _colorAttribute, _textureAttribute, _normalAttribute;
 
 public:
    OGLVertexMesh() : _vboId(0), _eboId(0) {
@@ -25,6 +25,7 @@ public:
       this->_positionAttribute = { 0, 3, 0, 0 };
       this->_colorAttribute = { 1, 3, 0, 0 };
       this->_textureAttribute = { 2, 2, 0, 0 };
+      this->_normalAttribute = { 0, 0, 0, 0 };
    }
 
    void Render() {}
@@ -60,6 +61,11 @@ public:
       this->_hasTexture = true;
    }
 
+   inline void SetNormalAttribute(VertexAttribute na) {
+      this->_normalAttribute = na;
+      this->_hasNormal = true;
+   }
+
    void SetUpBufferInterpretation();
 
    void SendToGPU();
@@ -74,6 +80,7 @@ void OGLVertexMesh<T>::SetUpBufferInterpretation()
    if (this->_hasPosition) this->SetUpBufferInterpretation(this->_positionAttribute);
    if (this->_hasColor) this->SetUpBufferInterpretation(this->_colorAttribute);
    if (this->_hasTexture) this->SetUpBufferInterpretation(this->_textureAttribute);
+   if (this->_hasNormal) this->SetUpBufferInterpretation(this->_normalAttribute);
 }
 
 template <class T>

@@ -6,6 +6,7 @@
 using std::string;
 #include "AbstractShader.h"
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 class BaseCamera;
 
@@ -51,6 +52,19 @@ public:
    {
       unsigned int location = glGetUniformLocation(_shaderProgram, name.c_str());
       glUniform1f(location, data);
+   }
+
+   void SendVec3ToGPU(const string& name, const glm::vec3& vector) const
+   {
+      unsigned int location = glGetUniformLocation(_shaderProgram, name.c_str());
+      glUniform3fv(location, 1, glm::value_ptr(vector));
+   }
+
+   virtual void SendGlobalLightToGPU(const Light& globalLight) const
+   {
+      SendVec3ToGPU("globalLightPosition", globalLight.position);
+      SendVec3ToGPU("globalLightColor", globalLight.color);
+      SendFloatToGPU("globalLightIntensity", globalLight.intensity);
    }
 
 protected:

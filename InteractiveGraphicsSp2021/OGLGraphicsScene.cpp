@@ -49,6 +49,22 @@ bool OGLGraphicsScene::Create()
    RotateAnimation* defaultRot = new RotateAnimation();
    _objects["smileyCube"]->SetAnimation(defaultRot);
 
+   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-4, 0, 0));
+
+   globalLight.intensity = 0.5f; // Brighten the cube a bit
+   MeshFactory<VertexPCNT, RGBA> meshFactory2;
+   OGLVertexMesh<VertexPCNT>* mesh2 = (OGLVertexMesh<VertexPCNT>*)
+      meshFactory2.CuboidMeshPCNT(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
+   mesh2->SetTexture(_textures["smileyTexture"]);
+   GraphicsObject* c2 = new GraphicsObject();
+   c2->AddMesh(mesh2);
+   AddGraphicsObject("smileyCube2", c2, "globalDiffuseShader");
+   c2->SendToGPU();
+
+   RotateAnimation* defaultRot2 = new RotateAnimation();
+   _objects["smileyCube2"]->SetAnimation(defaultRot2);
+   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(4, 0, 0));
+
    return true;
 }
 

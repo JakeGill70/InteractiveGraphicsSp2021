@@ -9,6 +9,7 @@ using std::map;
 #include "GraphicsObject.h"
 #include "BaseCamera.h"
 #include "TextFileReader.h"
+#include "GraphicsStructures.h"
 
 class BaseGraphicsScene :
     public BaseObject
@@ -22,7 +23,14 @@ protected:
    TextFileReader* _textFileReader;
 
 public:
-   BaseGraphicsScene() : _currentCamera(nullptr), _textFileReader(nullptr) {}
+   Light globalLight;
+
+public:
+   BaseGraphicsScene() : _currentCamera(nullptr), _textFileReader(nullptr) {
+      globalLight.position = { 100.0f, 100.0f, 0 };
+      globalLight.color = { 1, 1, 1 };
+      globalLight.intensity = 0.25;
+   }
    virtual ~BaseGraphicsScene();
 
    virtual void AddShader(const string& name, AbstractShader* shader) {
