@@ -37,6 +37,8 @@ bool OGLGraphicsScene::Create()
    _objects["cube"]->SetAnimation(defaultRot);
    _objects["indexedCube"]->SetAnimation(otherRot);
 
+   //_cameras["camera"]->frame.
+
    return true;
 }
 
