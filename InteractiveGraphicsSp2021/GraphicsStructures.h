@@ -30,4 +30,8 @@ struct VertexPCT {
    TexCoord tex;
 };
 
+struct Material {
+   float ambientIntensity;
+};
+
 #endif

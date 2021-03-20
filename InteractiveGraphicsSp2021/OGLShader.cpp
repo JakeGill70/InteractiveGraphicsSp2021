@@ -51,6 +51,7 @@ void OGLShader::Render(GraphicsObject* object)
    GLuint vbo;
    for (auto it = meshes.begin(); it != meshes.end(); it++) {
       mesh = *it;
+      SendFloatToGPU("materialAmbientIntensity", mesh->material.ambientIntensity);
       vbo = (GLuint)mesh->GetBufferId();
       glBindBuffer(GL_ARRAY_BUFFER, vbo);
       if (mesh->IsTextured()) {

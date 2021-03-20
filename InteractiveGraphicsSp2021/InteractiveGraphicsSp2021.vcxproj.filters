@@ -146,10 +146,12 @@
     <None Include="Simple3DVertexShader.glsl" />
     <None Include="PCT3DVertexShader.glsl" />
     <None Include="TexFragmentShader.glsl" />
+    <None Include="PCTAmbientFragmentShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="scene.txt" />
     <Text Include="Scene2.txt" />
+    <Text Include="Scene3.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brickwall.jpg">

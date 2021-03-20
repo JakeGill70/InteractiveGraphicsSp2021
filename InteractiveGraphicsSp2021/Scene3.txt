@@ -1,0 +1,46 @@
+# camera name, pos x, pos y, pos z, fov, near plane, far plane
+camera,0,5,10,60,0.1f,50
+<endCameras>
+# shader name, file path of vertex shader, file path of fragment shader, camera name
+defaultShader,default,default,none
+simple3DShader,Simple3DVertexShader.glsl,default,camera
+simpleTextureShader,PCT3DVertexShader.glsl,TexFragmentShader.glsl,camera
+ambientShader,PCT3DVertexShader.glsl,PCTAmbientFragmentShader.glsl,camera
+<endShaders>
+
+# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
+brickwallTexture
+<file>
+brickwall.jpg
+<endTexture>
+smileyTexture
+<file>
+smiley.jpg
+<endTexture>
+woodFloorTexture
+<file>
+wood_floor.jpg
+<endTexture>
+marbleTexture
+<file>
+marble-stone-floor.jpg
+<endTexture>
+<endTextures>
+
+# object name, shader name
+axis,simple3DShader
+PC,lines
+# x, y, z, r, g, b
+0, 0, 0, 1, 0, 0
+2.0f, 0, 0, 1, 0, 0
+0,    0, 0, 0, 1, 0
+0, 2.0f, 0, 0, 1, 0
+0, 0,    0, 0, 0, 1
+0, 0, 2.0f, 0, 0, 1
+<endVertexData>
+<endIndexData>
+<endMesh>
+<endObject>
+
+<endObjects>
+

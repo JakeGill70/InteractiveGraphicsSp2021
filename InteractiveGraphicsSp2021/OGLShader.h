@@ -47,6 +47,11 @@ public:
    void Render(GraphicsObject* object);
    bool Create();
    void SendMatrixToGPU(const string& name, const glm::mat4& matrix);
+   void SendFloatToGPU(const string& name, float data) const
+   {
+      unsigned int location = glGetUniformLocation(_shaderProgram, name.c_str());
+      glUniform1f(location, data);
+   }
 
 protected:
    void SetDefaultSource();

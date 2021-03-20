@@ -193,6 +193,7 @@
     <ClInclude Include="OGLVertexMesh.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="PCTAmbientFragmentShader.glsl" />
     <None Include="labweek07.ig" />
     <None Include="PCT3DVertexShader.glsl" />
     <None Include="TexFragmentShader.glsl" />
@@ -201,6 +202,7 @@
   <ItemGroup>
     <Text Include="scene.txt" />
     <Text Include="Scene2.txt" />
+    <Text Include="Scene3.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brickwall.jpg" />
