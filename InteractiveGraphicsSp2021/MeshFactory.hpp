@@ -39,84 +39,84 @@ AbstractVertexMesh<V>* MeshFactory<V, C>::CuboidMeshPCT(
    float halfDepth = depth / 2;
    OGLVertexMesh<V>* mesh = new OGLVertexMesh<V>();
    // +Z
-   V A = { -halfWidth, halfHeight, halfDepth, color};
-   V B = { -halfWidth, -halfHeight, halfDepth, color};
-   V C = { halfWidth, halfHeight, halfDepth, color};
-   V D = { halfWidth, -halfHeight, halfDepth, color};
+   V vA = { -halfWidth, halfHeight, halfDepth, color};
+   V vB = { -halfWidth, -halfHeight, halfDepth, color};
+   V vC = { halfWidth, halfHeight, halfDepth, color};
+   V vD = { halfWidth, -halfHeight, halfDepth, color};
    // -Z
-   V E = { halfWidth, halfHeight, -halfDepth, color };
-   V F = { halfWidth, -halfHeight, -halfDepth, color };
-   V G = { -halfWidth, halfHeight, -halfDepth, color };
-   V H = { -halfWidth, -halfHeight, -halfDepth, color };
+   V vE = { halfWidth, halfHeight, -halfDepth, color };
+   V vF = { halfWidth, -halfHeight, -halfDepth, color };
+   V vG = { -halfWidth, halfHeight, -halfDepth, color };
+   V vH = { -halfWidth, -halfHeight, -halfDepth, color };
 
    // Looking from the front
 
    // Front face
-   A.tex = { 0, repeatT };
-   B.tex = { 0, 0 };
-   C.tex = { repeatS, 0 };
-   D.tex = { repeatS, repeatT };
-   mesh->AddVertexData(A);
-   mesh->AddVertexData(B);
-   mesh->AddVertexData(C);
-   mesh->AddVertexData(A);
-   mesh->AddVertexData(C);
-   mesh->AddVertexData(D);
+   vA.tex = { 0, repeatT };
+   vB.tex = { 0, 0 };
+   vC.tex = { repeatS, 0 };
+   vD.tex = { repeatS, repeatT };
+   mesh->AddVertexData(vA);
+   mesh->AddVertexData(vB);
+   mesh->AddVertexData(vC);
+   mesh->AddVertexData(vA);
+   mesh->AddVertexData(vC);
+   mesh->AddVertexData(vD);
    // Right face
-   D.tex = { 0, repeatT };
-   C.tex = { 0, 0 };
-   F.tex = { repeatS, 0 };
-   E.tex = { repeatS, repeatT };
-   mesh->AddVertexData(D);
-   mesh->AddVertexData(C);
-   mesh->AddVertexData(F);
-   mesh->AddVertexData(D);
-   mesh->AddVertexData(F);
-   mesh->AddVertexData(E);
+   vD.tex = { 0, repeatT };
+   vC.tex = { 0, 0 };
+   vF.tex = { repeatS, 0 };
+   vE.tex = { repeatS, repeatT };
+   mesh->AddVertexData(vD);
+   mesh->AddVertexData(vC);
+   mesh->AddVertexData(vF);
+   mesh->AddVertexData(vD);
+   mesh->AddVertexData(vF);
+   mesh->AddVertexData(vE);
    // Back face
-   E.tex = { 0, repeatT };
-   F.tex = { 0, 0 };
-   G.tex = { repeatS, 0 };
-   H.tex = { repeatS, repeatT };
-   mesh->AddVertexData(E);
-   mesh->AddVertexData(F);
-   mesh->AddVertexData(G);
-   mesh->AddVertexData(E);
-   mesh->AddVertexData(G);
-   mesh->AddVertexData(H);
+   vE.tex = { 0, repeatT };
+   vF.tex = { 0, 0 };
+   vG.tex = { repeatS, 0 };
+   vH.tex = { repeatS, repeatT };
+   mesh->AddVertexData(vE);
+   mesh->AddVertexData(vF);
+   mesh->AddVertexData(vG);
+   mesh->AddVertexData(vE);
+   mesh->AddVertexData(vG);
+   mesh->AddVertexData(vH);
    // Left face
-   H.tex = { 0, repeatT };
-   G.tex = { 0, 0 };
-   B.tex = { repeatS, 0 };
-   A.tex = { repeatS, repeatT };
-   mesh->AddVertexData(H);
-   mesh->AddVertexData(G);
-   mesh->AddVertexData(B);
-   mesh->AddVertexData(H);
-   mesh->AddVertexData(B);
-   mesh->AddVertexData(A);
+   vH.tex = { 0, repeatT };
+   vG.tex = { 0, 0 };
+   vB.tex = { repeatS, 0 };
+   vA.tex = { repeatS, repeatT };
+   mesh->AddVertexData(vH);
+   mesh->AddVertexData(vG);
+   mesh->AddVertexData(vB);
+   mesh->AddVertexData(vH);
+   mesh->AddVertexData(vB);
+   mesh->AddVertexData(vA);
    // Top face
-   H.tex = { 0, repeatT };
-   A.tex = { 0, 0 };
-   D.tex = { repeatS, 0 };
-   E.tex = { repeatS, repeatT };
-   mesh->AddVertexData(H);
-   mesh->AddVertexData(A);
-   mesh->AddVertexData(D);
-   mesh->AddVertexData(H);
-   mesh->AddVertexData(D);
-   mesh->AddVertexData(E);
+   vH.tex = { 0, repeatT };
+   vA.tex = { 0, 0 };
+   vD.tex = { repeatS, 0 };
+   vE.tex = { repeatS, repeatT };
+   mesh->AddVertexData(vH);
+   mesh->AddVertexData(vA);
+   mesh->AddVertexData(vD);
+   mesh->AddVertexData(vH);
+   mesh->AddVertexData(vD);
+   mesh->AddVertexData(vE);
    // Bottom face
-   B.tex = { 0, repeatT };
-   G.tex = { 0, 0 };
-   F.tex = { repeatS, 0 };
-   C.tex = { repeatS, repeatT };
-   mesh->AddVertexData(B);
-   mesh->AddVertexData(G);
-   mesh->AddVertexData(F);
-   mesh->AddVertexData(B);
-   mesh->AddVertexData(F);
-   mesh->AddVertexData(C);
+   vB.tex = { 0, repeatT };
+   vG.tex = { 0, 0 };
+   vF.tex = { repeatS, 0 };
+   vC.tex = { repeatS, repeatT };
+   mesh->AddVertexData(vB);
+   mesh->AddVertexData(vG);
+   mesh->AddVertexData(vF);
+   mesh->AddVertexData(vB);
+   mesh->AddVertexData(vF);
+   mesh->AddVertexData(vC);
 }
 
 #endif
