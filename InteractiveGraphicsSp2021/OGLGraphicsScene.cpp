@@ -21,8 +21,16 @@ bool OGLGraphicsScene::Create()
 
    _objects["cube"]->frame.TranslateLocal(glm::vec3(-2, 0.5f, 0));
    _objects["indexedCube"]->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
-   _objects["purpleRectangle"]->frame.TranslateLocal(glm::vec3(0, 0, 2.0f));
-   _objects["wall"]->frame.TranslateLocal(glm::vec3(0, 1.0f, -2.0f));
+   _objects["wall"]->frame.TranslateLocal(glm::vec3(0, 2.5f, -5));
+   _objects["axis"]->frame.TranslateLocal(glm::vec3(0, 0.1f, 0));
+
+   _objects["leftWall"]->frame.RotateWorld(90, glm::vec3(1, 0, 0));
+   _objects["leftWall"]->frame.RotateWorld(90, glm::vec3(0, 1, 0));
+   _objects["leftWall"]->frame.TranslateWorld(glm::vec3(-5, 2.5f, 0));
+
+   _objects["rightWall"]->frame.RotateWorld(90, glm::vec3(1, 0, 0));
+   _objects["rightWall"]->frame.RotateWorld(-90, glm::vec3(0, 1, 0));
+   _objects["rightWall"]->frame.TranslateWorld(glm::vec3(5, 2.5f, 0));
 
    RotateAnimation* defaultRot = new RotateAnimation();
    RotateAnimation* otherRot = new RotateAnimation(glm::vec3(0, 0, 1), 180.0f);

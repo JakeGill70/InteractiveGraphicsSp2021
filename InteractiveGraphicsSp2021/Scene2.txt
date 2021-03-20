@@ -1,0 +1,126 @@
+# camera name, pos x, pos y, pos z, fov, near plane, far plane
+camera,0,5,10,60,0.1f,50
+<endCameras>
+# shader name, file path of vertex shader, file path of fragment shader, camera name
+defaultShader,default,default,none
+simple3DShader,Simple3DVertexShader.glsl,default,camera
+simpleTextureShader,PCT3DVertexShader.glsl,TexFragmentShader.glsl,camera
+<endShaders>
+
+# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
+brickwallTexture
+<file>
+brickwall.jpg
+<endTexture>
+smileyTexture
+<file>
+smiley.jpg
+<endTexture>
+woodFloorTexture
+<file>
+wood_floor.jpg
+<endTexture>
+marbleTexture
+<file>
+marble-stone-floor.jpg
+<endTexture>
+<endTextures>
+
+# object name, shader name
+axis,simple3DShader
+PC,lines
+# x, y, z, r, g, b
+0, 0, 0, 1, 0, 0
+2.0f, 0, 0, 1, 0, 0
+0,    0, 0, 0, 1, 0
+0, 2.0f, 0, 0, 1, 0
+0, 0,    0, 0, 0, 1
+0, 0, 2.0f, 0, 0, 1
+<endVertexData>
+<endIndexData>
+<endMesh>
+<endObject>
+
+cube,simple3DShader
+PC,triangles
+-0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f 
+-0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f 
+0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f  
+0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f  
+0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f 
+0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f 
+-0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f
+-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f
+<endVertexData>
+0, 1, 2, 0, 2, 3 
+3, 2, 5, 3, 5, 4
+4, 5, 6, 4, 6, 7
+7, 6, 1, 7, 1, 0
+5, 2, 1, 5, 1, 6
+7, 0, 3, 7, 3, 4
+<endIndexData>
+<endMesh>
+<endObject>
+
+indexedCube,simple3DShader
+PC,triangles,indexed
+-0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
+-0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f 
+0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f  
+0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f  
+0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f 
+0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f 
+-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+<endVertexData>
+0, 1, 2, 0, 2, 3 
+3, 2, 5, 3, 5, 4
+4, 5, 6, 4, 6, 7
+7, 6, 1, 7, 1, 0
+5, 2, 1, 5, 1, 6
+7, 0, 3, 7, 3, 4
+<endIndexData>
+<endMesh>
+<endObject>
+
+wall,simpleTextureShader
+PCT,triangles,indexed,smileyTexture
+-5,  2.5, 0, 1, 1, 1, 1, 0, 1
+-5, -2.5, 0, 1, 1, 1, 1, 0, 0
+ 0, -2.5, 0, 1, 1, 1, 1, 1, 0
+ 0,  2.5, 0, 1, 1, 1, 1, 1, 1
+<endVertexData>
+0, 1, 2, 0, 2, 3
+<endIndexData>
+<endMesh>
+PCT,triangles,indexed,marbleTexture
+0,  2.5, 0, 1, 1, 1, 1, 0, 2
+0, -2.5, 0, 1, 1, 1, 1, 0, 0
+5, -2.5, 0, 1, 1, 1, 1, 2, 0
+5,  2.5, 0, 1, 1, 1, 1, 2, 2
+<endVertexData>
+0, 1, 2, 0, 2, 3
+<endIndexData>
+<endMesh>
+<endObject>
+
+floor,simpleTextureShader
+<factoried mesh>
+PCT, flat textured, XZ, woodFloorTexture, -5, -5, 5, 5, 1, 1, 1, 1, 5, 5
+<endMesh>
+<endObject>
+
+leftWall,simpleTextureShader
+<factoried mesh>
+PCT, flat textured, XZ, brickwallTexture, -5, -2.5, 5, 2.5, 1, 1, 1, 1, 5, 5
+<endMesh>
+<endObject>
+
+rightWall,simpleTextureShader
+<factoried mesh>
+PCT, flat textured, XZ, brickwallTexture, -5, -2.5, 5, 2.5, 1, 1, 1, 1, 5, 5
+<endMesh>
+<endObject>
+
+<endObjects>
+

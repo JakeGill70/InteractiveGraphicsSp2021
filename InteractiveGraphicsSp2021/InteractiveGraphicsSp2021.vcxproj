@@ -200,10 +200,19 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="scene.txt" />
+    <Text Include="Scene2.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brickwall.jpg" />
+    <Image Include="crate.jpg" />
+    <Image Include="grass.jpg" />
+    <Image Include="marble-stone-floor.jpg" />
+    <Image Include="metal.jpg" />
+    <Image Include="pluto_texture.jpg" />
+    <Image Include="sky.jpg" />
     <Image Include="smiley.jpg" />
+    <Image Include="wood_floor.jpg" />
+    <Image Include="world.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -50,7 +50,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-   GLFWwindow* window = glfwCreateWindow(800, 600, "Lec Week 9 - Interactive Graphics", NULL, NULL);
+   GLFWwindow* window = glfwCreateWindow(800, 600, "Lec Week 10 - Interactive Graphics", NULL, NULL);
    if (window == NULL) {
       std::cout << "Failed to create GLFW window" << std::endl;
       glfwTerminate();
@@ -66,7 +66,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    glfwSetFramebufferSizeCallback(window, OnWindowResize_Callback);
 
    auto textFileReader = new TextFileReader();
-   auto sceneReader = new SceneReader("Scene.txt");
+   auto sceneReader = new SceneReader("Scene2.txt");
    OGLGraphicsScene scene(sceneReader);
    scene.SetTextFileReader(textFileReader);
    auto created = scene.Create();
