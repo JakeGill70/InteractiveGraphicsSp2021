@@ -48,6 +48,9 @@ void SceneReader::ProcessLine(const string& line)
    else if (_state == "reading mesh data") {
       ProcessMeshDataLine(line);
    }
+   else if (_state == "reading factoried mesh data") {
+      ProcessFactoriedMeshDataLine(line);
+   }
    else if (_state == "reading vertex data") {
       ProcessVertexDataLine(line);
    }
@@ -211,6 +214,10 @@ void SceneReader::ProcessObjectLine(const string& line)
 
 void SceneReader::ProcessMeshDataLine(const string& line)
 {
+   if (line == "<factoried mesh>") {
+      _state = "reading factoried mesh data";
+      return;
+   }
    if (line == "<endMesh>") {
       _state = "reading mesh data";
       _currentMeshIndex++;
@@ -242,6 +249,29 @@ void SceneReader::ProcessMeshDataLine(const string& line)
    data.textureName = tokens[3];
    _objectData[_currentName].meshData.push_back(data);
    _state = "reading vertex data";
+}
+
+void SceneReader::ProcessFactoriedMeshDataLine(const string& line)
+{
+   string factoryLine = line;
+   Trim(factoryLine);
+   vector<string> tokens;
+   Split(line, ',', tokens);
+   for (size_t i = 0; i < tokens.size(); i++) {
+      Trim(tokens[i]);
+   }
+
+   FactoriedMeshData factoryData;
+   factoryData.vertexType = tokens[0];
+   factoryData.meshType = tokens[1];
+   factoryData.whichPlane = tokens[2];
+   factoryData.textureName = tokens[3];
+   for (size_t i = 4; i < tokens.size(); i++) {
+      factoryData.params.push_back(std::stof(tokens[i]));
+   }
+
+   _objectData[_currentName].factoriedMeshData.push_back(factoryData);
+   _state = "reading mesh data";
 }
 
 void SceneReader::ProcessVertexDataLine(const string& line)

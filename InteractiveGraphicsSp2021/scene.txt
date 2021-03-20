@@ -128,6 +128,12 @@ PCT,triangles,indexed,brickwallTexture
 <endMesh>
 <endObject>
 
+floor,simpleTextureShader
+<factoried mesh>
+PCT, flat textured, XZ, smileyTexture, -5, -5, 5, 5, 1, 1, 1, 1, 5, 5
+<endMesh>
+<endObject>
+
 # triangle,defaultShader
 # PC,triangles
 #  0.0f,  0.5f, 0, 1, 0, 0

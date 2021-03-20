@@ -10,12 +10,12 @@ class MeshFactory :
     public BaseObject
 {
 public:
-   AbstractVertexMesh<V>* FlatTexturedSurfaceXZ(
+   AbstractVertexMesh<V>* FlatTexturedMeshXZ(
       float sx, float sz, float ex, float ez, C color, float repeatS, float repeatT);
 };
 
 template <class V, class C>
-AbstractVertexMesh<V>* MeshFactory<V,C>::FlatTexturedSurfaceXZ(
+AbstractVertexMesh<V>* MeshFactory<V,C>::FlatTexturedMeshXZ(
    float sx, float sz, float ex, float ez, C color, float repeatS, float repeatT)
 {
    OGLVertexMesh<V>* mesh = new OGLVertexMesh<V>();

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 using std::string;
+using std::wstring;
 using std::stringstream;
 using std::stringstream;
 using std::ifstream;
@@ -20,6 +21,10 @@ protected:
 public:
    inline string GetLog() {
       return _log.str();
+   }
+
+   static inline wstring WidenString(const string& str) {
+      return wstring(str.begin(), str.end());
    }
 
    void Log(const string& message) {

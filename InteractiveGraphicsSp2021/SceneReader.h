@@ -35,10 +35,19 @@ struct MeshData {
    vector<unsigned short> indexData;
 };
 
+struct FactoriedMeshData {
+   string vertexType;
+   string meshType;
+   string whichPlane;
+   string textureName;
+   vector<float> params;
+};
+
 struct ObjectData {
    string name;
    string shaderName;
    vector<MeshData> meshData;
+   vector<FactoriedMeshData> factoriedMeshData;
 };
 
 // texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
@@ -96,6 +105,7 @@ protected:
    virtual void ProcessShaderLine(const string& line);
    virtual void ProcessObjectLine(const string& line);
    virtual void ProcessMeshDataLine(const string& line);
+   virtual void ProcessFactoriedMeshDataLine(const string& line);
    virtual void ProcessVertexDataLine(const string& line);
    virtual void ProcessIndexDataLine(const string& line);
    virtual void ProcessTextureLine(const string& line);

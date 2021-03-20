@@ -303,25 +303,112 @@ namespace InteractiveGraphicsUnitTesting
 
          SceneReader sut("TestFile.txt");
          sut.Open();
-         string message = sut.GetLog();
-         wstring errorMessage(message.begin(), message.end());
-         Assert::IsFalse(sut.HasError(), wstring(message.begin(), message.end()).c_str());
+         Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
+
          sut.Read();
-         message = sut.GetLog();
-         Assert::IsFalse(sut.HasError(), wstring(message.begin(), message.end()).c_str());
+         Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
+
          map<string, ObjectData>& data = sut.GetObjectData();
          Assert::AreEqual(1, (int)data.size());
+
          auto it = data.begin();
          ObjectData objectData = it->second;
          Assert::AreEqual(2, (int)objectData.meshData.size());
+
          MeshData meshData = objectData.meshData[0];
          string expected = "PCT";
          Assert::AreEqual(expected, meshData.vertexType);
+
          expected = "triangles";
          Assert::AreEqual(expected, meshData.primitiveType);
+
          Assert::IsTrue(meshData.isIndexed);
+
          expected = "someTexture";
          Assert::AreEqual(expected, meshData.textureName);
+
+         std::remove("TestFile.txt");
+      }
+
+      TEST_METHOD(CanReadATexturedFactoriedObject)
+      {
+         ofstream fout("TestFile.txt");
+         fout << "camera,1,2,3,60,0.1f,50" << std::endl;
+         fout << "<endCameras>" << std::endl;
+         fout << "defaultShader,  default,default,none" << std::endl;
+         fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
+         fout << "simpleTextureShader, PCT3DVertexShader.glsl, TexFragmentShader.glsl, camera" << std::endl;
+         fout << "<endShaders>" << std::endl;
+         fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
+         fout << "<array>" << std::endl;
+         fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255,255" << std::endl;
+         fout << "<endTexture>" << std::endl;
+         fout << "someTexture" << std::endl;
+         fout << "<file>" << std::endl;
+         fout << "somefile.jpg" << std::endl;
+         fout << "<endTexture>" << std::endl;
+         fout << "<endTextures>" << std::endl;
+
+         fout << "wall,simpleTextureShader" << std::endl;
+
+         fout << "PCT,triangles,indexed,someTexture" << std::endl;
+         fout << "-2,  1, 0, 1, 1, 1, 1, 0, 1" << std::endl;
+         fout << "-2, -1, 0, 1, 1, 1, 1, 0, 0" << std::endl;
+         fout << " 0, -1, 0, 1, 1, 1, 1, 1, 0" << std::endl;
+         fout << " 0,  1, 0, 1, 1, 1, 1, 1, 1" << std::endl;
+         fout << "<endVertexData>" << std::endl;
+         fout << " 0, 1, 2, 0, 2, 3" << std::endl;
+         fout << "<endIndexData>" << std::endl;
+         fout << "<endMesh>" << std::endl;
+
+         fout << "PCT,triangles,indexed,someTexture" << std::endl;
+         fout << " 0,  1, 0, 1, 1, 1, 1, 0, 1" << std::endl;
+         fout << " 0, -1, 0, 1, 1, 1, 1, 0, 0" << std::endl;
+         fout << " 2, -1, 0, 1, 1, 1, 1, 1, 0" << std::endl;
+         fout << " 2,  1, 0, 1, 1, 1, 1, 1, 1" << std::endl;
+         fout << "<endVertexData>" << std::endl;
+         fout << " 0, 1, 2, 0, 2, 3" << std::endl;
+         fout << "<endIndexData>" << std::endl;
+         fout << "<endMesh>" << std::endl;
+         fout << "<endObject>" << std::endl;
+
+         fout << "object,someShader" << std::endl;
+         fout << "<factoried mesh>" << std::endl;
+         fout << "PCT, flat textured, XZ, someTexture, 5, -5, 5, 5, 1, 1, 1, 1, 5, 5" << std::endl;
+         fout << "<endMesh>" << std::endl;
+         fout << "<endObject>" << std::endl;
+
+         fout << "<endObjects>" << std::endl;
+         fout.close();
+
+         SceneReader sut("TestFile.txt");
+         sut.Open();
+         Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
+
+         sut.Read();
+         Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
+
+         map<string, ObjectData>& data = sut.GetObjectData();
+         Assert::AreEqual(2, (int)data.size());
+
+         auto it = data.begin();
+         ObjectData objectData = it->second;
+         Assert::AreEqual(1, (int)objectData.factoriedMeshData.size());
+
+         string expectedStr = "PCT";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].vertexType);
+
+         expectedStr = "flat textured";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].meshType);
+
+         expectedStr = "XZ";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].whichPlane);
+
+         expectedStr = "someTexture";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].textureName);
+
+         size_t expectedInt = 10;
+         Assert::AreEqual(expectedInt, objectData.factoriedMeshData[0].params.size());
 
          std::remove("TestFile.txt");
       }

@@ -19,27 +19,15 @@ bool OGLGraphicsScene::Create()
    if (!ReadTextureData()) return false;
    if (!ReadObjectData()) return false;
 
-    _objects["cube"]->frame.TranslateLocal(glm::vec3(-2, 0.5f, 0));
-    _objects["indexedCube"]->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
-    _objects["purpleRectangle"]->frame.TranslateLocal(glm::vec3(0, 0, 2.0f));
-    _objects["wall"]->frame.TranslateLocal(glm::vec3(0, 1.0f, -2.0f));
+   _objects["cube"]->frame.TranslateLocal(glm::vec3(-2, 0.5f, 0));
+   _objects["indexedCube"]->frame.TranslateLocal(glm::vec3(2, 0.5f, 0));
+   _objects["purpleRectangle"]->frame.TranslateLocal(glm::vec3(0, 0, 2.0f));
+   _objects["wall"]->frame.TranslateLocal(glm::vec3(0, 1.0f, -2.0f));
 
-    RotateAnimation* defaultRot = new RotateAnimation();
-    RotateAnimation* otherRot = new RotateAnimation(glm::vec3(0, 0, 1), 180.0f);
-    _objects["cube"]->SetAnimation(defaultRot);
-    _objects["indexedCube"]->SetAnimation(otherRot);
-
-    MeshFactory<VertexPCT, RGBA> pctFactory;
-    OGLVertexMesh<VertexPCT>* mesh = (OGLVertexMesh<VertexPCT>*)
-       pctFactory.FlatTexturedSurfaceXZ(-5, -5, 5, 5, { 1, 1, 1, 1 }, 5, 5);
-    mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
-    mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
-    mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
-    mesh->SetTexture(_textures["smileyTexture"]);
-    GraphicsObject* floor = new GraphicsObject();
-    floor->AddMesh(mesh);
-    AddGraphicsObject("floor", floor, "simpleTextureShader");
-    _objects["floor"]->SendToGPU();
+   RotateAnimation* defaultRot = new RotateAnimation();
+   RotateAnimation* otherRot = new RotateAnimation(glm::vec3(0, 0, 1), 180.0f);
+   _objects["cube"]->SetAnimation(defaultRot);
+   _objects["indexedCube"]->SetAnimation(otherRot);
 
    return true;
 }
@@ -131,7 +119,7 @@ bool OGLGraphicsScene::ReadTextureData()
             array[i] = data.arrayData[i];
          }
          texture->LoadFromArray(
-            array, (unsigned int)numberOfElements, 
+            array, (unsigned int)numberOfElements,
             data.width, data.height, data.numberOfChannels);
       }
       else {
@@ -148,6 +136,7 @@ bool OGLGraphicsScene::ReadObjectData()
    GraphicsObject* object;
    ObjectData data;
    MeshData meshData;
+   FactoriedMeshData factoriedMeshData;
    map<string, ObjectData>& objectData = _sceneReader->GetObjectData();
    for (auto it = objectData.begin(); it != objectData.end(); it++) {
       object = new GraphicsObject();
@@ -156,14 +145,29 @@ bool OGLGraphicsScene::ReadObjectData()
          meshData = *mit;
          if (meshData.vertexType == "PC") {
             mesh = CreatePCMesh(meshData);
-         }else if (meshData.vertexType == "PCT") {
+         }
+         else if (meshData.vertexType == "PCT") {
             mesh = CreatePCTMesh(meshData);
          }
          if (mesh) {
             object->AddMesh(mesh);
          }
          else {
-            _log << "Could not create " << data.name << std::endl;
+            _log << "Could not create mesh for " << data.name << std::endl;
+            delete object;
+            return false;
+         }
+      }
+      for (auto mit = data.factoriedMeshData.begin(); mit != data.factoriedMeshData.end(); mit++) {
+         factoriedMeshData = *mit;
+         if (factoriedMeshData.vertexType == "PCT") {
+            mesh = CreateFactoriedPCTMesh(factoriedMeshData);
+         }
+         if (mesh) {
+            object->AddMesh(mesh);
+         }
+         else {
+            _log << "Could not create factoried mesh for " << data.name << std::endl;
             delete object;
             return false;
          }
@@ -203,6 +207,38 @@ AbstractMesh* OGLGraphicsScene::CreatePCTMesh(MeshData& meshData)
    mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
    mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
    mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
+   return mesh;
+}
+
+AbstractMesh* OGLGraphicsScene::CreateFactoriedPCTMesh(FactoriedMeshData& meshData)
+{
+   MeshFactory<VertexPCT, RGBA> pctFactory;
+   OGLVertexMesh<VertexPCT>* mesh = nullptr;
+   if (meshData.meshType == "flat textured") {
+      if (meshData.whichPlane == "XZ") {
+         mesh = (OGLVertexMesh<VertexPCT>*)
+            pctFactory.FlatTexturedMeshXZ(
+               meshData.params[0], // sx
+               meshData.params[1], // sz
+               meshData.params[2], // ex
+               meshData.params[3], // ez
+               {
+                  meshData.params[4], // r
+                  meshData.params[5], // g
+                  meshData.params[6], // b
+                  meshData.params[7]  // a
+               },
+               meshData.params[8], // repeatS
+               meshData.params[9]  // repeatT
+            );
+      }
+   }
+   if (mesh) {
+      mesh->SetTexture(_textures[meshData.textureName]);
+      mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
+      mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
+      mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
+   }
    return mesh;
 }
 

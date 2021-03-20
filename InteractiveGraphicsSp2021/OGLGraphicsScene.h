@@ -31,6 +31,7 @@ protected:
    bool ReadPCMeshData(OGLVertexMesh<VertexPC>* mesh, MeshData& meshData);
    AbstractMesh* CreatePCTMesh(MeshData& meshData);
    bool ReadPCTMeshData(OGLVertexMesh<VertexPCT>* mesh, MeshData& meshData);
+   AbstractMesh* CreateFactoriedPCTMesh(FactoriedMeshData& meshData);
 
 };
 
