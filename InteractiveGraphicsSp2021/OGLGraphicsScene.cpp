@@ -45,7 +45,11 @@ bool OGLGraphicsScene::Create()
 
    GraphicsObject* c1 = new GraphicsObject();
    MeshFactory<VertexPCT, RGBA> meshFactory;
-   AbstractMesh* mesh = meshFactory.CuboidMeshPCT(2, 2, 2, { 1, 1, 1, 1 }, 1, 1);
+   OGLVertexMesh< VertexPCT>* mesh = (OGLVertexMesh<VertexPCT>*)
+      meshFactory.CuboidMeshPCT(2, 2, 2, { 1, 1, 1, 1 }, 1, 1);
+   mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
+   mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
+   mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
    mesh->SetTexture(_textures["smileyTexture"]);
    c1->AddMesh(mesh);
    AddGraphicsObject("cube1", c1, "ambientShader");
