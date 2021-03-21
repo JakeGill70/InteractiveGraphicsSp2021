@@ -25,15 +25,6 @@ template <class V, class C>
 AbstractVertexMesh<V>* MeshFactory<V,C>::IndexedFlatTexturedMeshXZ(
    float sx, float sz, float width, float depth, C color, float repeatS, float repeatT)
 {
-   //float ex = sx + width;
-   //float ez = sz + depth;
-   //OGLVertexMesh<V>* mesh = new OGLVertexMesh<V>();
-   //mesh->AddVertexData({ sx, 0, sz, color, 0, repeatT });
-   //mesh->AddVertexData({ sx, 0, ez, color, 0, 0 });
-   //mesh->AddVertexData({ ex, 0, ez, color, repeatS, 0 });
-   //mesh->AddVertexData({ ex, 0, sz, color, repeatS, repeatT });
-   //unsigned short indices[] = { 0, 1, 2, 0, 2, 3 };
-   //mesh->SetIndices(indices, 6);
    OGLVertexMesh<V>* mesh = 
       dynamic_cast<OGLVertexMesh<V>*>(IndexedFlatMeshXZ(sx, sz, width, depth, color));
    mesh->GetVertex(0).tex = { 0, repeatT };
