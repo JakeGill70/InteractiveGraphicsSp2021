@@ -55,7 +55,8 @@ bool OGLGraphicsScene::Create()
    globalLight.intensity = 0.5f; // Brighten the cube a bit
    MeshFactory<VertexPCNT, RGBA> meshFactory2;
    OGLVertexMesh<VertexPCNT>* mesh2 = (OGLVertexMesh<VertexPCNT>*)
-      meshFactory2.CuboidMeshPCNT(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
+      meshFactory2.NormalizedTexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
+   mesh2->SetUpAttributes("PCNT");
    mesh2->SetTexture(_textures["smileyTexture"]);
    GraphicsObject* c2 = new GraphicsObject();
    c2->AddMesh(mesh2);
@@ -65,6 +66,22 @@ bool OGLGraphicsScene::Create()
    RotateAnimation* defaultRot2 = new RotateAnimation();
    _objects["smileyCube2"]->SetAnimation(defaultRot2);
    _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(4, 0, 0));
+
+   OGLVertexMesh<VertexPCNT>* floorMesh = (OGLVertexMesh<VertexPCNT>*)
+      meshFactory2.NormalizedIndexedFlatTexturedMeshXZ(-20, -20, 40, 40, { 1, 1, 1, 1 }, 20, 20);
+   floorMesh->SetUpAttributes("PCNT");
+   floorMesh->SetTexture(_textures["woodFloorTexture"]);
+   GraphicsObject* floor = new GraphicsObject();
+   floor->AddMesh(floorMesh);
+   AddGraphicsObject("floor", floor, "globalDiffuseShader");
+   floor->SendToGPU();
+
+   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(0, 2, 0));
+   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(0, 2, 0));
+   _objects["axis"]->frame.TranslateWorld(glm::vec3(0, 0.1f, 0));
+
+   _cameras["camera"]->frame.TranslateWorld(glm::vec3(0, 2, 8));
+   _cameras["camera"]->UpdateView();
 
    return true;
 }

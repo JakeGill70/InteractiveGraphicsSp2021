@@ -72,6 +72,9 @@ public:
       this->SetColorAttribute({ 1, 4, bytesToNext, sizeof(GLfloat) * 3 });
       if (attributes == "PCT") {
          this->SetTextureAttribute({ 2, 2, bytesToNext, sizeof(GLfloat) * 7 });
+      } else if (attributes == "PCNT") {
+         this->SetNormalAttribute({ 2, 3, bytesToNext, sizeof(GLfloat) * 7 });
+         this->SetTextureAttribute({ 3, 2, bytesToNext, sizeof(GLfloat) * 10 });
       }
    }
 

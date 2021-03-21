@@ -60,7 +60,7 @@ public:
       glUniform3fv(location, 1, glm::value_ptr(vector));
    }
 
-   virtual void SendGlobalLightToGPU(const Light& globalLight) const
+   void SendGlobalLightToGPU(const Light& globalLight) const
    {
       SendVec3ToGPU("globalLightPosition", globalLight.position);
       SendVec3ToGPU("globalLightColor", globalLight.color);

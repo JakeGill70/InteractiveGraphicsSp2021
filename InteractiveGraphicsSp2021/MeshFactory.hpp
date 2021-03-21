@@ -12,16 +12,30 @@ class MeshFactory :
 public:
    AbstractVertexMesh<V>* IndexedFlatTexturedMeshXZ(
       float sx, float sz, float width, float depth, C color, float repeatS, float repeatT);
-
    AbstractVertexMesh<V>* IndexedFlatMeshXZ(
       float sx, float sz, float width, float depth, C color);
+   AbstractVertexMesh<V>* NormalizedIndexedFlatTexturedMeshXZ(
+      float sx, float sz, float width, float depth, C color, float repeatS, float repeatT);
    AbstractVertexMesh<V>* TexturedCuboidMesh(
       float width, float height, float depth, C color, float repeatS, float repeatT);
-   AbstractVertexMesh<V>* CuboidMeshPCNT(
+   AbstractVertexMesh<V>* NormalizedTexturedCuboidMesh(
       float width, float height, float depth, C color, float repeatS, float repeatT);
    AbstractVertexMesh<V>* CuboidMesh(float width, float height, float depth, C color);
 
 };
+
+template <class V, class C>
+AbstractVertexMesh<V>* MeshFactory<V, C>::NormalizedIndexedFlatTexturedMeshXZ(
+   float sx, float sz, float width, float depth, C color, float repeatS, float repeatT)
+{
+   OGLVertexMesh<V>* mesh =
+      dynamic_cast<OGLVertexMesh<V>*>
+      (IndexedFlatTexturedMeshXZ(sx, sz, width, depth, color, repeatS, repeatT));
+   for (int i = 0; i < 4; i++) {
+      mesh->GetVertex(i).normal = { 0, 1, 0 };
+   }
+   return mesh;
+}
 
 template <class V, class C>
 AbstractVertexMesh<V>* MeshFactory<V,C>::IndexedFlatTexturedMeshXZ(
@@ -139,120 +153,32 @@ AbstractVertexMesh<V>* MeshFactory<V, C>::TexturedCuboidMesh(
  }
 
 template <class V, class C>
-AbstractVertexMesh<V>* MeshFactory<V, C>::CuboidMeshPCNT(
+AbstractVertexMesh<V>* MeshFactory<V, C>::NormalizedTexturedCuboidMesh(
    float width, float height, float depth, C color, float repeatS, float repeatT)
 {
-   float halfWidth = width / 2;
-   float halfHeight = height / 2;
-   float halfDepth = depth / 2;
-   OGLVertexMesh<V>* mesh = new OGLVertexMesh<V>();
-   // +Z
-   V vA = { -halfWidth, halfHeight, halfDepth, color };
-   V vB = { -halfWidth, -halfHeight, halfDepth, color };
-   V vC = { halfWidth, -halfHeight, halfDepth, color };
-   V vD = { halfWidth, halfHeight, halfDepth, color };
-   // -Z
-   V vE = { halfWidth, halfHeight, -halfDepth, color };
-   V vF = { halfWidth, -halfHeight, -halfDepth, color };
-   V vG = { -halfWidth, -halfHeight, -halfDepth, color };
-   V vH = { -halfWidth, halfHeight, -halfDepth, color };
+   OGLVertexMesh<V>* mesh = dynamic_cast<OGLVertexMesh<V>*>
+      (TexturedCuboidMesh(width, depth, height, color, repeatS, repeatT));
 
-   // Looking from the front
+   // Assumes the cuboid mesh is created in the following order:
+   // front, right, back, left, top, bottom
+   // with 6 vertices for each face
+   Vector3D normals[6] = {
+      { 0, 0, 1 }, { 1, 0, 0 }, { 0, 0, -1 }, 
+      { -1, 0, 0 }, { 0, 1, 0 }, { 0, -1, 0 }
+   };
+   int ni = 0;
+   int numberOfVertices = (int)mesh->GetNumberOfVertices();
+   for (int i = 0; i < numberOfVertices; i += 6)
+   {
+      mesh->GetVertex(i).normal = normals[ni];
+      mesh->GetVertex(i + 1).normal = normals[ni];
+      mesh->GetVertex(i + 2).normal = normals[ni];
+      mesh->GetVertex(i + 3).normal = normals[ni];
+      mesh->GetVertex(i + 4).normal = normals[ni];
+      mesh->GetVertex(i + 5).normal = normals[ni];
+      ni++;
+   }
 
-   // Front face
-   vA.tex = { 0, repeatT };
-   vB.tex = { 0, 0 };
-   vC.tex = { repeatS, 0 };
-   vD.tex = { repeatS, repeatT };
-   vA.normal = { 0, 0, 1 };
-   vB.normal = { 0, 0, 1 };
-   vC.normal = { 0, 0, 1 };
-   vD.normal = { 0, 0, 1 };
-   mesh->AddVertexData(vA);
-   mesh->AddVertexData(vB);
-   mesh->AddVertexData(vC);
-   mesh->AddVertexData(vA);
-   mesh->AddVertexData(vC);
-   mesh->AddVertexData(vD);
-   // Right face
-   vD.tex = { 0, repeatT };
-   vC.tex = { 0, 0 };
-   vF.tex = { repeatS, 0 };
-   vE.tex = { repeatS, repeatT };
-   vD.normal = { 1, 0, 0 };
-   vC.normal = { 1, 0, 0 };
-   vF.normal = { 1, 0, 0 };
-   vE.normal = { 1, 0, 0 };
-   mesh->AddVertexData(vD);
-   mesh->AddVertexData(vC);
-   mesh->AddVertexData(vF);
-   mesh->AddVertexData(vD);
-   mesh->AddVertexData(vF);
-   mesh->AddVertexData(vE);
-   // Back face
-   vE.tex = { 0, repeatT };
-   vF.tex = { 0, 0 };
-   vG.tex = { repeatS, 0 };
-   vH.tex = { repeatS, repeatT };
-   vE.normal = { 0, 0, -1 };
-   vF.normal = { 0, 0, -1 };
-   vG.normal = { 0, 0, -1 };
-   vH.normal = { 0, 0, -1 };
-   mesh->AddVertexData(vE);
-   mesh->AddVertexData(vF);
-   mesh->AddVertexData(vG);
-   mesh->AddVertexData(vE);
-   mesh->AddVertexData(vG);
-   mesh->AddVertexData(vH);
-   // Left face
-   vH.tex = { 0, repeatT };
-   vG.tex = { 0, 0 };
-   vB.tex = { repeatS, 0 };
-   vA.tex = { repeatS, repeatT };
-   vH.normal = { -1, 0, 0 };
-   vG.normal = { -1, 0, 0 };
-   vB.normal = { -1, 0, 0 };
-   vA.normal = { -1, 0, 0 };
-   mesh->AddVertexData(vH);
-   mesh->AddVertexData(vG);
-   mesh->AddVertexData(vB);
-   mesh->AddVertexData(vH);
-   mesh->AddVertexData(vB);
-   mesh->AddVertexData(vA);
-   // Top face
-   vH.tex = { 0, repeatT };
-   vA.tex = { 0, 0 };
-   vD.tex = { repeatS, 0 };
-   vE.tex = { repeatS, repeatT };
-   vH.normal = { 0, 1, 0 };
-   vA.normal = { 0, 1, 0 };
-   vD.normal = { 0, 1, 0 };
-   vE.normal = { 0, 1, 0 };
-   mesh->AddVertexData(vH);
-   mesh->AddVertexData(vA);
-   mesh->AddVertexData(vD);
-   mesh->AddVertexData(vH);
-   mesh->AddVertexData(vD);
-   mesh->AddVertexData(vE);
-   // Bottom face
-   vB.tex = { 0, repeatT };
-   vG.tex = { 0, 0 };
-   vF.tex = { repeatS, 0 };
-   vC.tex = { repeatS, repeatT };
-   vB.normal = { 0, -1, 0 };
-   vG.normal = { 0, -1, 0 };
-   vF.normal = { 0, -1, 0 };
-   vC.normal = { 0, -1, 0 };
-   mesh->AddVertexData(vB);
-   mesh->AddVertexData(vG);
-   mesh->AddVertexData(vF);
-   mesh->AddVertexData(vB);
-   mesh->AddVertexData(vF);
-   mesh->AddVertexData(vC);
-   mesh->SetPositionAttribute({ 0,  3, sizeof(V), 0 });
-   mesh->SetColorAttribute({ 1, 4, sizeof(V), sizeof(GLfloat) * 3 });
-   mesh->SetNormalAttribute({ 2, 3, sizeof(V), sizeof(GLfloat) * 7 });
-   mesh->SetTextureAttribute({ 3, 2, sizeof(V), sizeof(GLfloat) * 10 });
    return mesh;
 }
 
