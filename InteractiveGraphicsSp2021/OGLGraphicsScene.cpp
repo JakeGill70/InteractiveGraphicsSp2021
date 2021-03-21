@@ -37,22 +37,22 @@ bool OGLGraphicsScene::Create()
    //_objects["cube"]->SetAnimation(defaultRot);
    //_objects["indexedCube"]->SetAnimation(otherRot);
 
-   MeshFactory<VertexPCT, RGBA> meshFactory;
-   OGLVertexMesh<VertexPCT>* mesh = (OGLVertexMesh<VertexPCT>*)
-      meshFactory.TexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
-   mesh->SetUpAttributes("PCT");
-   mesh->SetTexture(_textures["smileyTexture"]);
-   GraphicsObject* c1 = new GraphicsObject();
-   c1->AddMesh(mesh);
-   AddGraphicsObject("smileyCube", c1, "ambientShader");
-   c1->SendToGPU();
+   MeshFactory<VertexPCNT, RGBA> meshFactory;
+   OGLVertexMesh<VertexPCNT>* smileyMesh = (OGLVertexMesh<VertexPCNT>*)
+      meshFactory.NormalizedTexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 2, 2);
+   smileyMesh->SetUpAttributes("PCNT");
+   smileyMesh->SetTexture(_textures["smileyTexture"]);
+   GraphicsObject* smileyCube = new GraphicsObject();
+   smileyCube->AddMesh(smileyMesh);
+   AddGraphicsObject("smileyCube", smileyCube, "diffuseShader");
+   smileyCube->SendToGPU();
 
    RotateAnimation* defaultRot = new RotateAnimation();
    _objects["smileyCube"]->SetAnimation(defaultRot);
 
    _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-4, 0, 0));
 
-   globalLight.intensity = 0.5f; // Brighten the cube a bit
+   globalLight.intensity = 0.25f; // Brighten the cube a bit
    MeshFactory<VertexPCNT, RGBA> meshFactory2;
    OGLVertexMesh<VertexPCNT>* mesh2 = (OGLVertexMesh<VertexPCNT>*)
       meshFactory2.NormalizedTexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
@@ -60,7 +60,7 @@ bool OGLGraphicsScene::Create()
    mesh2->SetTexture(_textures["smileyTexture"]);
    GraphicsObject* c2 = new GraphicsObject();
    c2->AddMesh(mesh2);
-   AddGraphicsObject("smileyCube2", c2, "globalDiffuseShader");
+   AddGraphicsObject("smileyCube2", c2, "diffuseShader");
    c2->SendToGPU();
 
    RotateAnimation* defaultRot2 = new RotateAnimation();
@@ -73,7 +73,7 @@ bool OGLGraphicsScene::Create()
    floorMesh->SetTexture(_textures["woodFloorTexture"]);
    GraphicsObject* floor = new GraphicsObject();
    floor->AddMesh(floorMesh);
-   AddGraphicsObject("floor", floor, "globalDiffuseShader");
+   AddGraphicsObject("floor", floor, "diffuseShader");
    floor->SendToGPU();
 
    _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(0, 2, 0));
@@ -82,6 +82,20 @@ bool OGLGraphicsScene::Create()
 
    _cameras["camera"]->frame.TranslateWorld(glm::vec3(0, 2, 8));
    _cameras["camera"]->UpdateView();
+
+   localLight.color = { 1, 1, 1 }; // White light
+   localLight.intensity = 0.5f; // Medium intensity
+   localLight.position = { 0, 0.5f, 2.0f }; // Close to the floor
+
+   MeshFactory<VertexPC, RGB> meshFactory3;
+   OGLVertexMesh<VertexPC>* whiteCubeMesh = (OGLVertexMesh<VertexPC>*)
+      meshFactory3.CuboidMesh(0.2f, 0.2f, 0.2f, { 1, 1, 1 });
+   whiteCubeMesh->SetUpAttributes("PC");
+   GraphicsObject* whiteCube = new GraphicsObject();
+   whiteCube->AddMesh(whiteCubeMesh);
+   AddGraphicsObject("whiteCibe", whiteCube, "simple3DShader");
+   whiteCube->SendToGPU();
+   whiteCube->frame.SetPosition(localLight.position);
 
    return true;
 }

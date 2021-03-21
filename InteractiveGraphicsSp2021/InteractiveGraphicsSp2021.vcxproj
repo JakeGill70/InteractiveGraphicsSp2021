@@ -193,6 +193,7 @@
     <ClInclude Include="OGLVertexMesh.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="PCNTDiffuse2FragmentShader.glsl" />
     <None Include="PCNTDiffuseFragmentShader.glsl" />
     <None Include="PCNTLightingVertexShader.glsl" />
     <None Include="PCTAmbientFragmentShader.glsl" />

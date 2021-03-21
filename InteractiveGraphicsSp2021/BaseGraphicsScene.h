@@ -24,12 +24,17 @@ protected:
 
 public:
    Light globalLight;
+   Light localLight;
 
 public:
    BaseGraphicsScene() : _currentCamera(nullptr), _textFileReader(nullptr) {
       globalLight.position = { 100.0f, 100.0f, 0 };
       globalLight.color = { 1, 1, 1 };
       globalLight.intensity = 0.25;
+      globalLight.attenuationCoefficient = 1;
+      localLight.position = { 100.0f, 100.0f, 0 };
+      localLight.color = { 1, 1, 1 };
+      localLight.attenuationCoefficient = 0.2f;
    }
    virtual ~BaseGraphicsScene();
 

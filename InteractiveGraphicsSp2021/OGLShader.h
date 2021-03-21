@@ -67,6 +67,13 @@ public:
       SendFloatToGPU("globalLightIntensity", globalLight.intensity);
    }
 
+   void SendLocalLightToGPU(const Light& localLight) const
+   {
+      SendVec3ToGPU("localLightPosition", localLight.position);
+      SendVec3ToGPU("localLightColor", localLight.color);
+      SendFloatToGPU("localLightIntensity", localLight.intensity);
+   }
+
 protected:
    void SetDefaultSource();
    GLuint Compile(GLenum type, const GLchar* source);
