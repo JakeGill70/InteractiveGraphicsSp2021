@@ -27,6 +27,10 @@ marbleTexture
 <file>
 marble-stone-floor.jpg
 <endTexture>
+crateTexture
+<file>
+crate.jpg
+<endTexture>
 <endTextures>
 
 # object name, shader name

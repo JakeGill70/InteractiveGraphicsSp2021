@@ -72,6 +72,7 @@ public:
       SendVec3ToGPU("localLightPosition", localLight.position);
       SendVec3ToGPU("localLightColor", localLight.color);
       SendFloatToGPU("localLightIntensity", localLight.intensity);
+      SendFloatToGPU("localLightAttenuationCoefficient", localLight.attenuationCoefficient);
    }
 
 protected:

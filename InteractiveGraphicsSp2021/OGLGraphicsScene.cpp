@@ -76,7 +76,7 @@ bool OGLGraphicsScene::Create()
    AddGraphicsObject("floor", floor, "diffuseShader");
    floor->SendToGPU();
 
-   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(0, 2, 0));
+   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-3, 2, 0));
    _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(0, 2, 0));
    _objects["axis"]->frame.TranslateWorld(glm::vec3(0, 0.1f, 0));
 
@@ -96,6 +96,20 @@ bool OGLGraphicsScene::Create()
    AddGraphicsObject("whiteCibe", whiteCube, "simple3DShader");
    whiteCube->SendToGPU();
    whiteCube->frame.SetPosition(localLight.position);
+
+   OGLVertexMesh<VertexPCNT>* crateMesh = (OGLVertexMesh<VertexPCNT>*)
+      meshFactory.NormalizedTexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
+   crateMesh->SetUpAttributes("PCNT");
+   crateMesh->SetTexture(_textures["crateTexture"]);
+   GraphicsObject* crate = new GraphicsObject();
+   crate->AddMesh(crateMesh);
+   AddGraphicsObject("crate", crate, "diffuseShader");
+   crate->SendToGPU();
+
+   RotateAnimation* crateRot = new RotateAnimation(glm::vec3(1, 0, 0), 45.0f);
+   _objects["crate"]->SetAnimation(crateRot);
+
+   _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 6.5f, 0));
 
    return true;
 }
