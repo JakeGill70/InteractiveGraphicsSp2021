@@ -38,6 +38,14 @@ public:
       return numberOfElements;
    }
 
+   size_t GetNumberOfVertices() {
+      return this->_vertices.size();
+   }
+
+   size_t GetNumberOfIndices() {
+      return this->_indices.size();
+   }
+
    T& GetVertex(int index) {
       return _vertices[index];
    }
