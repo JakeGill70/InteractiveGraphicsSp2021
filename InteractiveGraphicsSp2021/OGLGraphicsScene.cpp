@@ -52,7 +52,7 @@ bool OGLGraphicsScene::Create()
 
    _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-4, 0, 0));
 
-   globalLight.intensity = 0.25f; // Brighten the cube a bit
+   
    MeshFactory<VertexPCNT, RGBA> meshFactory2;
    OGLVertexMesh<VertexPCNT>* mesh2 = (OGLVertexMesh<VertexPCNT>*)
       meshFactory2.NormalizedTexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
@@ -83,9 +83,11 @@ bool OGLGraphicsScene::Create()
    _cameras["camera"]->frame.TranslateWorld(glm::vec3(0, 2, 8));
    _cameras["camera"]->UpdateView();
 
+   globalLight.intensity = 0.5f;
    localLight.color = { 1, 1, 1 }; // White light
-   localLight.intensity = 0.5f; // Medium intensity
-   localLight.position = { 0, 0.5f, 2.0f }; // Close to the floor
+   localLight.intensity = 0.5f; 
+   localLight.position = { 0, 0.5f, 2.0f }; 
+   localLight.attenuationCoefficient = 1;
 
    MeshFactory<VertexPC, RGB> meshFactory3;
    OGLVertexMesh<VertexPC>* whiteCubeMesh = (OGLVertexMesh<VertexPC>*)
@@ -110,6 +112,9 @@ bool OGLGraphicsScene::Create()
    _objects["crate"]->SetAnimation(crateRot);
 
    _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 6.5f, 0));
+
+   _cameras["camera"]->frame.SetPosition(2, 10, -25);
+   _cameras["camera"]->UpdateView();
 
    return true;
 }

@@ -55,9 +55,9 @@ void OGLTexture::SendToGPU()
    if (_textureData != nullptr) {
       ApplyFilters();
       glBindTexture(GL_TEXTURE_2D, _id);
-      GLenum internalTextureFormat = GL_RGB, sourceFormat = GL_RGB;
+      GLenum internalTextureFormat = GL_SRGB, sourceFormat = GL_RGB;
       if (_numberOfChannels == 4) {
-         internalTextureFormat = GL_RGBA;
+         internalTextureFormat = GL_SRGB_ALPHA;
          sourceFormat = GL_RGBA;
       }
       // Send the texture data
