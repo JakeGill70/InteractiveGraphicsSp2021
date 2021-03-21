@@ -66,6 +66,15 @@ public:
       this->_hasNormal = true;
    }
 
+   void SetUpAttributes(const string& attributes) {
+      size_t bytesToNext = sizeof(T);
+      this->SetPositionAttribute({ 0,  3, bytesToNext, 0 });
+      this->SetColorAttribute({ 1, 4, bytesToNext, sizeof(GLfloat) * 3 });
+      if (attributes == "PCT") {
+         this->SetTextureAttribute({ 2, 2, bytesToNext, sizeof(GLfloat) * 7 });
+      }
+   }
+
    void SetUpBufferInterpretation();
 
    void SendToGPU();
