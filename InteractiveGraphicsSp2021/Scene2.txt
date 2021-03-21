@@ -106,19 +106,19 @@ PCT,triangles,indexed,marbleTexture
 
 floor,simpleTextureShader
 <factoried mesh>
-PCT, flat textured, XZ, woodFloorTexture, -5, -5, 5, 5, 1, 1, 1, 1, 5, 5
+PCT, flat textured, XZ, woodFloorTexture, -5, -5, 10, 10, 1, 1, 1, 1, 5, 5
 <endMesh>
 <endObject>
 
 leftWall,simpleTextureShader
 <factoried mesh>
-PCT, flat textured, XZ, brickwallTexture, -5, -2.5, 5, 2.5, 1, 1, 1, 1, 5, 5
+PCT, flat textured, XZ, brickwallTexture, -5, -2.5, 10, 5, 1, 1, 1, 1, 5, 5
 <endMesh>
 <endObject>
 
 rightWall,simpleTextureShader
 <factoried mesh>
-PCT, flat textured, XZ, brickwallTexture, -5, -2.5, 5, 2.5, 1, 1, 1, 1, 5, 5
+PCT, flat textured, XZ, brickwallTexture, -5, -2.5, 10, 5, 1, 1, 1, 1, 5, 5
 <endMesh>
 <endObject>
 
