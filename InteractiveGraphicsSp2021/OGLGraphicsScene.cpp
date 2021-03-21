@@ -225,7 +225,7 @@ AbstractMesh* OGLGraphicsScene::CreateFactoriedPCTMesh(FactoriedMeshData& meshDa
    if (meshData.meshType == "flat textured") {
       if (meshData.whichPlane == "XZ") {
          mesh = (OGLVertexMesh<VertexPCT>*)
-            pctFactory.FlatTexturedMeshXZ(
+            pctFactory.IndexedFlatTexturedMeshXZ(
                meshData.params[0], // sx
                meshData.params[1], // sz
                meshData.params[2], // ex

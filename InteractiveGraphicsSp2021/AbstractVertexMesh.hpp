@@ -38,6 +38,10 @@ public:
       return numberOfElements;
    }
 
+   T& GetVertex(int index) {
+      return _vertices[index];
+   }
+
    virtual void Render() = 0;
 };
 
