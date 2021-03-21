@@ -39,7 +39,7 @@ bool OGLGraphicsScene::Create()
 
    MeshFactory<VertexPCT, RGBA> meshFactory;
    OGLVertexMesh<VertexPCT>* mesh = (OGLVertexMesh<VertexPCT>*)
-      meshFactory.CuboidMeshPCT(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
+      meshFactory.TexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
    mesh->SetTexture(_textures["smileyTexture"]);
    GraphicsObject* c1 = new GraphicsObject();
    c1->AddMesh(mesh);
