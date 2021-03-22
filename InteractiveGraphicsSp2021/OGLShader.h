@@ -75,6 +75,47 @@ public:
       SendFloatToGPU("localLightAttenuationCoefficient", localLight.attenuationCoefficient);
    }
 
+   void SendIntegerToGPU(const string& name, int data) const
+   {
+      unsigned int location = glGetUniformLocation(_shaderProgram, name.c_str());
+      glUniform1i(location, data);
+   }
+
+   void SendFloatArrayToGPU(const string& name, void* values, unsigned int count) const
+   {
+      unsigned int location = glGetUniformLocation(_shaderProgram, name.c_str());
+      glUniform1fv(location, count, (float*)values);
+   }
+
+   void SendVectorArrayToGPU(const string& name, void* vectorArray, unsigned int count) const
+   {
+      unsigned int location = glGetUniformLocation(_shaderProgram, name.c_str());
+      glUniform3fv(location, count, (float*)vectorArray);
+   }
+
+   void SendLocalLightsToGPU(const Light localLights[], int numberOfLights) const
+   {
+      glm::vec3* positions = new glm::vec3[numberOfLights];
+      glm::vec3* colors = new glm::vec3[numberOfLights];
+      float* intensities = new float[numberOfLights];
+      float* attenuationCoefficients = new float[numberOfLights];
+      for (int i = 0; i < numberOfLights; i++) {
+         positions[i] = localLights[i].position;
+         colors[i] = localLights[i].color;
+         intensities[i] = localLights[i].intensity;
+         attenuationCoefficients[i] = localLights[i].attenuationCoefficient;
+      }
+      SendIntegerToGPU("numberOfLights", numberOfLights);
+      SendVectorArrayToGPU("localLightPosition", positions, numberOfLights);
+      SendVectorArrayToGPU("localLightColor", colors, numberOfLights);
+      SendFloatArrayToGPU("localLightIntensity", intensities, numberOfLights);
+      SendFloatArrayToGPU("localLightAttenuationCoefficient", attenuationCoefficients, numberOfLights);
+      delete[] positions;
+      delete[] colors;
+      delete[] intensities;
+      delete[] attenuationCoefficients;
+   }
+
 protected:
    void SetDefaultSource();
    GLuint Compile(GLenum type, const GLchar* source);

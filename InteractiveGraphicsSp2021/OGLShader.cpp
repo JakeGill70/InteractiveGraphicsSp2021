@@ -52,6 +52,8 @@ void OGLShader::Render(GraphicsObject* object)
    for (auto it = meshes.begin(); it != meshes.end(); it++) {
       mesh = *it;
       SendFloatToGPU("materialAmbientIntensity", mesh->material.ambientIntensity);
+      SendFloatToGPU("materialSpecularIntensity", mesh->material.specularIntensity);
+      SendFloatToGPU("materialShininess", mesh->material.shininess);
       vbo = (GLuint)mesh->GetBufferId();
       glBindBuffer(GL_ARRAY_BUFFER, vbo);
       if (mesh->IsTextured()) {
@@ -67,7 +69,6 @@ void OGLShader::Render(GraphicsObject* object)
             GL_UNSIGNED_SHORT, 0);
       }
    }
-
    glDisableVertexAttribArray(0);
    glDisableVertexAttribArray(1);
    glUseProgram(0);

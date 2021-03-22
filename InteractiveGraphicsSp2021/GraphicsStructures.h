@@ -40,6 +40,8 @@ struct VertexPCNT {
 
 struct Material {
    float ambientIntensity;
+   float specularIntensity;
+   float shininess;
 };
 
 struct Light {

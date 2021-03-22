@@ -44,7 +44,7 @@ bool OGLGraphicsScene::Create()
    smileyMesh->SetTexture(_textures["smileyTexture"]);
    GraphicsObject* smileyCube = new GraphicsObject();
    smileyCube->AddMesh(smileyMesh);
-   AddGraphicsObject("smileyCube", smileyCube, "diffuseShader");
+   AddGraphicsObject("smileyCube", smileyCube, "lightingShader");
    smileyCube->SendToGPU();
 
    RotateAnimation* defaultRot = new RotateAnimation();
@@ -60,7 +60,7 @@ bool OGLGraphicsScene::Create()
    mesh2->SetTexture(_textures["smileyTexture"]);
    GraphicsObject* c2 = new GraphicsObject();
    c2->AddMesh(mesh2);
-   AddGraphicsObject("smileyCube2", c2, "diffuseShader");
+   AddGraphicsObject("smileyCube2", c2, "lightingShader");
    c2->SendToGPU();
 
    RotateAnimation* defaultRot2 = new RotateAnimation();
@@ -73,7 +73,7 @@ bool OGLGraphicsScene::Create()
    floorMesh->SetTexture(_textures["woodFloorTexture"]);
    GraphicsObject* floor = new GraphicsObject();
    floor->AddMesh(floorMesh);
-   AddGraphicsObject("floor", floor, "diffuseShader");
+   AddGraphicsObject("floor", floor, "lightingShader");
    floor->SendToGPU();
 
    _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-3, 2, 0));
@@ -83,21 +83,49 @@ bool OGLGraphicsScene::Create()
    _cameras["camera"]->frame.TranslateWorld(glm::vec3(0, 2, 8));
    _cameras["camera"]->UpdateView();
 
-   globalLight.intensity = 0.5f;
-   localLight.color = { 1, 1, 1 }; // White light
-   localLight.intensity = 0.5f; 
-   localLight.position = { 0, 0.5f, 2.0f }; 
-   localLight.attenuationCoefficient = 1;
+   globalLight.intensity = 0.1f;
+   localLights[0].color = { 1, 1, 1 }; // White light
+   localLights[0].intensity = 0.5f; 
+   localLights[0].position = { 0, 0.5f, 2.0f }; 
+   localLights[0].attenuationCoefficient = 1;
+   _numberOfLights++;
+   localLights[1].color = { 1, 1, 0 }; // Yellow light
+   localLights[1].intensity = 0.5f;
+   localLights[1].position = { -7, 2.5f, 3.0f };
+   localLights[1].attenuationCoefficient = 0.5f;
+   _numberOfLights++;
+   localLights[2].color = { 1, 0, 1 }; // Purple light
+   localLights[2].intensity = 0.8f;
+   localLights[2].position = { 3, 1.0f, 7.0f };
+   localLights[2].attenuationCoefficient = 0.5f;
 
-   MeshFactory<VertexPC, RGB> meshFactory3;
+   MeshFactory<VertexPC, RGB> meshFactoryPCRGB;
    OGLVertexMesh<VertexPC>* whiteCubeMesh = (OGLVertexMesh<VertexPC>*)
-      meshFactory3.CuboidMesh(0.2f, 0.2f, 0.2f, { 1, 1, 1 });
+      meshFactoryPCRGB.CuboidMesh(0.2f, 0.2f, 0.2f, { 1, 1, 1 });
    whiteCubeMesh->SetUpAttributes("PC");
    GraphicsObject* whiteCube = new GraphicsObject();
    whiteCube->AddMesh(whiteCubeMesh);
-   AddGraphicsObject("whiteCibe", whiteCube, "simple3DShader");
+   AddGraphicsObject("whiteCube", whiteCube, "simple3DShader");
    whiteCube->SendToGPU();
-   whiteCube->frame.SetPosition(localLight.position);
+   whiteCube->frame.SetPosition(localLights[0].position);
+
+   OGLVertexMesh<VertexPC>* yellowCubeMesh = (OGLVertexMesh<VertexPC>*)
+      meshFactoryPCRGB.CuboidMesh(0.2f, 0.2f, 0.2f, { 1, 1, 0 });
+   yellowCubeMesh->SetUpAttributes("PC");
+   GraphicsObject* yellowCube = new GraphicsObject();
+   yellowCube->AddMesh(yellowCubeMesh);
+   AddGraphicsObject("yellowCube", yellowCube, "simple3DShader");
+   yellowCube->SendToGPU();
+   yellowCube->frame.SetPosition(localLights[1].position);
+
+   OGLVertexMesh<VertexPC>* purpleCubeMesh = (OGLVertexMesh<VertexPC>*)
+      meshFactoryPCRGB.CuboidMesh(0.2f, 0.2f, 0.2f, { 1, 0, 1 });
+   purpleCubeMesh->SetUpAttributes("PC");
+   GraphicsObject* purpleCube = new GraphicsObject();
+   purpleCube->AddMesh(purpleCubeMesh);
+   AddGraphicsObject("purpleCube", purpleCube, "simple3DShader");
+   purpleCube->SendToGPU();
+   purpleCube->frame.SetPosition(localLights[2].position);
 
    OGLVertexMesh<VertexPCNT>* crateMesh = (OGLVertexMesh<VertexPCNT>*)
       meshFactory.NormalizedTexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
@@ -105,7 +133,7 @@ bool OGLGraphicsScene::Create()
    crateMesh->SetTexture(_textures["crateTexture"]);
    GraphicsObject* crate = new GraphicsObject();
    crate->AddMesh(crateMesh);
-   AddGraphicsObject("crate", crate, "diffuseShader");
+   AddGraphicsObject("crate", crate, "lightingShader");
    crate->SendToGPU();
 
    RotateAnimation* crateRot = new RotateAnimation(glm::vec3(1, 0, 0), 45.0f);
@@ -113,8 +141,17 @@ bool OGLGraphicsScene::Create()
 
    _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 6.5f, 0));
 
-   _cameras["camera"]->frame.SetPosition(2, 10, -25);
-   _cameras["camera"]->UpdateView();
+   _currentCamera = _cameras["camera"];
+   _currentCamera->frame.SetPosition(0, 5, 15);
+   _currentCamera->UpdateView();
+
+   smileyMesh = (OGLVertexMesh<VertexPCNT>*)_objects["smileyCube2"]->GetMesh(0);
+   smileyMesh->material.specularIntensity = 0.9f;
+   smileyMesh->material.shininess = 100.0f;
+
+   floorMesh = (OGLVertexMesh<VertexPCNT>*)_objects["floor"]->GetMesh(0);
+   floorMesh->material.specularIntensity = 0.9f;
+   floorMesh->material.shininess = 200.0f;
 
    return true;
 }

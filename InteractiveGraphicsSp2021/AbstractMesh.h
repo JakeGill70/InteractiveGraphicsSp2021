@@ -21,6 +21,8 @@ public:
       : _texture(nullptr), _primitive(0) {
       _hasPosition = _hasColor = _hasTexture = _hasNormal = false;
       material.ambientIntensity = 0.01f;
+      material.specularIntensity = 0.5f;
+      material.shininess = 16;
    }
 
    virtual inline void SetPrimitive(unsigned int primitive) {

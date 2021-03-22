@@ -1,5 +1,5 @@
 # camera name, pos x, pos y, pos z, fov, near plane, far plane
-camera,0,5,10,60,0.1f,50
+camera,0,5,10,80,0.1f,50
 <endCameras>
 # shader name, file path of vertex shader, file path of fragment shader, camera name
 defaultShader,default,default,none
@@ -8,6 +8,8 @@ simpleTextureShader,PCT3DVertexShader.glsl,TexFragmentShader.glsl,camera
 ambientShader,PCT3DVertexShader.glsl,PCTAmbientFragmentShader.glsl,camera
 globalDiffuseShader,PCNTLightingVertexShader.glsl,PCNTDiffuseFragmentShader.glsl,camera
 diffuseShader,PCNTLightingVertexShader.glsl,PCNTDiffuse2FragmentShader.glsl,camera
+specularShader,PCNTLightingVertexShader.glsl,PCNTSpecularFragmentShader.glsl,camera
+lightingShader,PCNTLightingVertexShader.glsl,PCNTLightingFragmentShader.glsl,camera
 <endShaders>
 
 # texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter

@@ -46,6 +46,10 @@ public:
    virtual void SendVec3ToGPU(const string& name, const glm::vec3& vector) const = 0;
    virtual void SendGlobalLightToGPU(const Light& globalLight) const = 0;
    virtual void SendLocalLightToGPU(const Light& localLight) const = 0;
+   virtual void SendIntegerToGPU(const string& name, int data) const = 0;
+   virtual void SendFloatArrayToGPU(const string& name, void* values, unsigned int count) const = 0;
+   virtual void SendVectorArrayToGPU(const string& name, void* vectorArray, unsigned int count) const = 0;
+   virtual void SendLocalLightsToGPU(const Light localLights[], int numberOfLights) const = 0;
 
 protected:
    virtual void SendGPUData() = 0;

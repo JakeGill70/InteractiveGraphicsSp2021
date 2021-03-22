@@ -41,10 +41,13 @@ void BaseGraphicsScene::Update(double elapsedSeconds)
 
 void BaseGraphicsScene::Render()
 {
+   AbstractShader* shader;
    for (auto iterator = _shaders.begin(); iterator != _shaders.end(); iterator++) {
-      iterator->second->SelectProgram();
-      iterator->second->SendGlobalLightToGPU(globalLight);
-      iterator->second->SendLocalLightToGPU(localLight);
-      iterator->second->RenderObjects();
+      shader = iterator->second;
+      shader->SelectProgram();
+      shader->SendGlobalLightToGPU(globalLight);
+      shader->SendLocalLightsToGPU(localLights, _numberOfLights);
+      shader->SendVec3ToGPU("viewPosition", _currentCamera->frame.GetPosition());
+      shader->RenderObjects();
    }
 }

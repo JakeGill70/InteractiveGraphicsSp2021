@@ -195,7 +195,9 @@
   <ItemGroup>
     <None Include="PCNTDiffuse2FragmentShader.glsl" />
     <None Include="PCNTDiffuseFragmentShader.glsl" />
+    <None Include="PCNTLightingFragmentShader.glsl" />
     <None Include="PCNTLightingVertexShader.glsl" />
+    <None Include="PCNTSpecularFragmentShader.glsl" />
     <None Include="PCTAmbientFragmentShader.glsl" />
     <None Include="labweek07.ig" />
     <None Include="PCT3DVertexShader.glsl" />

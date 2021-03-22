@@ -150,6 +150,8 @@
     <None Include="PCNTLightingVertexShader.glsl" />
     <None Include="PCNTDiffuseFragmentShader.glsl" />
     <None Include="PCNTDiffuse2FragmentShader.glsl" />
+    <None Include="PCNTSpecularFragmentShader.glsl" />
+    <None Include="PCNTLightingFragmentShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="scene.txt" />

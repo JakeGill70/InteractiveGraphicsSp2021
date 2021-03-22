@@ -21,19 +21,24 @@ protected:
    map<string, AbstractTexture*> _textures;
    BaseCamera* _currentCamera;
    TextFileReader* _textFileReader;
+   int _numberOfLights;
 
 public:
    Light globalLight;
-   Light localLight;
+   static const int NumberOfLights = 10;
+   Light localLights[BaseGraphicsScene::NumberOfLights];
 
 public:
    BaseGraphicsScene() : _currentCamera(nullptr), _textFileReader(nullptr) {
       globalLight.position = { 100.0f, 100.0f, 0 };
       globalLight.color = { 1, 1, 1 };
       globalLight.intensity = 0.25;
-      localLight.position = { 100.0f, 100.0f, 0 };
-      localLight.color = { 1, 1, 1 };
-      localLight.attenuationCoefficient = 0.2f;
+      _numberOfLights = 1;
+      for (int i = 0; i < BaseGraphicsScene::NumberOfLights; i++) {
+         localLights[i].position = { 100.0f, 100.0f, 0 };
+         localLights[i].color = { 1, 1, 1 };
+         localLights[i].attenuationCoefficient = 0.2f;
+      }
    }
    virtual ~BaseGraphicsScene();
 
