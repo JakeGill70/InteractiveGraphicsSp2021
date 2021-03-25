@@ -205,6 +205,7 @@
   <ItemGroup>
     <Text Include="scene.txt" />
     <Text Include="Scene2.txt" />
+    <Text Include="Scene3.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brickwall.jpg" />
