@@ -32,10 +32,16 @@ bool OGLGraphicsScene::Create()
    _objects["rightWall"]->frame.RotateWorld(-90, glm::vec3(0, 1, 0));
    _objects["rightWall"]->frame.TranslateWorld(glm::vec3(5, 2.5f, 0));
 
+   _objects["frontWall"]->frame.RotateWorld(-90, glm::vec3(1, 0, 0));
+   _objects["frontWall"]->frame.TranslateWorld(glm::vec3(0, 2.5f, 5));
+
    RotateAnimation* defaultRot = new RotateAnimation();
    RotateAnimation* otherRot = new RotateAnimation(glm::vec3(0, 0, 1), 180.0f);
    _objects["cube"]->SetAnimation(defaultRot);
    _objects["indexedCube"]->SetAnimation(otherRot);
+
+   _cameras["camera"]->frame.SetPosition(10, 5, 0);
+   _cameras["camera"]->UpdateView();
 
    return true;
 }

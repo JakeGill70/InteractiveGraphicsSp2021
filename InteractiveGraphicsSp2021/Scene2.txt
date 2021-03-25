@@ -122,5 +122,11 @@ PCT, flat textured, XZ, brickwallTexture, -5, -2.5, 10, 5, 1, 1, 1, 1, 5, 5
 <endMesh>
 <endObject>
 
+frontWall,simpleTextureShader
+<factoried mesh>
+PCT, flat textured, XZ, brickwallTexture, -5, -2.5, 10, 5, 1, 1, 1, 1, 5, 5
+<endMesh>
+<endObject>
+
 <endObjects>
 
