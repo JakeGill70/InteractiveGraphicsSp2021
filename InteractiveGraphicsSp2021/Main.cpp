@@ -1,111 +1,30 @@
 #pragma comment(lib, "glfw3.lib")
 #pragma comment(lib, "opengl32.lib")
 #include <Windows.h>
-#include <glad/glad.h> 
-#include <GLFW/glfw3.h>
-#include <iostream>
-#include "GraphicsStructures.h"
-#include "OGLShader.h"
-#include "BaseCamera.h"
-#include "ReferenceFrame.h"
-#include <glm\glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include "BaseGraphicsScene.h"
-#include "OGLGraphicsScene.h"
+#include "GraphicsEnvironment.h"
+#include "GLFWGraphicsWindow.h"
+#include "SceneReader.h"
 #include "TextFileReader.h"
-#include <string>
-using std::wstring;
-#include "HighResolutionTimer.h"
-
-void ReportMessage(const string& message)
-{
-   // Quick way to convert from string to wstring
-   wstring errorString(message.begin(), message.end());
-   MessageBox(
-      NULL,
-      errorString.c_str(),
-      L"An Error Occurred",
-      MB_OK);
-}
-
-void OnWindowResize_Callback(GLFWwindow* window, int width, int height)
-{
-   glViewport(0, 0, width, height);
-}
-
-void ProcessUserInput(GLFWwindow* window)
-{
-   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-      glfwSetWindowShouldClose(window, true);
-   }
-}
+#include "OGLGraphicsScene.h"
+#include "OGLGraphicsSystem.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    _In_opt_ HINSTANCE hPrevInstance,
    _In_ LPWSTR    lpCmdLine,
    _In_ int       nCmdShow)
 {
-   glfwInit();
-   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+   GLFWGraphicsWindow* window = 
+      new GLFWGraphicsWindow(800, 600, "Lec Week 11 - Interactive Graphics");
 
-   GLFWwindow* window = glfwCreateWindow(800, 600, "Lec Week 11 - Interactive Graphics", NULL, NULL);
-   if (window == NULL) {
-      std::cout << "Failed to create GLFW window" << std::endl;
-      glfwTerminate();
-      return -1;
-   }
-   glfwMakeContextCurrent(window);
+   OGLGraphicsSystem* graphicsSystem = new OGLGraphicsSystem();
 
-   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-      std::cout << "Failed to initialize GLAD" << std::endl;
-      return -1;
-   }
+   OGLGraphicsScene* scene = 
+      new OGLGraphicsScene(
+         new SceneReader("Scene3.txt"), 
+         new TextFileReader());
 
-   glfwSetFramebufferSizeCallback(window, OnWindowResize_Callback);
-
-   auto textFileReader = new TextFileReader();
-   auto sceneReader = new SceneReader("Scene3.txt");
-   OGLGraphicsScene scene(sceneReader);
-   scene.SetTextFileReader(textFileReader);
-   auto created = scene.Create();
-   if (!created) {
-      ReportMessage(scene.GetLog());
-      glfwTerminate();
-      return 0;
-   }
-
-   // Cull back faces and use counter-clockwise winding of front faces
-   glEnable(GL_CULL_FACE);
-   glCullFace(GL_BACK);
-   glFrontFace(GL_CCW);
-
-   //Enable depth testing
-   glEnable(GL_DEPTH_TEST);
-   glDepthMask(GL_TRUE);
-   glDepthFunc(GL_LEQUAL);
-   glDepthRange(0.0f, 1.0f);
-
-   HighResolutionTimer timer;
-   int width, height;
-   glfwShowWindow(window);
-   //glfwMaximizeWindow(window);
-   timer.StartTiming();
-   while (!glfwWindowShouldClose(window)) {
-      glfwGetWindowSize(window, &width, &height);
-      scene.UpdateCameraProjection(width / (float)height);
-      ProcessUserInput(window);
-
-      glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-      scene.Update(timer.GetElapsedTimeInSeconds());
-      scene.Render();
-
-      glfwSwapBuffers(window);
-      glfwPollEvents();
-   }
-
-   glfwTerminate();
+   GraphicsEnvironment environment(window, graphicsSystem, scene);
+   environment.Initialize();
+   environment.Run();
    return 0;
 }

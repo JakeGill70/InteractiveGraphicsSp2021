@@ -4,6 +4,7 @@
 
 #include "BaseGraphicsScene.h"
 #include "SceneReader.h"
+#include "TextFileReader.h"
 #include <vector>
 using std::vector;
 #include "OGLVertexMesh.hpp"
@@ -15,8 +16,11 @@ private:
    SceneReader* _sceneReader;
 
 public:
-   OGLGraphicsScene(SceneReader* sceneReader) : _sceneReader(sceneReader)
-   {}
+   OGLGraphicsScene(SceneReader* sceneReader, TextFileReader* textFileReader)
+      : _sceneReader(sceneReader)
+   {
+      _textFileReader = textFileReader;
+   }
    ~OGLGraphicsScene();
 
    bool Create();
