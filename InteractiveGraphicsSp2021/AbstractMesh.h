@@ -4,6 +4,7 @@
 
 #include "BaseObject.h"
 #include "AbstractTexture.h"
+#include "GraphicsStructures.h"
 class AbstractMesh :
    public BaseObject
 {
@@ -13,9 +14,13 @@ protected:
    bool _hasPosition, _hasColor, _hasTexture;
 
 public:
+    Material material;
+
    AbstractMesh() 
       : _texture(nullptr), _primitive(0) {
       _hasPosition = _hasColor = _hasTexture = false;
+      material = Material();
+      material.ambientIntensity = 0.1f;
    }
 
    virtual inline void SetPrimitive(unsigned int primitive) {

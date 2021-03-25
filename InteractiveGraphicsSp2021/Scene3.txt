@@ -5,6 +5,7 @@ camera,0,5,10,60,0.1f,50
 defaultShader,default,default,none
 simple3DShader,Simple3DVertexShader.glsl,default,camera
 simpleTextureShader,PCT3DVertexShader.glsl,TexFragmentShader.glsl,camera
+ambientShader,PCT3DVertexShader.glsl,PCTAmbientFragmentShader.glsl,camera
 <endShaders>
 
 # texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter

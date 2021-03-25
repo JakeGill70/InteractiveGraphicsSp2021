@@ -42,6 +42,7 @@ public:
    virtual size_t GenerateBuffer() = 0;
    virtual bool Create() = 0;
    virtual void SendMatrixToGPU(const string& name, const glm::mat4& matrix) = 0;
+   virtual void SendFloatToGPU(const string& name, float data) const = 0;
 
 protected:
    virtual void SendGPUData() = 0;

@@ -146,6 +146,7 @@
     <None Include="Simple3DVertexShader.glsl" />
     <None Include="PCT3DVertexShader.glsl" />
     <None Include="TexFragmentShader.glsl" />
+    <None Include="PCTAmbientFragmentShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="scene.txt" />

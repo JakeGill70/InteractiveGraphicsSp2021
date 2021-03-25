@@ -21,6 +21,20 @@ bool OGLGraphicsScene::Create()
 
    _objects["axis"]->frame.TranslateLocal(glm::vec3(0, 0.1f, 0));
 
+   MeshFactory<VertexPCT, RGBA> meshFactory;
+   OGLVertexMesh<VertexPCT>* mesh = (OGLVertexMesh<VertexPCT>*)
+       meshFactory.TexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
+   mesh->SetUpAttributes("PCT");
+   mesh->SetTexture(_textures["smileyTexture"]);
+   GraphicsObject* c1 = new GraphicsObject();
+   c1->AddMesh(mesh);
+   AddGraphicsObject("smileyCube", c1, "ambientShader");
+   c1->SendToGPU();
+
+   RotateAnimation* defaultRot = new RotateAnimation();
+   _objects["smileyCube"]->SetAnimation(defaultRot);
+
+
    return true;
 }
 

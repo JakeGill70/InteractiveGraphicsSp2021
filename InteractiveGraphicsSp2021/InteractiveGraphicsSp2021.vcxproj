@@ -199,6 +199,7 @@
   <ItemGroup>
     <None Include="labweek07.ig" />
     <None Include="PCT3DVertexShader.glsl" />
+    <None Include="PCTAmbientFragmentShader.glsl" />
     <None Include="TexFragmentShader.glsl" />
     <None Include="Simple3DVertexShader.glsl" />
   </ItemGroup>

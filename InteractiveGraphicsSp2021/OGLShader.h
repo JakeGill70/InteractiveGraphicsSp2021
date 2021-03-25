@@ -53,6 +53,7 @@ protected:
    GLuint Compile(GLenum type, const GLchar* source);
    GLuint Link(GLuint vertexShader, GLuint fragmentShader);
    void LogError(GLuint shader, PFNGLGETSHADERIVPROC glGet__iv, PFNGLGETSHADERINFOLOGPROC glGet__InfoLog);
+   void SendFloatToGPU(const string& name, float data) const;
    void SendGPUData();
 };
 
