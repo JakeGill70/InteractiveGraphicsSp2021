@@ -263,10 +263,11 @@ void SceneReader::ProcessFactoriedMeshDataLine(const string& line)
 
    FactoriedMeshData factoryData;
    factoryData.vertexType = tokens[0];
-   factoryData.meshType = tokens[1];
-   factoryData.whichPlane = tokens[2];
-   factoryData.textureName = tokens[3];
-   for (size_t i = 4; i < tokens.size(); i++) {
+   factoryData.colorType = tokens[1];
+   factoryData.meshType = tokens[2];
+   factoryData.whichPlane = tokens[3];
+   factoryData.textureName = tokens[4];
+   for (size_t i = 5; i < tokens.size(); i++) {
       factoryData.params.push_back(std::stof(tokens[i]));
    }
 

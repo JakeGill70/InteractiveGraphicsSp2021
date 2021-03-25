@@ -37,6 +37,7 @@ struct MeshData {
 
 struct FactoriedMeshData {
    string vertexType;
+   string colorType;
    string meshType;
    string whichPlane;
    string textureName;

@@ -374,7 +374,7 @@ namespace InteractiveGraphicsUnitTesting
 
          fout << "object,someShader" << std::endl;
          fout << "<factoried mesh>" << std::endl;
-         fout << "PCT, flat textured, XZ, someTexture, 5, -5, 5, 5, 1, 1, 1, 1, 5, 5" << std::endl;
+         fout << "PCT, RGBA, flat, XZ, someTexture, 5, -5, 5, 5, 1, 1, 1, 1, 5, 5" << std::endl;
          fout << "<endMesh>" << std::endl;
          fout << "<endObject>" << std::endl;
 
@@ -398,7 +398,7 @@ namespace InteractiveGraphicsUnitTesting
          string expectedStr = "PCT";
          Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].vertexType);
 
-         expectedStr = "flat textured";
+         expectedStr = "flat";
          Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].meshType);
 
          expectedStr = "XZ";
@@ -411,6 +411,97 @@ namespace InteractiveGraphicsUnitTesting
          Assert::AreEqual(expectedInt, objectData.factoriedMeshData[0].params.size());
 
          std::remove("TestFile.txt");
-      }
+      } // TEST_METHOD(CanReadATexturedFactoriedObject)
+
+      TEST_METHOD(CanReadATexturedFactoriedCuboidPCNTRGBA)
+      {
+         ofstream fout("TestFile.txt");
+         fout << "camera,1,2,3,60,0.1f,50" << std::endl;
+         fout << "<endCameras>" << std::endl;
+         fout << "defaultShader,  default,default,none" << std::endl;
+         fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
+         fout << "simpleTextureShader, PCT3DVertexShader.glsl, TexFragmentShader.glsl, camera" << std::endl;
+         fout << "<endShaders>" << std::endl;
+         fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
+         fout << "<array>" << std::endl;
+         fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255,255" << std::endl;
+         fout << "<endTexture>" << std::endl;
+         fout << "someTexture" << std::endl;
+         fout << "<file>" << std::endl;
+         fout << "somefile.jpg" << std::endl;
+         fout << "<endTexture>" << std::endl;
+         fout << "<endTextures>" << std::endl;
+
+         fout << "wall,simpleTextureShader" << std::endl;
+
+         fout << "PCT,triangles,indexed,someTexture" << std::endl;
+         fout << "-2,  1, 0, 1, 1, 1, 1, 0, 1" << std::endl;
+         fout << "-2, -1, 0, 1, 1, 1, 1, 0, 0" << std::endl;
+         fout << " 0, -1, 0, 1, 1, 1, 1, 1, 0" << std::endl;
+         fout << " 0,  1, 0, 1, 1, 1, 1, 1, 1" << std::endl;
+         fout << "<endVertexData>" << std::endl;
+         fout << " 0, 1, 2, 0, 2, 3" << std::endl;
+         fout << "<endIndexData>" << std::endl;
+         fout << "<endMesh>" << std::endl;
+
+         fout << "PCT,triangles,indexed,someTexture" << std::endl;
+         fout << " 0,  1, 0, 1, 1, 1, 1, 0, 1" << std::endl;
+         fout << " 0, -1, 0, 1, 1, 1, 1, 0, 0" << std::endl;
+         fout << " 2, -1, 0, 1, 1, 1, 1, 1, 0" << std::endl;
+         fout << " 2,  1, 0, 1, 1, 1, 1, 1, 1" << std::endl;
+         fout << "<endVertexData>" << std::endl;
+         fout << " 0, 1, 2, 0, 2, 3" << std::endl;
+         fout << "<endIndexData>" << std::endl;
+         fout << "<endMesh>" << std::endl;
+         fout << "<endObject>" << std::endl;
+
+         fout << "object,someShader" << std::endl;
+         fout << "<factoried mesh>" << std::endl;
+         fout << "PCT, RGBA, flat, XZ, someTexture, 5, -5, 5, 5, 1, 1, 1, 1, 5, 5" << std::endl;
+         fout << "<endMesh>" << std::endl;
+         fout << "<endObject>" << std::endl;
+
+         fout << "object2,someShader2" << std::endl;
+         fout << "<factoried mesh>" << std::endl;
+         fout << "PCNT, RGBA, cuboid, NA, someTexture2, 4, 4, 4, 1, 1, 1, 1, 1, 1" << std::endl;
+         fout << "<endMesh>" << std::endl;
+         fout << "<endObject>" << std::endl;
+
+         fout << "<endObjects>" << std::endl;
+         fout.close();
+
+         SceneReader sut("TestFile.txt");
+         sut.Open();
+         Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
+
+         sut.Read();
+         Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
+
+         map<string, ObjectData>& data = sut.GetObjectData();
+         Assert::AreEqual(3, (int)data.size());
+
+         auto it = data.begin();
+         ObjectData objectData = it->second;
+         Assert::AreEqual(2, (int)objectData.factoriedMeshData.size());
+
+         string expectedStr = "PCNT";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[1].vertexType);
+
+         expectedStr = "RGBA";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[1].colorType);
+
+         expectedStr = "cuboid";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[1].meshType);
+
+         expectedStr = "someTexture2";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[1].textureName);
+
+         size_t expectedInt = 9;
+         Assert::AreEqual(expectedInt, objectData.factoriedMeshData[1].params.size());
+
+         std::remove("TestFile.txt");
+      } // TEST_METHOD(CanReadATexturedFactoriedCuboidPCNTRGBA)
+
+
    };
 }
