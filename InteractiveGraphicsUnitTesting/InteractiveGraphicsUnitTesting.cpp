@@ -169,7 +169,7 @@ namespace InteractiveGraphicsUnitTesting
          sut.Open();
          Assert::IsFalse(sut.HasError());
          sut.Read();
-         map<string, TextureData>& data = sut.GetTextureData();
+         unordered_map<string, TextureData>& data = sut.GetTextureData();
          Assert::AreEqual(1, (int)data.size());
          TextureData texData = data.begin()->second;
          Assert::AreEqual(16, (int)texData.arrayData.size());
@@ -186,11 +186,13 @@ namespace InteractiveGraphicsUnitTesting
          fout << "defaultShader,  default,default,none" << std::endl;
          fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
          fout << "<endShaders>" << std::endl;
+
          fout << "# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter" << std::endl;
          fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
          fout << "<array>" << std::endl;
          fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255,255" << std::endl;
          fout << "<endTexture>" << std::endl;
+
          fout << "customTexture2, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
          fout << "<array>" << std::endl;
          fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255" << std::endl;
@@ -202,16 +204,13 @@ namespace InteractiveGraphicsUnitTesting
          sut.Open();
          Assert::IsFalse(sut.HasError());
          sut.Read();
-         map<string, TextureData>& data = sut.GetTextureData();
+         unordered_map<string, TextureData>& data = sut.GetTextureData();
          Assert::AreEqual(2, (int)data.size());
-         TextureData texData;
-         auto it = data.begin();
-         texData = it->second;
+
+         TextureData texData = data["customTexture"];
          Assert::AreEqual(16, (int)texData.arrayData.size());
-         it++;
-         texData = it->second;
+         texData = data["customTexture2"];
          Assert::AreEqual(15, (int)texData.arrayData.size());
-         it++;
 
          std::remove("TestFile.txt");
       }
@@ -225,11 +224,13 @@ namespace InteractiveGraphicsUnitTesting
          fout << "defaultShader,  default,default,none" << std::endl;
          fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
          fout << "<endShaders>" << std::endl;
+
          fout << "# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter" << std::endl;
          fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
          fout << "<array>" << std::endl;
          fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255,255" << std::endl;
          fout << "<endTexture>" << std::endl;
+
          fout << "someTexture" << std::endl;
          fout << "<file>" << std::endl;
          fout << "somefile.jpg" << std::endl;
@@ -242,16 +243,12 @@ namespace InteractiveGraphicsUnitTesting
          Assert::IsFalse(sut.HasError());
          sut.Read();
          Assert::IsFalse(sut.HasError());
-         map<string, TextureData>& data = sut.GetTextureData();
+         unordered_map<string, TextureData>& data = sut.GetTextureData();
          Assert::AreEqual(2, (int)data.size());
-         TextureData texData;
-         auto it = data.begin();
-         texData = it->second;
+         TextureData texData = data["customTexture"];
          Assert::AreEqual(16, (int)texData.arrayData.size());
-         it++;
-         texData = it->second;
+         texData = data["someTexture"];
          Assert::AreEqual("somefile.jpg", texData.filePath.c_str());
-         it++;
 
          std::remove("TestFile.txt");
       }
@@ -308,11 +305,10 @@ namespace InteractiveGraphicsUnitTesting
          sut.Read();
          Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
 
-         map<string, ObjectData>& data = sut.GetObjectData();
+         unordered_map<string, ObjectData>& data = sut.GetObjectData();
          Assert::AreEqual(1, (int)data.size());
 
-         auto it = data.begin();
-         ObjectData objectData = it->second;
+         ObjectData objectData = data["wall"];
          Assert::AreEqual(2, (int)objectData.meshData.size());
 
          MeshData meshData = objectData.meshData[0];
@@ -388,11 +384,10 @@ namespace InteractiveGraphicsUnitTesting
          sut.Read();
          Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
 
-         map<string, ObjectData>& data = sut.GetObjectData();
+         unordered_map<string, ObjectData>& data = sut.GetObjectData();
          Assert::AreEqual(2, (int)data.size());
 
-         auto it = data.begin();
-         ObjectData objectData = it->second;
+         ObjectData objectData = data["object"];
          Assert::AreEqual(1, (int)objectData.factoriedMeshData.size());
 
          string expectedStr = "PCT";
@@ -477,27 +472,27 @@ namespace InteractiveGraphicsUnitTesting
          sut.Read();
          Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
 
-         map<string, ObjectData>& data = sut.GetObjectData();
-         Assert::AreEqual(3, (int)data.size());
+         unordered_map<string, ObjectData>& allObjects = sut.GetObjectData();
+         // There should be 3 objects
+         Assert::AreEqual(3, (int)allObjects.size());
 
-         auto it = data.begin();
-         ObjectData objectData = it->second;
-         Assert::AreEqual(2, (int)objectData.factoriedMeshData.size());
+         ObjectData objectData = allObjects["object2"];
+         Assert::AreEqual(1, (int)objectData.factoriedMeshData.size());
 
          string expectedStr = "PCNT";
-         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[1].vertexType);
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].vertexType);
 
          expectedStr = "RGBA";
-         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[1].colorType);
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].colorType);
 
          expectedStr = "cuboid";
-         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[1].meshType);
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].meshType);
 
          expectedStr = "someTexture2";
-         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[1].textureName);
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].textureName);
 
          size_t expectedInt = 9;
-         Assert::AreEqual(expectedInt, objectData.factoriedMeshData[1].params.size());
+         Assert::AreEqual(expectedInt, objectData.factoriedMeshData[0].params.size());
 
          std::remove("TestFile.txt");
       } // TEST_METHOD(CanReadATexturedFactoriedCuboidPCNTRGBA)

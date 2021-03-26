@@ -10,8 +10,8 @@ using std::string;
 using std::ifstream;
 #include <vector>
 using std::vector;
-#include <map>
-using std::map;
+#include <unordered_map>
+using std::unordered_map;
 
 struct CameraData{
    string name;
@@ -69,8 +69,8 @@ protected:
    bool _errorOccurred;
    vector<CameraData> _cameraData;
    vector<ShaderData> _shaderData;
-   map<string, ObjectData> _objectData;
-   map<string, TextureData> _textureData;
+   unordered_map<string, ObjectData> _objectData;
+   unordered_map<string, TextureData> _textureData;
    string _currentName;
    string _state;
    int _currentMeshIndex;
@@ -92,11 +92,11 @@ public:
       return _shaderData;
    }
 
-   map<string, ObjectData>& GetObjectData() {
+   unordered_map<string, ObjectData>& GetObjectData() {
       return _objectData;
    }
 
-   map<string, TextureData>& GetTextureData() {
+   unordered_map<string, TextureData>& GetTextureData() {
       return _textureData;
    }
 

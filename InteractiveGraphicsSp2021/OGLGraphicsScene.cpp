@@ -208,7 +208,7 @@ bool OGLGraphicsScene::ReadTextureData()
    TextureData data;
    size_t numberOfElements;
    unsigned char* array;
-   map<string, TextureData>& textureData = _sceneReader->GetTextureData();
+   unordered_map<string, TextureData>& textureData = _sceneReader->GetTextureData();
    for (auto it = textureData.begin(); it != textureData.end(); it++) {
       data = it->second;
       texture = new OGLTexture();
@@ -243,7 +243,7 @@ bool OGLGraphicsScene::ReadObjectData()
    ObjectData data;
    MeshData meshData;
    FactoriedMeshData factoriedMeshData;
-   map<string, ObjectData>& objectData = _sceneReader->GetObjectData();
+   unordered_map<string, ObjectData>& objectData = _sceneReader->GetObjectData();
    for (auto it = objectData.begin(); it != objectData.end(); it++) {
       object = new GraphicsObject();
       data = it->second;
