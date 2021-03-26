@@ -32,6 +32,7 @@ public:
        localLight.position = { 100,100,0 };
        localLight.color = { 1,1,1};
        localLight.intensity = 0.25f;
+       localLight.attenuationCoefficient = 0.2f;
    }
    virtual ~BaseGraphicsScene();
 

@@ -96,6 +96,22 @@ bool OGLGraphicsScene::Create()
    c4->SendToGPU();
    _objects["localLight"]->frame.TranslateWorld(localLight.position);
 
+   OGLVertexMesh<VertexPCNT>* mesh5 = (OGLVertexMesh<VertexPCNT>*)
+       meshFactory2.NormalizedTexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
+   mesh5->SetUpAttributes("PCNT");
+   mesh5->SetTexture(_textures["crate"]);
+   GraphicsObject* c5 = new GraphicsObject();
+   c5->AddMesh(mesh5);
+   AddGraphicsObject("crateCube", c5, "diffuseShader");
+   c5->SendToGPU();
+
+   _objects["crateCube"]->frame.SetPosition(0, 6, 0);
+
+   RotateAnimation* crateRotation = new RotateAnimation({ 1,0,0 }, 45);
+   _objects["crateCube"]->SetAnimation(crateRotation);
+
+   _objects["smileyCube"]->frame.TranslateWorld({ -3,0,0 });
+
    return true;
 }
 

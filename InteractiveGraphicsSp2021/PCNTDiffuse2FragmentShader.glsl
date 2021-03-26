@@ -15,6 +15,7 @@ uniform float globalLightIntensity;
 uniform vec3 localLightPosition;
 uniform vec3 localLightColor;
 uniform float localLightIntensity;
+uniform float localLightAttenuationCoefficient;
 
 uniform sampler2D tex;
 
@@ -28,9 +29,13 @@ void main()
    vec3 toLocalLightDir = normalize(localLightPosition - fragPosition);
    vec4 localDiffuse = calculateDiffuse(toLocalLightDir, fragNormal, localLightIntensity, localLightColor);
 
+   float distanceToLight = length(localLightPosition - fragPosition);
+   float attenuation = 1.0 / (1.0 + localLightAttenuationCoefficient * pow(distanceToLight, 2));
+
+
    vec4 texFragColor = texture(tex, fragTexCoord) * fragColor;
    vec4 ambientColor = materialAmbientIntensity * vec4(1.0f, 1.0f, 1.0f, 1.0f);
-   color = (ambientColor + localDiffuse + globalDiffuse) * texFragColor;
+   color = (ambientColor + (localDiffuse * attenuation) + globalDiffuse) * texFragColor;
 }
 
 vec4 calculateDiffuse(vec3 lightDir, vec3 unitNormal, float lightIntensity, vec3 lightColor)
