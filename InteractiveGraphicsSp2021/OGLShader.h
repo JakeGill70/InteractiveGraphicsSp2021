@@ -58,6 +58,7 @@ protected:
    void SendGPUData();
    void SendVec3ToGPU(const string& name, const glm::vec3& vector) const;
    void SendGlobalLightToGPU(const Light& globalLight) const;
+   void SendLocalLightToGPU(const Light& localLight) const;
 };
 
 

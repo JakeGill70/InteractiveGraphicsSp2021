@@ -198,6 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="labweek07.ig" />
+    <None Include="PCNTDiffuse2FragmentShader.glsl" />
     <None Include="PCNTDiffuseFragmentShader.glsl" />
     <None Include="PCNTLightingVertexShader.glsl" />
     <None Include="PCT3DVertexShader.glsl" />

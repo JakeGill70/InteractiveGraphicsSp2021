@@ -45,6 +45,7 @@ public:
    virtual void SendFloatToGPU(const string& name, float data) const = 0;
    virtual void SendVec3ToGPU(const string& name, const glm::vec3& vector) const = 0;
    virtual void SendGlobalLightToGPU(const Light& globalLight) const = 0;
+   virtual void SendLocalLightToGPU(const Light& localLight) const = 0;
 
 protected:
    virtual void SendGPUData() = 0;

@@ -24,9 +24,6 @@ public:
    AbstractVertexMesh<V>* NormalizedTexturedCuboidMesh(
        float width, float height, float depth, C color, float repeatS, float repeatT);
 
-   AbstractVertexMesh<V>* NormalizedIndexedFlatTexturedMeshXZ(
-       float sx, float sz, float width, float depth, C color, float repeatS, float repeatT);
-
 };
 
 template <class V, class C>
@@ -174,21 +171,6 @@ AbstractVertexMesh<V>* MeshFactory<V, C>::NormalizedTexturedCuboidMesh(
     return mesh;
 }
 
-template <class V, class C>
-AbstractVertexMesh<V>* MeshFactory<V, C>::NormalizedIndexedFlatTexturedMeshXZ(
-    float sx, float sz, float width, float depth, C color, float repeatS, float repeatT)
-{
-    OGLVertexMesh<V>* mesh =
-        dynamic_cast<OGLVertexMesh<V>*>(IndexedFlatTexturedMeshXZ(sx, sz, width, depth, color, repeatS, repeatT));
-
-    int numberOfVertices = (int)mesh->GetNumberOfVertices();
-    for (int i = 0; i < numberOfVertices; i++)
-    {
-        mesh->GetVertex(i).normal = {0,1,0};
-    }
-
-    return mesh;
-}
 
 #endif
 

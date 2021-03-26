@@ -44,6 +44,7 @@ void BaseGraphicsScene::Render()
    for (auto iterator = _shaders.begin(); iterator != _shaders.end(); iterator++) {
        iterator->second->SelectProgram();
        iterator->second->SendGlobalLightToGPU(globalLight);
+       iterator->second->SendLocalLightToGPU(localLight);
        iterator->second->RenderObjects();
    }
 }

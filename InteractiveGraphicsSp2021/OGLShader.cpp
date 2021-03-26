@@ -180,3 +180,10 @@ void OGLShader::SendGlobalLightToGPU(const Light& globalLight) const
     SendVec3ToGPU("globalLightColor", globalLight.color);
     SendFloatToGPU("globalLightIntensity", globalLight.intensity);
 }
+
+void OGLShader::SendLocalLightToGPU(const Light& localLight) const
+{
+    SendVec3ToGPU("localLightPosition", localLight.position);
+    SendVec3ToGPU("localLightColor", localLight.color);
+    SendFloatToGPU("localLightIntensity", localLight.intensity);
+}

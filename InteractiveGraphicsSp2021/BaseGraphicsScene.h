@@ -21,16 +21,17 @@ protected:
    BaseCamera* _currentCamera;
    TextFileReader* _textFileReader;
    Light globalLight;
+   Light localLight;
 
 public:
-   BaseGraphicsScene() : _currentCamera(nullptr), _textFileReader(nullptr), globalLight() {
-       globalLight.position.x = 100;
-       globalLight.position.y = 100;
-       globalLight.position.z = 0;
-       globalLight.color.r = 255;
-       globalLight.color.g = 255;
-       globalLight.color.b = 255;
+   BaseGraphicsScene() : _currentCamera(nullptr), _textFileReader(nullptr), globalLight(), localLight() {
+       globalLight.position = { 100,100,0 };
+       globalLight.color = { 1,1,1 };
        globalLight.intensity = 0.25f;
+
+       localLight.position = { 100,100,0 };
+       localLight.color = { 1,1,1};
+       localLight.intensity = 0.25f;
    }
    virtual ~BaseGraphicsScene();
 
