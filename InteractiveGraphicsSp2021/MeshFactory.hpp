@@ -21,6 +21,9 @@ public:
    AbstractVertexMesh<V>* TexturedCuboidMesh(
        float width, float height, float depth, C color, float repeatS, float repeatT);
 
+   AbstractVertexMesh<V>* NormalizedTexturedCuboidMesh(
+       float width, float height, float depth, C color, float repeatS, float repeatT);
+
 };
 
 template <class V, class C>
@@ -135,6 +138,36 @@ AbstractVertexMesh<V>* MeshFactory<V, C>::TexturedCuboidMesh(
         mesh->GetVertex(i + 4).tex = { repeatS, 0 };
         mesh->GetVertex(i + 5).tex = { repeatS, repeatT };
     }
+    return mesh;
+}
+
+template <class V, class C>
+AbstractVertexMesh<V>* MeshFactory<V, C>::NormalizedTexturedCuboidMesh(
+    float width, float height, float depth, C color, float repeatS, float repeatT)
+{
+    OGLVertexMesh<V>* mesh = dynamic_cast<OGLVertexMesh<V>*>
+        (TexturedCuboidMesh(width, depth, height, color, repeatS, repeatT));
+
+    // Assumes the cuboid mesh is created in the following order:
+    // front, right, back, left, top, bottom
+    // with 6 vertices for each face
+    Vector3D normals[6] = {
+       { 0, 0, 1 }, { 1, 0, 0 }, { 0, 0, -1 },
+       { -1, 0, 0 }, { 0, 1, 0 }, { 0, -1, 0 }
+    };
+    int ni = 0;
+    int numberOfVertices = (int)mesh->GetNumberOfVertices();
+    for (int i = 0; i < numberOfVertices; i += 6)
+    {
+        mesh->GetVertex(i).normal = normals[ni];
+        mesh->GetVertex(i + 1).normal = normals[ni];
+        mesh->GetVertex(i + 2).normal = normals[ni];
+        mesh->GetVertex(i + 3).normal = normals[ni];
+        mesh->GetVertex(i + 4).normal = normals[ni];
+        mesh->GetVertex(i + 5).normal = normals[ni];
+        ni++;
+    }
+
     return mesh;
 }
 

@@ -167,3 +167,16 @@ void OGLShader::SendFloatToGPU(const string& name, float data) const
     unsigned int location = glGetUniformLocation(_shaderProgram, name.c_str());
     glUniform1f(location, data);
 }
+
+void OGLShader::SendVec3ToGPU(const string& name, const glm::vec3& vector) const
+{
+    unsigned int location = glGetUniformLocation(_shaderProgram, name.c_str());
+    glUniform3fv(location, 1, glm::value_ptr(vector));
+}
+
+void OGLShader::SendGlobalLightToGPU(const Light& globalLight) const
+{
+    SendVec3ToGPU("globalLightPosition", globalLight.position);
+    SendVec3ToGPU("globalLightColor", globalLight.color);
+    SendFloatToGPU("globalLightIntensity", globalLight.intensity);
+}

@@ -20,9 +20,18 @@ protected:
    map<string, AbstractTexture*> _textures;
    BaseCamera* _currentCamera;
    TextFileReader* _textFileReader;
+   Light globalLight;
 
 public:
-   BaseGraphicsScene() : _currentCamera(nullptr), _textFileReader(nullptr) {}
+   BaseGraphicsScene() : _currentCamera(nullptr), _textFileReader(nullptr), globalLight() {
+       globalLight.position.x = 100;
+       globalLight.position.y = 100;
+       globalLight.position.z = 0;
+       globalLight.color.r = 255;
+       globalLight.color.g = 255;
+       globalLight.color.b = 255;
+       globalLight.intensity = 0.25f;
+   }
    virtual ~BaseGraphicsScene();
 
    virtual void AddShader(const string& name, AbstractShader* shader) {

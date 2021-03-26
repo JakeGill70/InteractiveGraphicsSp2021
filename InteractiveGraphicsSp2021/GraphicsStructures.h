@@ -2,6 +2,7 @@
 #ifndef GRAPHICS_STRUCTURES
 #define GRAPHICS_STRUCTURES
 #include <glad/glad.h>
+#include <glm\glm.hpp>
 
 struct Vector3D {
    GLfloat x, y, z;
@@ -32,6 +33,19 @@ struct VertexPCT {
 
 struct Material {
     float ambientIntensity;
+};
+
+struct Light {
+    glm::vec3 position;
+    glm::vec3 color;
+    float intensity;
+};
+
+struct VertexPCNT {
+    Vector3D position;
+    RGBA color;
+    Vector3D normal;
+    TexCoord tex;
 };
 
 #endif

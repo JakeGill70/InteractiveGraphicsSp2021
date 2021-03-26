@@ -6,6 +6,7 @@
 using std::string;
 #include "AbstractShader.h"
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 class BaseCamera;
 
@@ -55,6 +56,8 @@ protected:
    void LogError(GLuint shader, PFNGLGETSHADERIVPROC glGet__iv, PFNGLGETSHADERINFOLOGPROC glGet__InfoLog);
    void SendFloatToGPU(const string& name, float data) const;
    void SendGPUData();
+   void SendVec3ToGPU(const string& name, const glm::vec3& vector) const;
+   void SendGlobalLightToGPU(const Light& globalLight) const;
 };
 
 
