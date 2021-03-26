@@ -52,7 +52,6 @@ bool OGLGraphicsScene::Create()
    _objects["smileyCube2"]->SetAnimation(defaultRot2);
    _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(4, 0, 0));
 
-<<<<<<< HEAD
    OGLVertexMesh<VertexPCNT>* mesh = (OGLVertexMesh<VertexPCNT>*)
        meshFactory2.NormalizedTexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 2, 2);
    mesh->SetUpAttributes("PCNT");
@@ -75,9 +74,13 @@ bool OGLGraphicsScene::Create()
    c3->AddMesh(mesh3);
    AddGraphicsObject("floor", c3, "diffuseShader");
    c3->SendToGPU();
-=======
->>>>>>> parent of de68eb0 (Milestone 5)
 
+
+   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(0, 2, 0));
+   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(0, 2, 0));
+
+   _cameras["camera"]->frame.TranslateWorld(glm::vec3(0, 2, 8));
+   _cameras["camera"]->UpdateView();
 
    localLight.color = { 1, 1, 1 }; // White light
    localLight.intensity = 0.5f; // Medium intensity
