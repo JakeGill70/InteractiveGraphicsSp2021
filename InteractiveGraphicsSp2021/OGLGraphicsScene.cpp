@@ -112,6 +112,16 @@ bool OGLGraphicsScene::Create()
 
    _objects["smileyCube"]->frame.TranslateWorld({ -3,0,0 });
 
+   globalLight.intensity = 0.05f;
+   localLight.color = { 1, 1, 1 }; // White light
+   localLight.intensity = 0.5f;
+   localLight.position = { 0, 0.5f, 2.0f };
+   localLight.attenuationCoefficient = 1;
+
+   globalLight.intensity = 0.25f;
+   _cameras["camera"]->frame.RotateWorld(180, { 0,1,0 });
+   _cameras["camera"]->UpdateView();
+
    return true;
 }
 
