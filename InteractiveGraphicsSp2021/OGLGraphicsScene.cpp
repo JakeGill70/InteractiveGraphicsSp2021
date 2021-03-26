@@ -51,7 +51,20 @@ bool OGLGraphicsScene::Create()
    _objects["smileyCube2"]->SetAnimation(defaultRot2);
    _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(4, 0, 0));
 
+   OGLVertexMesh<VertexPCNT>* mesh3 = (OGLVertexMesh<VertexPCNT>*)
+       meshFactory2.NormalizedIndexedFlatTexturedMeshXZ(-20, -20, 40, 40, { 1,1,1,1 }, 20, 20);
+   mesh3->SetUpAttributes("PCNT");
+   mesh3->SetTexture(_textures["woodFloorTexture"]);
+   GraphicsObject* c3 = new GraphicsObject();
+   c3->AddMesh(mesh3);
+   AddGraphicsObject("floor", c3, "globalDiffuseShader");
+   c3->SendToGPU();
 
+   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(0, 2, 0));
+   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(0, 2, 0));
+
+   _cameras["camera"]->frame.TranslateWorld(glm::vec3(0, 2, 8));
+   _cameras["camera"]->UpdateView();
 
    return true;
 }
