@@ -113,16 +113,17 @@ bool OGLGraphicsScene::ReadLightData()
 {
    vector<LightData>& allLightData = _sceneReader->GetLightData();
    LightData data;
-   _numberOfLights = (int)allLightData.size();
-   for (size_t i = 0; i < _numberOfLights; i++) {
+   int li = 0;
+   for (size_t i = 0; i < allLightData.size(); i++) {
       data = allLightData[i];
       if (data.type == "local") {
-         localLights[i] = data.light;
+         localLights[li++] = data.light;
       }
       else {
          globalLight = data.light;
       }
    }
+   _numberOfLights = li;
 
    return true;
 }
