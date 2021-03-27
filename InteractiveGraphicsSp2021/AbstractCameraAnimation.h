@@ -13,13 +13,15 @@ protected:
    AbstractInputSystem* _inputSystem;
 
 public:
-   virtual void Update(float elapsedSeconds) = 0;
+   virtual void Update(double elapsedSeconds) = 0;
 
-   inline void SetCamera(BaseCamera* camera);
-   inline BaseCamera* GetCamera();
+   void SetCamera(BaseCamera* camera);
+   BaseCamera* GetCamera();
 
-   inline void SetInputSystem(AbstractInputSystem* inputSystem);
-   inline AbstractInputSystem* GetInputSystem();
+   void SetInputSystem(AbstractInputSystem* inputSystem);
+   AbstractInputSystem* GetInputSystem();
+
+   virtual void CheckInputSystem() {};
 };
 
 #endif

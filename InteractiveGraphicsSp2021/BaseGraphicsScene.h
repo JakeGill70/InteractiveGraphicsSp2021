@@ -11,6 +11,7 @@ using std::map;
 #include "TextFileReader.h"
 #include "GraphicsStructures.h"
 #include "GraphicsWindow.h"
+#include "AbstractInputSystem.h"
 
 class BaseGraphicsScene :
     public BaseObject
@@ -24,6 +25,7 @@ protected:
    TextFileReader* _textFileReader;
    int _numberOfLights;
    GraphicsWindow* _window;
+   AbstractInputSystem* _inputSystem;
 
 public:
    Light globalLight;
@@ -32,7 +34,8 @@ public:
  
 public:
    BaseGraphicsScene(GraphicsWindow* window) 
-      : _currentCamera(nullptr), _textFileReader(nullptr), _window(window) {
+      : _currentCamera(nullptr), _textFileReader(nullptr), 
+      _window(window), _inputSystem(nullptr) {
       globalLight.position = { 100.0f, 100.0f, 0 };
       globalLight.color = { 1, 1, 1 };
       globalLight.intensity = 0.25;

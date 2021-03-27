@@ -23,6 +23,7 @@ BaseGraphicsScene::~BaseGraphicsScene()
    _textures.clear();
 
    delete _textFileReader;
+   if (_inputSystem) delete _inputSystem;
 }
 
 void BaseGraphicsScene::UpdateCameraProjection(float aspectRatio)
@@ -34,6 +35,7 @@ void BaseGraphicsScene::UpdateCameraProjection(float aspectRatio)
 
 void BaseGraphicsScene::Update(double elapsedSeconds)
 {
+   _currentCamera->Update(elapsedSeconds);
    for (auto iterator = _objects.begin(); iterator != _objects.end(); iterator++) {
       iterator->second->Update(elapsedSeconds);
    }

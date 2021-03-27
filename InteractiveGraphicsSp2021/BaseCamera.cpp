@@ -2,20 +2,20 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "AbstractCameraAnimation.h"
 
-inline void BaseCamera::SetAnimation(AbstractCameraAnimation* animation)
+void BaseCamera::SetAnimation(AbstractCameraAnimation* animation)
 {
    _animation = animation;
    _animation->SetCamera(this);
 }
 
-inline AbstractCameraAnimation* BaseCamera::GetAnimation()
+AbstractCameraAnimation* BaseCamera::GetAnimation()
 {
    return _animation;
 }
 
-void BaseCamera::Update(float elapsedSeconds, float aspectRatio)
+void BaseCamera::Update(double elapsedSeconds)
 {
-   UpdateProjection(aspectRatio);
+   if (_animation) _animation->Update(elapsedSeconds);
 }
 
 void BaseCamera::UpdateProjection(float aspectRatio)
@@ -37,4 +37,12 @@ void BaseCamera::UpdateView()
       target,
       frame.GetYAxis()
    );
+}
+
+void BaseCamera::SetupLookingForward()
+{
+   glm::vec3 position = frame.GetPosition();
+   glm::vec3 forward = frame.orientation[2];
+   forward = -forward;
+   target = position + forward;
 }

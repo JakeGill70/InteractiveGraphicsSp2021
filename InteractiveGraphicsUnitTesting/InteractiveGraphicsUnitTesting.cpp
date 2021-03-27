@@ -566,7 +566,7 @@ namespace InteractiveGraphicsUnitTesting
       {
          class FakeCameraAnimation : public AbstractCameraAnimation {
          public:
-            void Update(float elapsedSeconds) {}
+            void Update(double elapsedSeconds) {}
          };
 
          BaseCamera sut;

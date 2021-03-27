@@ -21,7 +21,9 @@ public:
    inline SimpleMovingState GetState();
    inline void SetState(SimpleMovingState state);
 
-   void Update(float elapsedSeconds);
+   void Update(double elapsedSeconds);
+
+   void CheckInputSystem();
 };
 
 #endif

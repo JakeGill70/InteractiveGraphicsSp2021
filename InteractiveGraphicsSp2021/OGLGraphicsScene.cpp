@@ -6,6 +6,8 @@
 #include "OGLVertexMesh.hpp"
 #include "MeshFactory.hpp"
 #include "GLFWInputSystem.h"
+#include "GLFWGraphicsWindow.h"
+#include "SimpleMovingCameraAnimation.h"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
@@ -41,9 +43,17 @@ bool OGLGraphicsScene::Create()
 
    _currentCamera = _cameras["camera"];
    _currentCamera->frame.SetPosition(0, 5, 15);
+   _currentCamera->SetupLookingForward();
    _currentCamera->UpdateView();
 
-   //GLFWInputSystem* inputSystem = new GLFWInputSystem();
+   GLFWGraphicsWindow* window = (GLFWGraphicsWindow*)_window;
+   _inputSystem = new GLFWInputSystem(window->GetGLFWWindow());
+   _inputSystem->RegisterKey("W", GLFW_KEY_W);
+   _inputSystem->RegisterKey("S", GLFW_KEY_S);
+
+   SimpleMovingCameraAnimation* cameraAnimation = new SimpleMovingCameraAnimation();
+   cameraAnimation->SetInputSystem(_inputSystem);
+   _currentCamera->SetAnimation(cameraAnimation);
 
    return true;
 }

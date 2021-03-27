@@ -32,15 +32,17 @@ public:
       _aspectRatio = aspectRatio;
    }
 
-   inline void SetAnimation(AbstractCameraAnimation* animation);
-   inline AbstractCameraAnimation* GetAnimation();
+   void SetAnimation(AbstractCameraAnimation* animation);
+   AbstractCameraAnimation* GetAnimation();
 
    virtual inline const glm::mat4& GetProjection() const { return _projection; }
    virtual inline const glm::mat4& GetView() const { return _view; }
 
-   virtual void Update(float elapsedSeconds, float aspectRatio);
+   virtual void Update(double elapsedSeconds);
    virtual void UpdateProjection(float aspectRatio);
    virtual void UpdateView();
+
+   virtual void SetupLookingForward();
 
 };
 
