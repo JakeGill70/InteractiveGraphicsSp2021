@@ -23,6 +23,10 @@ public:
    void SwapBuffer();
    void PollEvents();
    void Clear();
+
+   GLFWwindow* GetGLFWWindow() {
+      return _window;
+   }
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include "OGLTexture.h"
 #include "OGLVertexMesh.hpp"
 #include "MeshFactory.hpp"
+#include "GLFWInputSystem.h"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
@@ -41,6 +42,8 @@ bool OGLGraphicsScene::Create()
    _currentCamera = _cameras["camera"];
    _currentCamera->frame.SetPosition(0, 5, 15);
    _currentCamera->UpdateView();
+
+   //GLFWInputSystem* inputSystem = new GLFWInputSystem();
 
    return true;
 }

@@ -149,7 +149,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AbstractAnimation.cpp" />
+    <ClCompile Include="AbstractCameraAnimation.cpp" />
     <ClCompile Include="AbstractGraphicsObject.cpp" />
+    <ClCompile Include="AbstractInputSystem.cpp" />
     <ClCompile Include="AbstractReader.cpp" />
     <ClCompile Include="AbstractShader.cpp" />
     <ClCompile Include="AbstractTimer.cpp" />
@@ -158,6 +160,7 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="GLFWGraphicsWindow.cpp" />
+    <ClCompile Include="GLFWInputSystem.cpp" />
     <ClCompile Include="GraphicsEnvironment.cpp" />
     <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="GraphicsWindow.cpp" />
@@ -170,11 +173,15 @@
     <ClCompile Include="ReferenceFrame.cpp" />
     <ClCompile Include="RotateAnimation.cpp" />
     <ClCompile Include="SceneReader.cpp" />
+    <ClCompile Include="SimpleMovingCameraAnimation.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAnimation.h" />
+    <ClInclude Include="AbstractCameraAnimation.h" />
+    <ClInclude Include="AbstractInputSystem.h" />
     <ClInclude Include="GLFWGraphicsWindow.h" />
+    <ClInclude Include="GLFWInputSystem.h" />
     <ClInclude Include="GraphicsEnvironment.h" />
     <ClInclude Include="GraphicsObject.h" />
     <ClInclude Include="AbstractMesh.h" />
@@ -198,6 +205,7 @@
     <ClInclude Include="ReferenceFrame.h" />
     <ClInclude Include="RotateAnimation.h" />
     <ClInclude Include="SceneReader.h" />
+    <ClInclude Include="SimpleMovingCameraAnimation.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TextFileReader.h" />
     <ClInclude Include="OGLVertexMesh.hpp" />

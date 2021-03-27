@@ -20,6 +20,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
    OGLGraphicsScene* scene = 
       new OGLGraphicsScene(
+         window,
          new SceneReader("Scene3.txt"), 
          new TextFileReader());
 

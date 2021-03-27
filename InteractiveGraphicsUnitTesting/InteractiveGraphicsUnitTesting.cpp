@@ -4,6 +4,8 @@
 #include "../InteractiveGraphicsSp2021/AbstractReader.cpp"
 #include "../InteractiveGraphicsSp2021/TextFileReader.cpp"
 #include "../InteractiveGraphicsSp2021/SceneReader.cpp"
+#include "../InteractiveGraphicsSp2021/AbstractCameraAnimation.cpp"
+#include "../InteractiveGraphicsSp2021/BaseCamera.cpp"
 #include <fstream>
 using std::ofstream;
 #include <string>
@@ -555,5 +557,25 @@ namespace InteractiveGraphicsUnitTesting
       } // TEST_METHOD(CanReadATexturedFactoriedCuboidPCNTRGBA)
 
 
+   };
+
+   TEST_CLASS(A_BaseCamera) 
+   {
+   public:
+      TEST_METHOD(CanSetTheAnimation)
+      {
+         class FakeCameraAnimation : public AbstractCameraAnimation {
+         public:
+            void Update(float elapsedSeconds) {}
+         };
+
+         BaseCamera sut;
+         FakeCameraAnimation* animation = new FakeCameraAnimation();
+         sut.SetAnimation(animation);
+
+         Assert::IsNotNull(sut.GetAnimation());
+         Assert::IsNotNull(animation->GetCamera());
+         delete animation;
+      }
    };
 }

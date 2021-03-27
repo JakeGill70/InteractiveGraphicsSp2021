@@ -10,6 +10,7 @@ using std::map;
 #include "BaseCamera.h"
 #include "TextFileReader.h"
 #include "GraphicsStructures.h"
+#include "GraphicsWindow.h"
 
 class BaseGraphicsScene :
     public BaseObject
@@ -22,14 +23,16 @@ protected:
    BaseCamera* _currentCamera;
    TextFileReader* _textFileReader;
    int _numberOfLights;
+   GraphicsWindow* _window;
 
 public:
    Light globalLight;
    static const int NumberOfLights = 10;
    Light localLights[BaseGraphicsScene::NumberOfLights];
-
+ 
 public:
-   BaseGraphicsScene() : _currentCamera(nullptr), _textFileReader(nullptr) {
+   BaseGraphicsScene(GraphicsWindow* window) 
+      : _currentCamera(nullptr), _textFileReader(nullptr), _window(window) {
       globalLight.position = { 100.0f, 100.0f, 0 };
       globalLight.color = { 1, 1, 1 };
       globalLight.intensity = 0.25;
@@ -70,6 +73,10 @@ public:
 
    virtual inline void SetTextFileReader(TextFileReader* reader) {
       _textFileReader = reader;
+   }
+
+   virtual GraphicsWindow* GetWindow() {
+      return _window;
    }
 
    virtual bool Create() { return true; }

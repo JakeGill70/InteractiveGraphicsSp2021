@@ -16,8 +16,8 @@ private:
    SceneReader* _sceneReader;
 
 public:
-   OGLGraphicsScene(SceneReader* sceneReader, TextFileReader* textFileReader)
-      : _sceneReader(sceneReader)
+   OGLGraphicsScene(GraphicsWindow* window, SceneReader* sceneReader, TextFileReader* textFileReader)
+      : BaseGraphicsScene(window), _sceneReader(sceneReader)
    {
       _textFileReader = textFileReader;
    }
