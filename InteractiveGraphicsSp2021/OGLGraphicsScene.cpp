@@ -16,6 +16,7 @@ bool OGLGraphicsScene::Create()
    if (!LoadScene()) return false;
    ReadCameraData();
    if (!ReadShaderData()) return false;
+   if (!ReadLightData()) return false;
    if (!ReadTextureData()) return false;
    if (!ReadObjectData()) return false;
 
@@ -32,22 +33,6 @@ bool OGLGraphicsScene::Create()
    _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 6.5f, 0));
    
    _objects["axis"]->frame.TranslateWorld(glm::vec3(0, 0.1f, 0));
-
-   globalLight.intensity = 0.1f;
-   localLights[0].color = { 1, 1, 1 }; // White light
-   localLights[0].intensity = 0.5f;
-   localLights[0].position = { 0, 0.5f, 2.0f };
-   localLights[0].attenuationCoefficient = 1;
-   _numberOfLights++;
-   localLights[1].color = { 1, 1, 0 }; // Yellow light
-   localLights[1].intensity = 0.5f;
-   localLights[1].position = { -7, 2.5f, 3.0f };
-   localLights[1].attenuationCoefficient = 0.5f;
-   _numberOfLights++;
-   localLights[2].color = { 1, 0, 1 }; // Purple light
-   localLights[2].intensity = 0.8f;
-   localLights[2].position = { 3, 1.0f, 7.0f };
-   localLights[2].attenuationCoefficient = 0.5f;
 
    _objects["whiteCube"]->frame.SetPosition(localLights[0].position);
    _objects["yellowCube"]->frame.SetPosition(localLights[1].position);
@@ -118,6 +103,24 @@ bool OGLGraphicsScene::ReadShaderData()
       AddShader(shaderData[i].name, shader);
       if (shaderData[i].cameraName != "none") {
          _shaders[shaderData[i].name]->SetCamera(_cameras[shaderData[i].cameraName]);
+      }
+   }
+
+   return true;
+}
+
+bool OGLGraphicsScene::ReadLightData()
+{
+   vector<LightData>& allLightData = _sceneReader->GetLightData();
+   LightData data;
+   _numberOfLights = (int)allLightData.size();
+   for (size_t i = 0; i < _numberOfLights; i++) {
+      data = allLightData[i];
+      if (data.type == "local") {
+         localLights[i] = data.light;
+      }
+      else {
+         globalLight = data.light;
       }
    }
 

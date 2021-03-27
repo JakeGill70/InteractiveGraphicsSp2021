@@ -27,11 +27,15 @@ void SceneReader::Read()
 void SceneReader::ProcessLine(const string& line)
 {
    if (line.substr(0, 1) == "#") return;
+
    if (_state == "reading cameras") {
       ProcessCameraLine(line);
    }
    else if (_state == "reading shaders") {
       ProcessShaderLine(line);
+   }
+   else if (_state == "reading lights") {
+      ProcessLightLine(line);
    }
    else if (_state == "reading textures") {
       ProcessTextureLine(line);
@@ -89,7 +93,7 @@ void SceneReader::ProcessCameraLine(const string& line)
 void SceneReader::ProcessShaderLine(const string& line)
 {
    if (line == "<endShaders>") {
-      _state = "reading textures";
+      _state = "reading lights";
       return;
    }
    vector<string> tokens;
@@ -109,6 +113,31 @@ void SceneReader::ProcessShaderLine(const string& line)
    data.fragmentShaderFilePath = tokens[2];
    data.cameraName = tokens[3];
    _shaderData.push_back(data);
+}
+
+void SceneReader::ProcessLightLine(const string& line)
+{
+   if (line == "<endLights>") {
+      _state = "reading textures";
+      return;
+   }
+   vector<string> tokens;
+   Split(line, ',', tokens);
+   for (size_t i = 0; i < tokens.size(); i++) {
+      Trim(tokens[i]);
+   }
+   // type, position, color, intensity, attenuation coefficient
+   LightData data;
+   data.type = tokens[0];
+   data.light.position = {
+      std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])
+   };
+   data.light.color = {
+      std::stof(tokens[4]), std::stof(tokens[5]), std::stof(tokens[6])
+   };
+   data.light.intensity = std::stof(tokens[7]);
+   data.light.attenuationCoefficient = std::stof(tokens[8]);
+   _lightData.push_back(data);
 }
 
 void SceneReader::ProcessTextureLine(const string& line)

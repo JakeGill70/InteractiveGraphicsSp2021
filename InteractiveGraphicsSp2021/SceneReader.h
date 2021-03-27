@@ -19,6 +19,11 @@ struct CameraData{
    float fov, nearPlane, farPlane;
 };
 
+struct LightData {
+   string type;
+   Light light;
+};
+
 struct ShaderData {
    string name;
    string vertexShaderFilePath;
@@ -72,6 +77,7 @@ protected:
    bool _errorOccurred;
    vector<CameraData> _cameraData;
    vector<ShaderData> _shaderData;
+   vector<LightData> _lightData;
    unordered_map<string, ObjectData> _objectData;
    unordered_map<string, TextureData> _textureData;
    string _currentName;
@@ -95,6 +101,10 @@ public:
       return _shaderData;
    }
 
+   vector<LightData>& GetLightData() {
+      return _lightData;
+   }
+
    unordered_map<string, ObjectData>& GetObjectData() {
       return _objectData;
    }
@@ -107,6 +117,7 @@ protected:
    virtual void ProcessLine(const string& line);
    virtual void ProcessCameraLine(const string& line);
    virtual void ProcessShaderLine(const string& line);
+   virtual void ProcessLightLine(const string& line);
    virtual void ProcessObjectLine(const string& line);
    virtual void ProcessMeshDataLine(const string& line);
    virtual void ProcessFactoriedMeshDataLine(const string& line);

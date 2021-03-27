@@ -13,6 +13,12 @@ specularShader,PCNTLightingVertexShader.glsl,PCNTSpecularFragmentShader.glsl,cam
 lightingShader,PCNTLightingVertexShader.glsl,PCNTLightingFragmentShader.glsl,camera
 <endShaders>
 
+global, 100.0f, 100.0f, 0, 1, 1, 1, 0.1, 0.0
+local, 0, 0.5f, 2.0f, 1, 1, 1, 0.5f, 1
+local, -7, 2.5f, 3.0f, 1, 1, 0, 0.5f, 0.5f
+local, 3, 1.0f, 7.0f, 1, 0, 1, 0.8f, 0.5f
+<endLights>
+
 # texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
 brickwallTexture
 <file>

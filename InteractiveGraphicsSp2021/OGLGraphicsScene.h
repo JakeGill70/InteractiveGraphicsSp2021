@@ -29,6 +29,7 @@ protected:
    bool LoadScene();
    bool ReadCameraData();
    bool ReadShaderData();
+   bool ReadLightData();
    bool ReadTextureData();
    bool ReadObjectData();
    void CreateFactoriedMesh(FactoriedMeshData& factoriedMeshData, AbstractMesh*& mesh);

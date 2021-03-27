@@ -413,10 +413,17 @@ namespace InteractiveGraphicsUnitTesting
          ofstream fout("TestFile.txt");
          fout << "camera,1,2,3,60,0.1f,50" << std::endl;
          fout << "<endCameras>" << std::endl;
+
          fout << "defaultShader,  default,default,none" << std::endl;
          fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
          fout << "simpleTextureShader, PCT3DVertexShader.glsl, TexFragmentShader.glsl, camera" << std::endl;
          fout << "<endShaders>" << std::endl;
+
+         fout << "global, 101, 102, 103, 0.1, 0.2, 0.3, 0.4, 0.5" << std::endl;
+         fout << "local, 0, 0.5f, 2.0f, 1, 1, 1, 0.5f, 1" << std::endl;
+         fout << "local, 0, 0.5f, 2.0f, 1, 1, 1, 0.5f, 1" << std::endl;
+         fout << "<endLights>" << std::endl;
+
          fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
          fout << "<array>" << std::endl;
          fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255,255" << std::endl;
@@ -466,6 +473,10 @@ namespace InteractiveGraphicsUnitTesting
          fout << "<endObjects>" << std::endl;
          fout.close();
 
+         size_t expectedInt;
+         float expectedFloat;
+         string expectedStr;
+
          SceneReader sut("TestFile.txt");
          sut.Open();
          Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
@@ -473,14 +484,30 @@ namespace InteractiveGraphicsUnitTesting
          sut.Read();
          Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
 
+         // LIGHTS
+
+         vector<LightData>& allLights = sut.GetLightData();
+
+         expectedInt = 3;
+         Assert::AreEqual(expectedInt, allLights.size());
+
+         LightData lightData;
+         // "global, 101, 102, 103, 0.1, 0.2, 0.3, 0.4, 0.5"
+         lightData = allLights[0];
+         expectedStr = "global";
+         Assert::AreEqual(expectedStr, lightData.type);
+
+         // OBJECTS
+
          unordered_map<string, ObjectData>& allObjects = sut.GetObjectData();
-         size_t expectedInt = 3;
+
+         expectedInt = 3;
          Assert::AreEqual(expectedInt, allObjects.size());
 
          ObjectData objectData = allObjects["object"];
          Assert::AreEqual(1, (int)objectData.factoriedMeshData.size());
 
-         string expectedStr = "PCT";
+         expectedStr = "PCT";
          Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].vertexType);
 
          expectedStr = "flat";
@@ -515,7 +542,7 @@ namespace InteractiveGraphicsUnitTesting
          expectedInt = 9;
          Assert::AreEqual(expectedInt, objectData.factoriedMeshData[0].params.size());
 
-         float expectedFloat = 0.1f;
+         expectedFloat = 0.1f;
          Assert::AreEqual(expectedFloat, objectData.factoriedMeshData[0].material.ambientIntensity);
 
          expectedFloat = 0.2f;
