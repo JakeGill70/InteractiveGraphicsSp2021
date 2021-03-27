@@ -458,7 +458,7 @@ namespace InteractiveGraphicsUnitTesting
 
          fout << "object2,someShader2" << std::endl;
          fout << "<factoried mesh>" << std::endl;
-         fout << "PCNT, RGBA, cuboid, NA, someTexture2, 4, 4, 4, 1, 1, 1, 1, 1, 1" << std::endl;
+         fout << "PCNT, RGBA, cuboid, someTexture2, 4, 4, 4, 1, 1, 1, 1, 1, 1" << std::endl;
          fout << "material, 0.1, 0.2, 0.3" << std::endl;
          fout << "<endMesh>" << std::endl;
          fout << "<endObject>" << std::endl;

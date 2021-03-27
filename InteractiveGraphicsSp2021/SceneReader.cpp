@@ -281,7 +281,8 @@ void SceneReader::ProcessFactoriedMeshDataLine(const string& line)
    factoryMeshData.vertexType = tokens[idx++];
    factoryMeshData.colorType = tokens[idx++];
    factoryMeshData.meshType = tokens[idx++];
-   if (factoryMeshData.vertexType == "PCNT") {
+   if (factoryMeshData.vertexType == "PCNT" 
+      || factoryMeshData.vertexType == "PCT") {
       if (factoryMeshData.meshType == "flat") {
          factoryMeshData.whichPlane = tokens[idx++];
       }
