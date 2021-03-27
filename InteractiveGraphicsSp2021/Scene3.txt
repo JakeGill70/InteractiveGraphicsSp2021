@@ -1,6 +1,7 @@
 # camera name, pos x, pos y, pos z, fov, near plane, far plane
 camera,0,5,10,80,0.1f,50
 <endCameras>
+
 # shader name, file path of vertex shader, file path of fragment shader, camera name
 defaultShader,default,default,none
 simple3DShader,Simple3DVertexShader.glsl,default,camera
@@ -59,20 +60,38 @@ material, 0.01, 0.9f, 200.0f
 
 smileyCube,lightingShader
 <factoried mesh>
-PCNT, RGBA, cuboid, NA, smileyTexture, 4, 4, 4, 1, 1, 1, 1, 2, 2
+PCNT, RGBA, cuboid, smileyTexture, 4, 4, 4, 1, 1, 1, 1, 2, 2
 <endMesh>
 <endObject>
 
 smileyCube2,lightingShader
 <factoried mesh>
-PCNT, RGBA, cuboid, NA, smileyTexture, 4, 4, 4, 1, 1, 1, 1, 1, 1
+PCNT, RGBA, cuboid, smileyTexture, 4, 4, 4, 1, 1, 1, 1, 1, 1
 material, 0.01, 0.9f, 100.0f
 <endMesh>
 <endObject>
 
 crate,lightingShader
 <factoried mesh>
-PCNT, RGBA, cuboid, NA, crateTexture, 4, 4, 4, 1, 1, 1, 1, 1, 1
+PCNT, RGBA, cuboid, crateTexture, 4, 4, 4, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
+whiteCube,simple3DShader
+<factoried mesh>
+PC, RGB, cuboid, 0.2f, 0.2f, 0.2f, 1, 1, 1
+<endMesh>
+<endObject>
+
+yellowCube,simple3DShader
+<factoried mesh>
+PC, RGB, cuboid, 0.2f, 0.2f, 0.2f, 1, 1, 0
+<endMesh>
+<endObject>
+
+purpleCube,simple3DShader
+<factoried mesh>
+PC, RGB, cuboid, 0.2f, 0.2f, 0.2f, 1, 0, 1
 <endMesh>
 <endObject>
 

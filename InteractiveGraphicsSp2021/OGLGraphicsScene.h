@@ -37,10 +37,12 @@ protected:
    bool ReadPCMeshData(OGLVertexMesh<VertexPC>* mesh, MeshData& meshData);
    AbstractMesh* CreatePCTMesh(MeshData& meshData);
    bool ReadPCTMeshData(OGLVertexMesh<VertexPCT>* mesh, MeshData& meshData);
+   AbstractMesh* CreateFactoriedPCMesh(FactoriedMeshData& meshData);
    AbstractMesh* CreateFactoriedPCTMesh(FactoriedMeshData& meshData);
    AbstractMesh* CreateFactoriedPCNTMesh(FactoriedMeshData& meshData);
 
    void CreatePCNTFlatMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPCNT>*& mesh);
+   void CreatePCCuboidMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPC>*& mesh);
    void CreatePCNTCuboidMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPCNT>*& mesh);
 
 };

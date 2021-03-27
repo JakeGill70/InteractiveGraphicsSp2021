@@ -277,18 +277,34 @@ void SceneReader::ProcessFactoriedMeshDataLine(const string& line)
    }
 
    FactoriedMeshData factoryMeshData;
-   factoryMeshData.vertexType = tokens[0];
-   factoryMeshData.colorType = tokens[1];
-   factoryMeshData.meshType = tokens[2];
-   factoryMeshData.whichPlane = tokens[3];
-   factoryMeshData.textureName = tokens[4];
-   for (size_t i = 5; i < tokens.size(); i++) {
+   int idx = 0;
+   factoryMeshData.vertexType = tokens[idx++];
+   factoryMeshData.colorType = tokens[idx++];
+   factoryMeshData.meshType = tokens[idx++];
+   if (factoryMeshData.vertexType == "PCNT") {
+      if (factoryMeshData.meshType == "flat") {
+         factoryMeshData.whichPlane = tokens[idx++];
+      }
+      else {
+         factoryMeshData.whichPlane = "";
+      }
+      factoryMeshData.textureName = tokens[idx++];
+   }
+   else if (factoryMeshData.vertexType == "PC") {
+      if (factoryMeshData.meshType == "flat") {
+         factoryMeshData.whichPlane = tokens[idx++];
+      }
+      else {
+         factoryMeshData.whichPlane = "";
+      }
+      factoryMeshData.textureName = "";
+   }
+   for (size_t i = idx; i < tokens.size(); i++) {
       factoryMeshData.params.push_back(std::stof(tokens[i]));
    }
    factoryMeshData.hasMaterial = false;
 
    _objectData[_currentName].factoriedMeshData.push_back(factoryMeshData);
-   //_state = "reading mesh data";
 }
 
 void SceneReader::ProcessVertexDataLine(const string& line)

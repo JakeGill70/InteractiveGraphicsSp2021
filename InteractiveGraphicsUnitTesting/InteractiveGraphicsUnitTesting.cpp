@@ -474,11 +474,13 @@ namespace InteractiveGraphicsUnitTesting
          Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
 
          unordered_map<string, ObjectData>& allObjects = sut.GetObjectData();
-         // There should be 3 objects
-         Assert::AreEqual(3, (int)allObjects.size());
+         size_t expectedInt = 3;
+         Assert::AreEqual(expectedInt, allObjects.size());
 
          ObjectData objectData = allObjects["object2"];
-         Assert::AreEqual(1, (int)objectData.factoriedMeshData.size());
+
+         expectedInt = 1;
+         Assert::AreEqual(expectedInt, objectData.factoriedMeshData.size());
 
          string expectedStr = "PCNT";
          Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].vertexType);
@@ -492,7 +494,7 @@ namespace InteractiveGraphicsUnitTesting
          expectedStr = "someTexture2";
          Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].textureName);
 
-         size_t expectedInt = 9;
+         expectedInt = 9;
          Assert::AreEqual(expectedInt, objectData.factoriedMeshData[0].params.size());
 
          float expectedFloat = 0.1f;

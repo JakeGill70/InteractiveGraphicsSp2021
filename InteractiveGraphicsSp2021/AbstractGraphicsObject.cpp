@@ -1,5 +1,6 @@
 #include "GraphicsObject.h"
 #include "AbstractAnimation.h"
+#include "AbstractMesh.h"
 
 GraphicsObject::~GraphicsObject()
 {

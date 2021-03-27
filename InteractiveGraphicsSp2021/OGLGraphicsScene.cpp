@@ -26,6 +26,10 @@ bool OGLGraphicsScene::Create()
    RotateAnimation* defaultRot2 = new RotateAnimation();
    _objects["smileyCube2"]->SetAnimation(defaultRot2);
    _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(4, 2, 0));
+
+   RotateAnimation* crateRot = new RotateAnimation(glm::vec3(1, 0, 0), 45.0f);
+   _objects["crate"]->SetAnimation(crateRot);
+   _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 6.5f, 0));
    
    _objects["axis"]->frame.TranslateWorld(glm::vec3(0, 0.1f, 0));
 
@@ -45,38 +49,9 @@ bool OGLGraphicsScene::Create()
    localLights[2].position = { 3, 1.0f, 7.0f };
    localLights[2].attenuationCoefficient = 0.5f;
 
-   MeshFactory<VertexPC, RGB> meshFactoryPCRGB;
-   OGLVertexMesh<VertexPC>* whiteCubeMesh = (OGLVertexMesh<VertexPC>*)
-      meshFactoryPCRGB.CuboidMesh(0.2f, 0.2f, 0.2f, { 1, 1, 1 });
-   whiteCubeMesh->SetUpAttributes("PC");
-   GraphicsObject* whiteCube = new GraphicsObject();
-   whiteCube->AddMesh(whiteCubeMesh);
-   AddGraphicsObject("whiteCube", whiteCube, "simple3DShader");
-   whiteCube->SendToGPU();
-   whiteCube->frame.SetPosition(localLights[0].position);
-
-   OGLVertexMesh<VertexPC>* yellowCubeMesh = (OGLVertexMesh<VertexPC>*)
-      meshFactoryPCRGB.CuboidMesh(0.2f, 0.2f, 0.2f, { 1, 1, 0 });
-   yellowCubeMesh->SetUpAttributes("PC");
-   GraphicsObject* yellowCube = new GraphicsObject();
-   yellowCube->AddMesh(yellowCubeMesh);
-   AddGraphicsObject("yellowCube", yellowCube, "simple3DShader");
-   yellowCube->SendToGPU();
-   yellowCube->frame.SetPosition(localLights[1].position);
-
-   OGLVertexMesh<VertexPC>* purpleCubeMesh = (OGLVertexMesh<VertexPC>*)
-      meshFactoryPCRGB.CuboidMesh(0.2f, 0.2f, 0.2f, { 1, 0, 1 });
-   purpleCubeMesh->SetUpAttributes("PC");
-   GraphicsObject* purpleCube = new GraphicsObject();
-   purpleCube->AddMesh(purpleCubeMesh);
-   AddGraphicsObject("purpleCube", purpleCube, "simple3DShader");
-   purpleCube->SendToGPU();
-   purpleCube->frame.SetPosition(localLights[2].position);
-
-   RotateAnimation* crateRot = new RotateAnimation(glm::vec3(1, 0, 0), 45.0f);
-   _objects["crate"]->SetAnimation(crateRot);
-
-   _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 6.5f, 0));
+   _objects["whiteCube"]->frame.SetPosition(localLights[0].position);
+   _objects["yellowCube"]->frame.SetPosition(localLights[1].position);
+   _objects["purpleCube"]->frame.SetPosition(localLights[2].position);
 
    _currentCamera = _cameras["camera"];
    _currentCamera->frame.SetPosition(0, 5, 15);
@@ -265,12 +240,27 @@ AbstractMesh* OGLGraphicsScene::CreatePCTMesh(MeshData& meshData)
 
 void OGLGraphicsScene::CreateFactoriedMesh(FactoriedMeshData& factoriedMeshData, AbstractMesh*& mesh)
 {
-   if (factoriedMeshData.vertexType == "PCT") {
+   if (factoriedMeshData.vertexType == "PC") {
+      mesh = CreateFactoriedPCMesh(factoriedMeshData);
+   } 
+   else if (factoriedMeshData.vertexType == "PCT") {
       mesh = CreateFactoriedPCTMesh(factoriedMeshData);
    }
    else if (factoriedMeshData.vertexType == "PCNT") {
       mesh = CreateFactoriedPCNTMesh(factoriedMeshData);
    }
+}
+
+AbstractMesh* OGLGraphicsScene::CreateFactoriedPCMesh(FactoriedMeshData& meshData)
+{
+   OGLVertexMesh<VertexPC>* mesh = nullptr;
+   if (meshData.meshType == "cuboid") {
+      CreatePCCuboidMesh(meshData, mesh);
+   }
+   if (mesh) {
+      mesh->SetUpAttributes("PC");
+   }
+   return mesh;
 }
 
 AbstractMesh* OGLGraphicsScene::CreateFactoriedPCTMesh(FactoriedMeshData& meshData)
@@ -341,6 +331,23 @@ void OGLGraphicsScene::CreatePCNTFlatMesh(
             meshData.params[9]  // repeatT
          );
    }
+}
+
+void OGLGraphicsScene::CreatePCCuboidMesh(
+   FactoriedMeshData& meshData, OGLVertexMesh<VertexPC>*& mesh)
+{
+   MeshFactory<VertexPC, RGB> pcntFactory;
+   mesh = (OGLVertexMesh<VertexPC>*)
+      pcntFactory.CuboidMesh(
+         meshData.params[0], // width
+         meshData.params[1], // height
+         meshData.params[2], // depth
+         {
+            meshData.params[3], // r
+            meshData.params[4], // g
+            meshData.params[5], // b
+         }
+      );
 }
 
 void OGLGraphicsScene::CreatePCNTCuboidMesh(
