@@ -33,6 +33,7 @@ struct MeshData {
    bool isIndexed;
    vector<float> vertexData;
    vector<unsigned short> indexData;
+   Material material;
 };
 
 struct FactoriedMeshData {
@@ -42,6 +43,8 @@ struct FactoriedMeshData {
    string whichPlane;
    string textureName;
    vector<float> params;
+   bool hasMaterial;
+   Material material;
 };
 
 struct ObjectData {

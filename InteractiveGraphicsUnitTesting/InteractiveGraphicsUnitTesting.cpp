@@ -459,6 +459,7 @@ namespace InteractiveGraphicsUnitTesting
          fout << "object2,someShader2" << std::endl;
          fout << "<factoried mesh>" << std::endl;
          fout << "PCNT, RGBA, cuboid, NA, someTexture2, 4, 4, 4, 1, 1, 1, 1, 1, 1" << std::endl;
+         fout << "material, 0.1, 0.2, 0.3" << std::endl;
          fout << "<endMesh>" << std::endl;
          fout << "<endObject>" << std::endl;
 
@@ -493,6 +494,15 @@ namespace InteractiveGraphicsUnitTesting
 
          size_t expectedInt = 9;
          Assert::AreEqual(expectedInt, objectData.factoriedMeshData[0].params.size());
+
+         float expectedFloat = 0.1f;
+         Assert::AreEqual(expectedFloat, objectData.factoriedMeshData[0].material.ambientIntensity);
+
+         expectedFloat = 0.2f;
+         Assert::AreEqual(expectedFloat, objectData.factoriedMeshData[0].material.specularIntensity);
+
+         expectedFloat = 0.3f;
+         Assert::AreEqual(expectedFloat, objectData.factoriedMeshData[0].material.shininess);
 
          std::remove("TestFile.txt");
       } // TEST_METHOD(CanReadATexturedFactoriedCuboidPCNTRGBA)

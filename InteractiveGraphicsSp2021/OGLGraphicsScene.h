@@ -31,11 +31,17 @@ protected:
    bool ReadShaderData();
    bool ReadTextureData();
    bool ReadObjectData();
+   void CreateFactoriedMesh(FactoriedMeshData& factoriedMeshData, AbstractMesh*& mesh);
+   void CreateMesh(MeshData& meshData, AbstractMesh*& mesh);
    AbstractMesh* CreatePCMesh(MeshData& meshData);
    bool ReadPCMeshData(OGLVertexMesh<VertexPC>* mesh, MeshData& meshData);
    AbstractMesh* CreatePCTMesh(MeshData& meshData);
    bool ReadPCTMeshData(OGLVertexMesh<VertexPCT>* mesh, MeshData& meshData);
    AbstractMesh* CreateFactoriedPCTMesh(FactoriedMeshData& meshData);
+   AbstractMesh* CreateFactoriedPCNTMesh(FactoriedMeshData& meshData);
+
+   void CreatePCNTFlatMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPCNT>*& mesh);
+   void CreatePCNTCuboidMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPCNT>*& mesh);
 
 };
 

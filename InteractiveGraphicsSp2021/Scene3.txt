@@ -50,5 +50,31 @@ PC,lines
 <endMesh>
 <endObject>
 
+floor,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, woodFloorTexture, -20, -20, 40, 40, 1, 1, 1, 1, 20, 20
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+smileyCube,lightingShader
+<factoried mesh>
+PCNT, RGBA, cuboid, NA, smileyTexture, 4, 4, 4, 1, 1, 1, 1, 2, 2
+<endMesh>
+<endObject>
+
+smileyCube2,lightingShader
+<factoried mesh>
+PCNT, RGBA, cuboid, NA, smileyTexture, 4, 4, 4, 1, 1, 1, 1, 1, 1
+material, 0.01, 0.9f, 100.0f
+<endMesh>
+<endObject>
+
+crate,lightingShader
+<factoried mesh>
+PCNT, RGBA, cuboid, NA, crateTexture, 4, 4, 4, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
 <endObjects>
 

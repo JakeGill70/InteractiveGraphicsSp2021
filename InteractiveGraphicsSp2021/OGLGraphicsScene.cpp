@@ -19,56 +19,20 @@ bool OGLGraphicsScene::Create()
    if (!ReadTextureData()) return false;
    if (!ReadObjectData()) return false;
 
-   MeshFactory<VertexPCNT, RGBA> meshFactory;
-   OGLVertexMesh<VertexPCNT>* smileyMesh = (OGLVertexMesh<VertexPCNT>*)
-      meshFactory.NormalizedTexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 2, 2);
-   smileyMesh->SetUpAttributes("PCNT");
-   smileyMesh->SetTexture(_textures["smileyTexture"]);
-   GraphicsObject* smileyCube = new GraphicsObject();
-   smileyCube->AddMesh(smileyMesh);
-   AddGraphicsObject("smileyCube", smileyCube, "lightingShader");
-   smileyCube->SendToGPU();
-
    RotateAnimation* defaultRot = new RotateAnimation();
    _objects["smileyCube"]->SetAnimation(defaultRot);
-
-   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-4, 0, 0));
-
-   
-   MeshFactory<VertexPCNT, RGBA> meshFactory2;
-   OGLVertexMesh<VertexPCNT>* mesh2 = (OGLVertexMesh<VertexPCNT>*)
-      meshFactory2.NormalizedTexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
-   mesh2->SetUpAttributes("PCNT");
-   mesh2->SetTexture(_textures["smileyTexture"]);
-   GraphicsObject* c2 = new GraphicsObject();
-   c2->AddMesh(mesh2);
-   AddGraphicsObject("smileyCube2", c2, "lightingShader");
-   c2->SendToGPU();
+   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-7, 2, 0));
 
    RotateAnimation* defaultRot2 = new RotateAnimation();
    _objects["smileyCube2"]->SetAnimation(defaultRot2);
-   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(4, 0, 0));
-
-   OGLVertexMesh<VertexPCNT>* floorMesh = (OGLVertexMesh<VertexPCNT>*)
-      meshFactory2.NormalizedIndexedFlatTexturedMeshXZ(-20, -20, 40, 40, { 1, 1, 1, 1 }, 20, 20);
-   floorMesh->SetUpAttributes("PCNT");
-   floorMesh->SetTexture(_textures["woodFloorTexture"]);
-   GraphicsObject* floor = new GraphicsObject();
-   floor->AddMesh(floorMesh);
-   AddGraphicsObject("floor", floor, "lightingShader");
-   floor->SendToGPU();
-
-   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-3, 2, 0));
-   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(0, 2, 0));
+   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(4, 2, 0));
+   
    _objects["axis"]->frame.TranslateWorld(glm::vec3(0, 0.1f, 0));
-
-   _cameras["camera"]->frame.TranslateWorld(glm::vec3(0, 2, 8));
-   _cameras["camera"]->UpdateView();
 
    globalLight.intensity = 0.1f;
    localLights[0].color = { 1, 1, 1 }; // White light
-   localLights[0].intensity = 0.5f; 
-   localLights[0].position = { 0, 0.5f, 2.0f }; 
+   localLights[0].intensity = 0.5f;
+   localLights[0].position = { 0, 0.5f, 2.0f };
    localLights[0].attenuationCoefficient = 1;
    _numberOfLights++;
    localLights[1].color = { 1, 1, 0 }; // Yellow light
@@ -109,15 +73,6 @@ bool OGLGraphicsScene::Create()
    purpleCube->SendToGPU();
    purpleCube->frame.SetPosition(localLights[2].position);
 
-   OGLVertexMesh<VertexPCNT>* crateMesh = (OGLVertexMesh<VertexPCNT>*)
-      meshFactory.NormalizedTexturedCuboidMesh(4, 4, 4, { 1, 1, 1, 1 }, 1, 1);
-   crateMesh->SetUpAttributes("PCNT");
-   crateMesh->SetTexture(_textures["crateTexture"]);
-   GraphicsObject* crate = new GraphicsObject();
-   crate->AddMesh(crateMesh);
-   AddGraphicsObject("crate", crate, "lightingShader");
-   crate->SendToGPU();
-
    RotateAnimation* crateRot = new RotateAnimation(glm::vec3(1, 0, 0), 45.0f);
    _objects["crate"]->SetAnimation(crateRot);
 
@@ -126,14 +81,6 @@ bool OGLGraphicsScene::Create()
    _currentCamera = _cameras["camera"];
    _currentCamera->frame.SetPosition(0, 5, 15);
    _currentCamera->UpdateView();
-
-   smileyMesh = (OGLVertexMesh<VertexPCNT>*)_objects["smileyCube2"]->GetMesh(0);
-   smileyMesh->material.specularIntensity = 0.9f;
-   smileyMesh->material.shininess = 100.0f;
-
-   floorMesh = (OGLVertexMesh<VertexPCNT>*)_objects["floor"]->GetMesh(0);
-   floorMesh->material.specularIntensity = 0.9f;
-   floorMesh->material.shininess = 200.0f;
 
    return true;
 }
@@ -249,12 +196,7 @@ bool OGLGraphicsScene::ReadObjectData()
       data = it->second;
       for (auto mit = data.meshData.begin(); mit != data.meshData.end(); mit++) {
          meshData = *mit;
-         if (meshData.vertexType == "PC") {
-            mesh = CreatePCMesh(meshData);
-         }
-         else if (meshData.vertexType == "PCT") {
-            mesh = CreatePCTMesh(meshData);
-         }
+         CreateMesh(meshData, mesh);
          if (mesh) {
             object->AddMesh(mesh);
          }
@@ -266,9 +208,7 @@ bool OGLGraphicsScene::ReadObjectData()
       }
       for (auto mit = data.factoriedMeshData.begin(); mit != data.factoriedMeshData.end(); mit++) {
          factoriedMeshData = *mit;
-         if (factoriedMeshData.vertexType == "PCT") {
-            mesh = CreateFactoriedPCTMesh(factoriedMeshData);
-         }
+         CreateFactoriedMesh(factoriedMeshData, mesh);
          if (mesh) {
             object->AddMesh(mesh);
          }
@@ -284,6 +224,16 @@ bool OGLGraphicsScene::ReadObjectData()
    return true;
 }
 
+void OGLGraphicsScene::CreateMesh(MeshData& meshData, AbstractMesh*& mesh)
+{
+   if (meshData.vertexType == "PC") {
+      mesh = CreatePCMesh(meshData);
+   }
+   else if (meshData.vertexType == "PCT") {
+      mesh = CreatePCTMesh(meshData);
+   }
+}
+
 AbstractMesh* OGLGraphicsScene::CreatePCMesh(MeshData& meshData)
 {
    OGLVertexMesh<VertexPC>* mesh = new OGLVertexMesh<VertexPC>();
@@ -294,8 +244,7 @@ AbstractMesh* OGLGraphicsScene::CreatePCMesh(MeshData& meshData)
       delete mesh;
       return nullptr;
    }
-   mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPC), 0 });
-   mesh->SetColorAttribute({ 1, 3, sizeof(VertexPC), sizeof(GLfloat) * 3 });
+   mesh->SetUpAttributes("PC");
    return mesh;
 }
 
@@ -310,17 +259,25 @@ AbstractMesh* OGLGraphicsScene::CreatePCTMesh(MeshData& meshData)
       return nullptr;
    }
    mesh->SetTexture(_textures[meshData.textureName]);
-   mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
-   mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
-   mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
+   mesh->SetUpAttributes("PCT");
    return mesh;
+}
+
+void OGLGraphicsScene::CreateFactoriedMesh(FactoriedMeshData& factoriedMeshData, AbstractMesh*& mesh)
+{
+   if (factoriedMeshData.vertexType == "PCT") {
+      mesh = CreateFactoriedPCTMesh(factoriedMeshData);
+   }
+   else if (factoriedMeshData.vertexType == "PCNT") {
+      mesh = CreateFactoriedPCNTMesh(factoriedMeshData);
+   }
 }
 
 AbstractMesh* OGLGraphicsScene::CreateFactoriedPCTMesh(FactoriedMeshData& meshData)
 {
    MeshFactory<VertexPCT, RGBA> pctFactory;
    OGLVertexMesh<VertexPCT>* mesh = nullptr;
-   if (meshData.meshType == "flat textured") {
+   if (meshData.meshType == "flat") {
       if (meshData.whichPlane == "XZ") {
          mesh = (OGLVertexMesh<VertexPCT>*)
             pctFactory.IndexedFlatTexturedMeshXZ(
@@ -341,11 +298,69 @@ AbstractMesh* OGLGraphicsScene::CreateFactoriedPCTMesh(FactoriedMeshData& meshDa
    }
    if (mesh) {
       mesh->SetTexture(_textures[meshData.textureName]);
-      mesh->SetPositionAttribute({ 0,  3, sizeof(VertexPCT), 0 });
-      mesh->SetColorAttribute({ 1, 4, sizeof(VertexPCT), sizeof(GLfloat) * 3 });
-      mesh->SetTextureAttribute({ 2, 2, sizeof(VertexPCT), sizeof(GLfloat) * 7 });
+      mesh->SetUpAttributes("PCT");
    }
    return mesh;
+}
+
+AbstractMesh* OGLGraphicsScene::CreateFactoriedPCNTMesh(FactoriedMeshData& meshData)
+{
+   OGLVertexMesh<VertexPCNT>* mesh = nullptr;
+   if (meshData.meshType == "flat") {
+      CreatePCNTFlatMesh(meshData, mesh);
+   }
+   else if (meshData.meshType == "cuboid") {
+      CreatePCNTCuboidMesh(meshData, mesh);
+   }
+   if (mesh) {
+      if(meshData.hasMaterial) mesh->material = meshData.material;
+      mesh->SetTexture(_textures[meshData.textureName]);
+      mesh->SetUpAttributes("PCNT");
+   }
+   return mesh;
+}
+
+void OGLGraphicsScene::CreatePCNTFlatMesh(
+   FactoriedMeshData& meshData, OGLVertexMesh<VertexPCNT>*& mesh)
+{
+   MeshFactory<VertexPCNT, RGBA> pcntFactory;
+   if (meshData.whichPlane == "XZ") {
+      mesh = (OGLVertexMesh<VertexPCNT>*)
+         pcntFactory.NormalizedIndexedFlatTexturedMeshXZ(
+            meshData.params[0], // sx
+            meshData.params[1], // sz
+            meshData.params[2], // ex
+            meshData.params[3], // ez
+            {
+               meshData.params[4], // r
+               meshData.params[5], // g
+               meshData.params[6], // b
+               meshData.params[7]  // a
+            },
+            meshData.params[8], // repeatS
+            meshData.params[9]  // repeatT
+         );
+   }
+}
+
+void OGLGraphicsScene::CreatePCNTCuboidMesh(
+   FactoriedMeshData& meshData, OGLVertexMesh<VertexPCNT>*& mesh)
+{
+   MeshFactory<VertexPCNT, RGBA> pcntFactory;
+   mesh = (OGLVertexMesh<VertexPCNT>*)
+      pcntFactory.NormalizedTexturedCuboidMesh(
+         meshData.params[0], // width
+         meshData.params[1], // height
+         meshData.params[2], // depth
+         {
+            meshData.params[3], // r
+            meshData.params[4], // g
+            meshData.params[5], // b
+            meshData.params[6]  // a
+         },
+         meshData.params[7], // repeatS
+         meshData.params[8]  // repeatT
+      );
 }
 
 bool OGLGraphicsScene::ReadPCMeshData(OGLVertexMesh<VertexPC>* mesh, MeshData& meshData)

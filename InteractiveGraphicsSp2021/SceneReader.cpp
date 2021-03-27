@@ -253,6 +253,11 @@ void SceneReader::ProcessMeshDataLine(const string& line)
 
 void SceneReader::ProcessFactoriedMeshDataLine(const string& line)
 {
+   if (line == "<endMesh>") {
+      _state = "reading mesh data";
+      _currentMeshIndex++;
+      return;
+   }
    string factoryLine = line;
    Trim(factoryLine);
    vector<string> tokens;
@@ -261,18 +266,29 @@ void SceneReader::ProcessFactoriedMeshDataLine(const string& line)
       Trim(tokens[i]);
    }
 
-   FactoriedMeshData factoryData;
-   factoryData.vertexType = tokens[0];
-   factoryData.colorType = tokens[1];
-   factoryData.meshType = tokens[2];
-   factoryData.whichPlane = tokens[3];
-   factoryData.textureName = tokens[4];
-   for (size_t i = 5; i < tokens.size(); i++) {
-      factoryData.params.push_back(std::stof(tokens[i]));
+   if (tokens[0] == "material") {
+      FactoriedMeshData& meshData = 
+         _objectData[_currentName].factoriedMeshData[_currentMeshIndex];
+      meshData.material = {
+         std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])
+      };
+      meshData.hasMaterial = true;
+      return;
    }
 
-   _objectData[_currentName].factoriedMeshData.push_back(factoryData);
-   _state = "reading mesh data";
+   FactoriedMeshData factoryMeshData;
+   factoryMeshData.vertexType = tokens[0];
+   factoryMeshData.colorType = tokens[1];
+   factoryMeshData.meshType = tokens[2];
+   factoryMeshData.whichPlane = tokens[3];
+   factoryMeshData.textureName = tokens[4];
+   for (size_t i = 5; i < tokens.size(); i++) {
+      factoryMeshData.params.push_back(std::stof(tokens[i]));
+   }
+   factoryMeshData.hasMaterial = false;
+
+   _objectData[_currentName].factoriedMeshData.push_back(factoryMeshData);
+   //_state = "reading mesh data";
 }
 
 void SceneReader::ProcessVertexDataLine(const string& line)
