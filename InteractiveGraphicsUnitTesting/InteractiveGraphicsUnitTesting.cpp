@@ -408,7 +408,7 @@ namespace InteractiveGraphicsUnitTesting
          std::remove("TestFile.txt");
       } // TEST_METHOD(CanReadATexturedFactoriedObject)
 
-      TEST_METHOD(CanReadATexturedFactoriedCuboidPCNTRGBA)
+      TEST_METHOD(CanReadASceneFile)
       {
          ofstream fout("TestFile.txt");
          fout << "camera,1,2,3,60,0.1f,50" << std::endl;
@@ -477,12 +477,30 @@ namespace InteractiveGraphicsUnitTesting
          size_t expectedInt = 3;
          Assert::AreEqual(expectedInt, allObjects.size());
 
-         ObjectData objectData = allObjects["object2"];
+         ObjectData objectData = allObjects["object"];
+         Assert::AreEqual(1, (int)objectData.factoriedMeshData.size());
+
+         string expectedStr = "PCT";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].vertexType);
+
+         expectedStr = "flat";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].meshType);
+
+         expectedStr = "XZ";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].whichPlane);
+
+         expectedStr = "someTexture";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].textureName);
+
+         expectedInt = 10;
+         Assert::AreEqual(expectedInt, objectData.factoriedMeshData[0].params.size());
+
+         objectData = allObjects["object2"];
 
          expectedInt = 1;
          Assert::AreEqual(expectedInt, objectData.factoriedMeshData.size());
 
-         string expectedStr = "PCNT";
+         expectedStr = "PCNT";
          Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].vertexType);
 
          expectedStr = "RGBA";
