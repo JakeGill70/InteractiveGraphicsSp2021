@@ -76,6 +76,39 @@ bool OGLGraphicsScene::Create()
    greenCube->SendToGPU();
    greenCube->frame.SetPosition(localLights[_numberOfLights-1].position);
 
+   // Move the other objects out of the way a bit
+   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-5, 0, 0));
+   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(5, 0, 0));
+   _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 5, 0));
+
+   OGLVertexMesh<VertexPC>* circleMesh = (OGLVertexMesh<VertexPC>*)
+      meshFactoryPCRGB.CircularMeshXY(2.5f, { 1, 1, 1 });
+   circleMesh->SetUpAttributes("PC");
+   GraphicsObject* whiteCircle = new GraphicsObject();
+   whiteCircle->AddMesh(circleMesh);
+   AddGraphicsObject("whiteCircle", whiteCircle, "simple3DShader");
+   _objects["whiteCircle"]->SendToGPU();
+   _objects["whiteCircle"]->frame.TranslateWorld({ 0, 2.5f, 0 });
+
+   OGLVertexMesh<VertexPC>* circleMesh2 = (OGLVertexMesh<VertexPC>*)
+      meshFactoryPCRGB.CircularMeshXY(4.0f, { 0.23f, 0.45f, 0.67f });
+   circleMesh2->SetUpAttributes("PC");
+   GraphicsObject* myCircle = new GraphicsObject();
+   myCircle->AddMesh(circleMesh2);
+   AddGraphicsObject("myCircle", myCircle, "simple3DShader");
+   _objects["myCircle"]->SendToGPU();
+   _objects["myCircle"]->frame.TranslateWorld({ 0, 4.0f, -10 });
+
+   MeshFactory<VertexPCNT, RGBA> meshFactoryPCNTRGBA;
+   OGLVertexMesh<VertexPCNT>* diskMesh = (OGLVertexMesh<VertexPCNT>*)
+      meshFactoryPCNTRGBA.DiskMeshXY(5, { 1, 1, 1, 1 });
+   diskMesh->SetUpAttributes("PCNT");
+   diskMesh->SetTexture(_textures["marbleTexture"]);
+   GraphicsObject* worldDisk = new GraphicsObject();
+   worldDisk->AddMesh(diskMesh);
+   AddGraphicsObject("worldDisk", worldDisk, "lightingShader");
+   _objects["worldDisk"]->SendToGPU();
+   _objects["worldDisk"]->frame.TranslateWorld({ 0, 5, 2.5f });
 
    return true;
 }

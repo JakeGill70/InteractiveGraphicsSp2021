@@ -41,6 +41,10 @@ crateTexture
 <file>
 crate.jpg
 <endTexture>
+worldTexture
+<file>
+world.jpg
+<endTexture>
 <endTextures>
 
 # object name, shader name

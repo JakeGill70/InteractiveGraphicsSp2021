@@ -21,6 +21,8 @@ public:
    AbstractVertexMesh<V>* NormalizedTexturedCuboidMesh(
       float width, float height, float depth, C color, float repeatS, float repeatT);
    AbstractVertexMesh<V>* CuboidMesh(float width, float height, float depth, C color);
+   AbstractVertexMesh<VertexPC>* CircularMeshXY(float radius, RGB color, int steps=10);
+   AbstractVertexMesh<VertexPCNT>* DiskMeshXY(float radius, RGBA color, int steps = 10);
 
 };
 
@@ -179,6 +181,53 @@ AbstractVertexMesh<V>* MeshFactory<V, C>::NormalizedTexturedCuboidMesh(
       ni++;
    }
 
+   return mesh;
+}
+
+template <>
+AbstractVertexMesh<VertexPC>* MeshFactory<VertexPC, RGB>::CircularMeshXY(float radius, RGB color, int steps)
+{
+   OGLVertexMesh<VertexPC>* mesh = new OGLVertexMesh<VertexPC>();
+   mesh->SetPrimitive(GL_LINES);
+   float x, y, radians;
+   for (float theta = 0; theta <= 360; theta += steps) {
+      radians = glm::radians(theta);
+      x = radius * cosf(radians);
+      y = radius * sinf(radians);
+      mesh->AddVertexData({ x, y, 0, color });
+      radians = glm::radians(theta + steps);
+      x = radius * cosf(radians);
+      y = radius * sinf(radians);
+      mesh->AddVertexData({ x, y, 0, color });
+   }
+   return mesh;
+}
+
+template <>
+AbstractVertexMesh<VertexPCNT>* MeshFactory<VertexPCNT, RGBA>::DiskMeshXY(float radius, RGBA color, int steps)
+{
+   OGLVertexMesh<VertexPCNT>* mesh = new OGLVertexMesh<VertexPCNT>();
+   TexCoord tex = { 0, 0 };
+   float x, y, radians;
+   for (float theta = 0; theta <= 360; theta += steps) {
+      radians = glm::radians(theta);
+      x = radius * cosf(radians);
+      y = radius * sinf(radians);
+      tex.S = cosf(radians);
+      tex.T = sinf(radians);
+      mesh->AddVertexData({ x, y, 0, color, {0, 0, 1}, tex });
+
+      radians = glm::radians(theta + steps);
+      x = radius * cosf(radians);
+      y = radius * sinf(radians);
+      tex.S = cosf(radians);
+      tex.T = sinf(radians);
+      mesh->AddVertexData({ x, y, 0, color, {0, 0, 1}, tex });
+
+      tex.S = 0.5f;
+      tex.T = 0.5f;
+      mesh->AddVertexData({ 0, 0, 0, color, {0, 0, 1}, tex });
+   }
    return mesh;
 }
 
