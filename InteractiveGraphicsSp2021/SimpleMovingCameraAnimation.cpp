@@ -25,26 +25,38 @@ void SimpleMovingCameraAnimation::Update(double elapsedSeconds)
    CheckInputSystem();
    ReferenceFrame& frame = _camera->frame;
    switch (_state) {
-   case SimpleMovingState::Not_Moving:
-      break;
-   case SimpleMovingState::Moving_Forward: {
-      glm::vec3 forward = -frame.GetZAxis(); // Forward is -ve Z
-      glm::vec3 moveDelta = forward * (_speed * (float)elapsedSeconds);
-      frame.TranslateWorld(moveDelta);
-      _camera->UpdateView();
-      break;
-   }
-   case SimpleMovingState::Moving_Backward:
-      glm::vec3 backward = frame.GetZAxis(); 
-      glm::vec3 moveDelta = backward * (_speed * (float)elapsedSeconds);
-      frame.TranslateWorld(moveDelta);
-      _camera->UpdateView();
-      break;
-      break;
-   case SimpleMovingState::Moving_Left:
-      break;
-   case SimpleMovingState::Moving_Right:
-      break;
+      case SimpleMovingState::Not_Moving:
+         break;
+      case SimpleMovingState::Moving_Forward: {
+         glm::vec3 forward = -frame.GetZAxis(); // Forward is -ve Z
+         glm::vec3 moveDelta = forward * (_speed * (float)elapsedSeconds);
+         frame.TranslateWorld(moveDelta);
+         _camera->UpdateView();
+         break;
+      }
+      case SimpleMovingState::Moving_Backward: {
+         glm::vec3 backward = frame.GetZAxis();
+         glm::vec3 moveDelta = backward * (_speed * (float)elapsedSeconds);
+         frame.TranslateWorld(moveDelta);
+         _camera->UpdateView();
+         break;
+      }
+      case SimpleMovingState::Moving_Left: {
+         glm::vec3 left = -frame.GetXAxis();
+         glm::vec3 moveDelta = left * (_speed * (float)elapsedSeconds);
+         frame.TranslateWorld(moveDelta);
+         _camera->SetupLookingForward();
+         _camera->UpdateView();
+         break;
+      }
+      case SimpleMovingState::Moving_Right: {
+         glm::vec3 right = frame.GetXAxis();
+         glm::vec3 moveDelta = right * (_speed * (float)elapsedSeconds);
+         frame.TranslateWorld(moveDelta);
+         _camera->SetupLookingForward();
+         _camera->UpdateView();
+         break;
+      }
    }
 }
 
@@ -59,6 +71,16 @@ void SimpleMovingCameraAnimation::CheckInputSystem()
    keyState = _inputSystem->GetKeyState("S");
    if (keyState == KeyState::Pressed) {
       _state = SimpleMovingState::Moving_Backward;
+      return;
+   }
+   keyState = _inputSystem->GetKeyState("A");
+   if (keyState == KeyState::Pressed) {
+      _state = SimpleMovingState::Moving_Left;
+      return;
+   }
+   keyState = _inputSystem->GetKeyState("D");
+   if (keyState == KeyState::Pressed) {
+      _state = SimpleMovingState::Moving_Right;
       return;
    }
 }
