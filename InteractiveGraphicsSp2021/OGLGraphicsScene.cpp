@@ -40,6 +40,7 @@ bool OGLGraphicsScene::Create()
    _objects["whiteCube"]->frame.SetPosition(localLights[0].position);
    _objects["yellowCube"]->frame.SetPosition(localLights[1].position);
    _objects["purpleCube"]->frame.SetPosition(localLights[2].position);
+   _objects["redCube"]->frame.SetPosition(localLights[3].position);
 
    _currentCamera = _cameras["camera"];
    _currentCamera->frame.SetPosition(0, 5, 15);
@@ -58,6 +59,23 @@ bool OGLGraphicsScene::Create()
    SimpleMovingCameraAnimation* cameraAnimation = new SimpleMovingCameraAnimation();
    cameraAnimation->SetInputSystem(_inputSystem);
    _currentCamera->SetAnimation(cameraAnimation);
+
+   localLights[_numberOfLights].color = { 0, 1, 0 };
+   localLights[_numberOfLights].position = { -10, 1, -10 };
+   localLights[_numberOfLights].intensity = 0.5f;
+   localLights[_numberOfLights].attenuationCoefficient = 0.5f;
+   _numberOfLights++;
+
+   MeshFactory<VertexPC, RGB> meshFactoryPCRGB;
+   OGLVertexMesh<VertexPC>* greenCubeMesh = (OGLVertexMesh<VertexPC>*)
+      meshFactoryPCRGB.CuboidMesh(0.2f, 0.2f, 0.2f, { 0, 1, 0 });
+   greenCubeMesh->SetUpAttributes("PC");
+   GraphicsObject* greenCube = new GraphicsObject();
+   greenCube->AddMesh(greenCubeMesh);
+   AddGraphicsObject("greenCube", greenCube, "simple3DShader");
+   greenCube->SendToGPU();
+   greenCube->frame.SetPosition(localLights[_numberOfLights-1].position);
+
 
    return true;
 }
