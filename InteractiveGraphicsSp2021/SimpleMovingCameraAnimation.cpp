@@ -21,31 +21,31 @@ inline void SimpleMovingCameraAnimation::SetState(SimpleMovingState state)
 
 void SimpleMovingCameraAnimation::Update(double elapsedSeconds)
 {
-   _camera->SetupLookingForward();
    CheckInputSystem();
    ReferenceFrame& frame = _camera->frame;
+   glm::vec3 moveDelta(1);
    switch (_state) {
-   case SimpleMovingState::Not_Moving:
-      break;
-   case SimpleMovingState::Moving_Forward: {
-      glm::vec3 forward = -frame.GetZAxis(); // Forward is -ve Z
-      glm::vec3 moveDelta = forward * (_speed * (float)elapsedSeconds);
-      frame.TranslateWorld(moveDelta);
-      _camera->UpdateView();
-      break;
+      case SimpleMovingState::Not_Moving:
+         break;
+      case SimpleMovingState::Moving_Forward: {
+         glm::vec3 forward = -frame.GetZAxis(); // Forward is -ve Z
+         moveDelta = forward * (_speed * (float)elapsedSeconds);
+         frame.TranslateWorld(moveDelta);
+         break;
+      }
+      case SimpleMovingState::Moving_Backward: {
+         glm::vec3 backward = frame.GetZAxis();
+         moveDelta = backward * (_speed * (float)elapsedSeconds);
+         frame.TranslateWorld(moveDelta);
+         break;
+      }
+      case SimpleMovingState::Moving_Left:
+         break;
+      case SimpleMovingState::Moving_Right:
+         break;
    }
-   case SimpleMovingState::Moving_Backward:
-      glm::vec3 backward = frame.GetZAxis(); 
-      glm::vec3 moveDelta = backward * (_speed * (float)elapsedSeconds);
-      frame.TranslateWorld(moveDelta);
-      _camera->UpdateView();
-      break;
-      break;
-   case SimpleMovingState::Moving_Left:
-      break;
-   case SimpleMovingState::Moving_Right:
-      break;
-   }
+   _camera->SetupLookingForward();
+   _camera->UpdateView();
 }
 
 void SimpleMovingCameraAnimation::CheckInputSystem()
