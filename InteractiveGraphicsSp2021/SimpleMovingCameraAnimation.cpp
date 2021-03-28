@@ -7,6 +7,7 @@ SimpleMovingCameraAnimation::SimpleMovingCameraAnimation()
 {
    _state = SimpleMovingState::Not_Moving;
    _speed = 20.0f;
+   _turnSpeed = 180.0f;
 }
 
 inline SimpleMovingState SimpleMovingCameraAnimation::GetState()
@@ -41,18 +42,24 @@ void SimpleMovingCameraAnimation::Update(double elapsedSeconds)
       }
       case SimpleMovingState::Moving_Left: {
          glm::vec3 left = -frame.GetXAxis();
-         glm::vec3 moveDelta = left * (_speed * (float)elapsedSeconds);
+         moveDelta = left * (_speed * (float)elapsedSeconds);
          frame.TranslateWorld(moveDelta);
-         _camera->SetupLookingForward();
-         _camera->UpdateView();
          break;
       }
       case SimpleMovingState::Moving_Right: {
          glm::vec3 right = frame.GetXAxis();
-         glm::vec3 moveDelta = right * (_speed * (float)elapsedSeconds);
+         moveDelta = right * (_speed * (float)elapsedSeconds);
          frame.TranslateWorld(moveDelta);
-         _camera->SetupLookingForward();
-         _camera->UpdateView();
+         break;
+      }
+      case SimpleMovingState::Turning_Left: {
+         float turnDelta = (_turnSpeed * (float)elapsedSeconds);
+         frame.RotateLocal(turnDelta, glm::vec3(0, 1, 0));
+         break;
+      }
+      case SimpleMovingState::Turning_Right: {
+         float turnDelta = (_turnSpeed * (float)elapsedSeconds);
+         frame.RotateLocal(-turnDelta, glm::vec3(0, 1, 0));
          break;
       }
    }
@@ -81,6 +88,16 @@ void SimpleMovingCameraAnimation::CheckInputSystem()
    keyState = _inputSystem->GetKeyState("D");
    if (keyState == KeyState::Pressed) {
       _state = SimpleMovingState::Moving_Right;
+      return;
+   }
+   keyState = _inputSystem->GetKeyState("LEFT");
+   if (keyState == KeyState::Pressed) {
+      _state = SimpleMovingState::Turning_Left;
+      return;
+   }
+   keyState = _inputSystem->GetKeyState("RIGHT");
+   if (keyState == KeyState::Pressed) {
+      _state = SimpleMovingState::Turning_Right;
       return;
    }
 }
