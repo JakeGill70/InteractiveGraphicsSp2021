@@ -14,7 +14,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    _In_ int       nCmdShow)
 {
    GLFWGraphicsWindow* window = 
-      new GLFWGraphicsWindow(800, 600, "Lec Week 11 - Interactive Graphics");
+      new GLFWGraphicsWindow(800, 600, "Lec Week 12 - Interactive Graphics");
 
    OGLGraphicsSystem* graphicsSystem = new OGLGraphicsSystem();
 

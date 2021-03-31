@@ -159,6 +159,10 @@ namespace InteractiveGraphicsUnitTesting
          fout << "defaultShader,  default,default,none" << std::endl;
          fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
          fout << "<endShaders>" << std::endl;
+
+         fout << "local, 5, 1, -5, 1, 0, 0, 0.5f, 0.5f" << std::endl;
+         fout << "<endLights>" << std::endl;
+
          fout << "# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter" << std::endl;
          fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
          fout << "<array>" << std::endl;
@@ -188,6 +192,9 @@ namespace InteractiveGraphicsUnitTesting
          fout << "defaultShader,  default,default,none" << std::endl;
          fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
          fout << "<endShaders>" << std::endl;
+
+         fout << "local, 5, 1, -5, 1, 0, 0, 0.5f, 0.5f" << std::endl;
+         fout << "<endLights>" << std::endl;
 
          fout << "# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter" << std::endl;
          fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
@@ -227,6 +234,9 @@ namespace InteractiveGraphicsUnitTesting
          fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
          fout << "<endShaders>" << std::endl;
 
+         fout << "local, 5, 1, -5, 1, 0, 0, 0.5f, 0.5f" << std::endl;
+         fout << "<endLights>" << std::endl;
+
          fout << "# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter" << std::endl;
          fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
          fout << "<array>" << std::endl;
@@ -264,6 +274,10 @@ namespace InteractiveGraphicsUnitTesting
          fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
          fout << "simpleTextureShader, PCT3DVertexShader.glsl, TexFragmentShader.glsl, camera" << std::endl;
          fout << "<endShaders>" << std::endl;
+
+         fout << "local, 5, 1, -5, 1, 0, 0, 0.5f, 0.5f" << std::endl;
+         fout << "<endLights>" << std::endl;
+
          fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
          fout << "<array>" << std::endl;
          fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255,255" << std::endl;
@@ -328,88 +342,6 @@ namespace InteractiveGraphicsUnitTesting
          std::remove("TestFile.txt");
       }
 
-      TEST_METHOD(CanReadATexturedFactoriedObject)
-      {
-         ofstream fout("TestFile.txt");
-         fout << "camera,1,2,3,60,0.1f,50" << std::endl;
-         fout << "<endCameras>" << std::endl;
-         fout << "defaultShader,  default,default,none" << std::endl;
-         fout << "simple3DShader,simple3Dvertex.glsl,default,camera" << std::endl;
-         fout << "simpleTextureShader, PCT3DVertexShader.glsl, TexFragmentShader.glsl, camera" << std::endl;
-         fout << "<endShaders>" << std::endl;
-         fout << "customTexture, repeat, repeat, nearest, nearest, 4, 4, 4" << std::endl;
-         fout << "<array>" << std::endl;
-         fout << "255,255,255,255,0,0,255,255,0,0,255,255,255,255,255,255" << std::endl;
-         fout << "<endTexture>" << std::endl;
-         fout << "someTexture" << std::endl;
-         fout << "<file>" << std::endl;
-         fout << "somefile.jpg" << std::endl;
-         fout << "<endTexture>" << std::endl;
-         fout << "<endTextures>" << std::endl;
-
-         fout << "wall,simpleTextureShader" << std::endl;
-
-         fout << "PCT,triangles,indexed,someTexture" << std::endl;
-         fout << "-2,  1, 0, 1, 1, 1, 1, 0, 1" << std::endl;
-         fout << "-2, -1, 0, 1, 1, 1, 1, 0, 0" << std::endl;
-         fout << " 0, -1, 0, 1, 1, 1, 1, 1, 0" << std::endl;
-         fout << " 0,  1, 0, 1, 1, 1, 1, 1, 1" << std::endl;
-         fout << "<endVertexData>" << std::endl;
-         fout << " 0, 1, 2, 0, 2, 3" << std::endl;
-         fout << "<endIndexData>" << std::endl;
-         fout << "<endMesh>" << std::endl;
-
-         fout << "PCT,triangles,indexed,someTexture" << std::endl;
-         fout << " 0,  1, 0, 1, 1, 1, 1, 0, 1" << std::endl;
-         fout << " 0, -1, 0, 1, 1, 1, 1, 0, 0" << std::endl;
-         fout << " 2, -1, 0, 1, 1, 1, 1, 1, 0" << std::endl;
-         fout << " 2,  1, 0, 1, 1, 1, 1, 1, 1" << std::endl;
-         fout << "<endVertexData>" << std::endl;
-         fout << " 0, 1, 2, 0, 2, 3" << std::endl;
-         fout << "<endIndexData>" << std::endl;
-         fout << "<endMesh>" << std::endl;
-         fout << "<endObject>" << std::endl;
-
-         fout << "object,someShader" << std::endl;
-         fout << "<factoried mesh>" << std::endl;
-         fout << "PCT, RGBA, flat, XZ, someTexture, 5, -5, 5, 5, 1, 1, 1, 1, 5, 5" << std::endl;
-         fout << "<endMesh>" << std::endl;
-         fout << "<endObject>" << std::endl;
-
-         fout << "<endObjects>" << std::endl;
-         fout.close();
-
-         SceneReader sut("TestFile.txt");
-         sut.Open();
-         Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
-
-         sut.Read();
-         Assert::IsFalse(sut.HasError(), sut.WidenString(sut.GetLog()).c_str());
-
-         unordered_map<string, ObjectData>& data = sut.GetObjectData();
-         Assert::AreEqual(2, (int)data.size());
-
-         ObjectData objectData = data["object"];
-         Assert::AreEqual(1, (int)objectData.factoriedMeshData.size());
-
-         string expectedStr = "PCT";
-         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].vertexType);
-
-         expectedStr = "flat";
-         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].meshType);
-
-         expectedStr = "XZ";
-         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].whichPlane);
-
-         expectedStr = "someTexture";
-         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].textureName);
-
-         size_t expectedInt = 10;
-         Assert::AreEqual(expectedInt, objectData.factoriedMeshData[0].params.size());
-
-         std::remove("TestFile.txt");
-      } // TEST_METHOD(CanReadATexturedFactoriedObject)
-
       TEST_METHOD(CanReadASceneFile)
       {
          ofstream fout("TestFile.txt");
@@ -461,14 +393,20 @@ namespace InteractiveGraphicsUnitTesting
 
          fout << "object,someShader" << std::endl;
          fout << "<factoried mesh>" << std::endl;
-         fout << "PCT, RGBA, flat, XZ, someTexture, 5, -5, 5, 5, 1, 1, 1, 1, 5, 5" << std::endl;
+         fout << "PCT, RGBA, triangles, flat, XZ, someTexture, 5, -5, 5, 5, 1, 1, 1, 1, 5, 5" << std::endl;
          fout << "<endMesh>" << std::endl;
          fout << "<endObject>" << std::endl;
 
          fout << "object2,someShader2" << std::endl;
          fout << "<factoried mesh>" << std::endl;
-         fout << "PCNT, RGBA, cuboid, someTexture2, 4, 4, 4, 1, 1, 1, 1, 1, 1" << std::endl;
+         fout << "PCNT, RGBA, triangles, cuboid, someTexture2, 4, 4, 4, 1, 1, 1, 1, 1, 1" << std::endl;
          fout << "material, 0.1, 0.2, 0.3" << std::endl;
+         fout << "<endMesh>" << std::endl;
+         fout << "<endObject>" << std::endl;
+
+         fout << "object3,someShader" << std::endl;
+         fout << "<factoried mesh>" << std::endl;
+         fout << "PC, RGB, lines, circle, 2.5f, 1, 1, 1" << std::endl;
          fout << "<endMesh>" << std::endl;
          fout << "<endObject>" << std::endl;
 
@@ -503,7 +441,7 @@ namespace InteractiveGraphicsUnitTesting
 
          unordered_map<string, ObjectData>& allObjects = sut.GetObjectData();
 
-         expectedInt = 3;
+         expectedInt = 4;
          Assert::AreEqual(expectedInt, allObjects.size());
 
          ObjectData objectData = allObjects["object"];
@@ -552,6 +490,21 @@ namespace InteractiveGraphicsUnitTesting
 
          expectedFloat = 0.3f;
          Assert::AreEqual(expectedFloat, objectData.factoriedMeshData[0].material.shininess);
+
+         objectData = allObjects["object3"];
+         
+         expectedInt = 1;
+         Assert::AreEqual(expectedInt, objectData.factoriedMeshData.size());
+         expectedStr = "PC";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].vertexType);
+         expectedStr = "RGB";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].colorType);
+         expectedStr = "lines";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].primitiveType);
+         expectedStr = "circle";
+         Assert::AreEqual(expectedStr, objectData.factoriedMeshData[0].meshType);
+         expectedInt = 4;
+         Assert::AreEqual(expectedInt, objectData.factoriedMeshData[0].params.size());
 
          std::remove("TestFile.txt");
       } // TEST_METHOD(CanReadATexturedFactoriedCuboidPCNTRGBA)

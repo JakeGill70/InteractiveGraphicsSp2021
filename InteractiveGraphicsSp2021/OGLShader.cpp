@@ -36,6 +36,7 @@ void OGLShader::RenderObjects()
       iterator != _objectsToRender.end(); 
       iterator++) {
       GraphicsObject* object = iterator->second;
+      if (!object->isVisible) continue;
       SelectProgram();
       SendMatrixToGPU("world", object->frame.orientation);
       Render(object);

@@ -20,9 +20,10 @@ protected:
 
 public:
    ReferenceFrame frame;
+   bool isVisible;
 
 public:
-   GraphicsObject() : _animation(nullptr){}
+   GraphicsObject() : _animation(nullptr), isVisible(true){}
 
    virtual ~GraphicsObject();
 

@@ -309,6 +309,7 @@ void SceneReader::ProcessFactoriedMeshDataLine(const string& line)
    int idx = 0;
    factoryMeshData.vertexType = tokens[idx++];
    factoryMeshData.colorType = tokens[idx++];
+   factoryMeshData.primitiveType = tokens[idx++];
    factoryMeshData.meshType = tokens[idx++];
    if (factoryMeshData.vertexType == "PCNT" 
       || factoryMeshData.vertexType == "PCT") {

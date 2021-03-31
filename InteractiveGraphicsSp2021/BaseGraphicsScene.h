@@ -87,6 +87,8 @@ public:
    virtual void Update(double elapsedSeconds);
 
    virtual void Render();
+
+   virtual void HideAllObjects();
 };
 
 #endif

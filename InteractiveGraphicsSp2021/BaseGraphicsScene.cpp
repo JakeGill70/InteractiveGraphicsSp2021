@@ -53,3 +53,10 @@ void BaseGraphicsScene::Render()
       shader->RenderObjects();
    }
 }
+
+void BaseGraphicsScene::HideAllObjects()
+{
+   for (auto iterator = _objects.begin(); iterator != _objects.end(); iterator++) {
+      iterator->second->isVisible = false;
+   }
+}

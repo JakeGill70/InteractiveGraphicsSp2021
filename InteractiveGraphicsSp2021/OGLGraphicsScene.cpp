@@ -42,7 +42,7 @@ bool OGLGraphicsScene::Create()
    _objects["purpleCube"]->frame.SetPosition(localLights[2].position);
    _objects["redCube"]->frame.SetPosition(localLights[3].position);
 
-   _currentCamera = _cameras["camera"];
+   _currentCamera = _cameras["camera1"];
    _currentCamera->frame.SetPosition(0, 5, 15);
    _currentCamera->SetupLookingForward();
    _currentCamera->UpdateView();
@@ -67,14 +67,7 @@ bool OGLGraphicsScene::Create()
    _numberOfLights++;
 
    MeshFactory<VertexPC, RGB> meshFactoryPCRGB;
-   OGLVertexMesh<VertexPC>* greenCubeMesh = (OGLVertexMesh<VertexPC>*)
-      meshFactoryPCRGB.CuboidMesh(0.2f, 0.2f, 0.2f, { 0, 1, 0 });
-   greenCubeMesh->SetUpAttributes("PC");
-   GraphicsObject* greenCube = new GraphicsObject();
-   greenCube->AddMesh(greenCubeMesh);
-   AddGraphicsObject("greenCube", greenCube, "simple3DShader");
-   greenCube->SendToGPU();
-   greenCube->frame.SetPosition(localLights[_numberOfLights-1].position);
+   _objects["greenCube"]->frame.SetPosition(localLights[_numberOfLights-1].position);
 
    // Move the other objects out of the way a bit
    _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-5, 0, 0));
@@ -109,6 +102,22 @@ bool OGLGraphicsScene::Create()
    AddGraphicsObject("worldDisk", worldDisk, "lightingShader");
    _objects["worldDisk"]->SendToGPU();
    _objects["worldDisk"]->frame.TranslateWorld({ 0, 5, 2.5f });
+
+   HideAllObjects();
+
+   _objects["floor"]->isVisible = true;
+   _objects["axis"]->isVisible = true;
+
+
+   OGLVertexMesh<VertexPC>* spiroMesh = (OGLVertexMesh<VertexPC>*)
+      //meshFactoryPCRGB.SpirographMeshXY(5, 0.955f, 0.55f, 20, { 1, 0, 1 });
+      meshFactoryPCRGB.SpirographMeshXY(5, 0.5f, 0.9f, 20, { 1, 0, 1 });
+   spiroMesh->SetUpAttributes("PC");
+   GraphicsObject* spirograph = new GraphicsObject();
+   spirograph->AddMesh(spiroMesh);
+   AddGraphicsObject("spirograph", spirograph, "simple3DShader");
+   _objects["spirograph"]->SendToGPU();
+   //_objects["spirograph"]->frame.TranslateWorld({ 0, 5.0f, 0 });
 
    return true;
 }

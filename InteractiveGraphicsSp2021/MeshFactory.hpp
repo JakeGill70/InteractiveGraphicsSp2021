@@ -23,7 +23,7 @@ public:
    AbstractVertexMesh<V>* CuboidMesh(float width, float height, float depth, C color);
    AbstractVertexMesh<VertexPC>* CircularMeshXY(float radius, RGB color, int steps=10);
    AbstractVertexMesh<VertexPCNT>* DiskMeshXY(float radius, RGBA color, int steps = 10);
-
+   AbstractVertexMesh<VertexPC>* SpirographMeshXY(float R, float l, float k, float revolutions, RGB color, int steps = 10);
 };
 
 template <class V, class C>
@@ -227,6 +227,30 @@ AbstractVertexMesh<VertexPCNT>* MeshFactory<VertexPCNT, RGBA>::DiskMeshXY(float 
       tex.S = 0.5f;
       tex.T = 0.5f;
       mesh->AddVertexData({ 0, 0, 0, color, {0, 0, 1}, tex });
+   }
+   return mesh;
+}
+
+template <>
+AbstractVertexMesh<VertexPC>* MeshFactory<VertexPC, RGB>::SpirographMeshXY(
+   float R, float l, float k, float revolutions, RGB color, int steps)
+{
+   OGLVertexMesh<VertexPC>* mesh = new OGLVertexMesh<VertexPC>();
+   mesh->SetPrimitive(GL_LINES);
+   VertexPC V;
+   float x, y, radians, q = (1 - k) / k;
+   float degrees = 360.0f * revolutions;
+   for (float theta = 0; theta <= degrees; theta += steps) {
+      radians = glm::radians(theta);
+      x = R * (((1 - k) * cosf(radians)) + (l * k * cosf(q * radians)));
+      y = R * (((1 - k) * sinf(radians)) - (l * k * sinf(q * radians)));
+      V = { x, y, 0, color.red, color.green, color.blue };
+      mesh->AddVertexData(V);
+      radians = glm::radians(theta + steps);
+      x = R * (((1 - k) * cosf(radians)) + (l * k * cosf(q * radians)));
+      y = R * (((1 - k) * sinf(radians)) - (l * k * sinf(q * radians)));
+      V = { x, y, 0, color.red, color.green, color.blue };
+      mesh->AddVertexData(V);
    }
    return mesh;
 }
