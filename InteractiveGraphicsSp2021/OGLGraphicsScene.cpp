@@ -67,6 +67,8 @@ bool OGLGraphicsScene::Create()
 
    _objects["greenCube"]->frame.SetPosition(localLights[_numberOfLights-1].position);
 
+   _objects["redCube"]->frame.SetPosition(localLights[3].position);
+
    return true;
 }
 
