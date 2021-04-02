@@ -5,7 +5,8 @@
 #include "AbstractCameraAnimation.h"
 
 enum class SimpleMovingState {
-   Not_Moving, Moving_Forward, Moving_Backward, Moving_Left, Moving_Right
+   Not_Moving, Moving_Forward, Moving_Backward, Moving_Left, Moving_Right,
+   Turning_Left, Turning_Right
 };
 
 class SimpleMovingCameraAnimation :
@@ -14,6 +15,7 @@ class SimpleMovingCameraAnimation :
 protected:
    SimpleMovingState _state;
    float _speed;
+   float _turnSpeed;
 
 public:
    SimpleMovingCameraAnimation();
