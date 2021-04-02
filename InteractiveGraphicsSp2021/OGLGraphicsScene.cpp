@@ -59,6 +59,14 @@ bool OGLGraphicsScene::Create()
    cameraAnimation->SetInputSystem(_inputSystem);
    _currentCamera->SetAnimation(cameraAnimation);
 
+   localLights[_numberOfLights].color = glm::vec3(0.2f, 0.95f, 0.2f);
+   localLights[_numberOfLights].position = glm::vec3(-10.0f, 1.0f, -10.0f);
+   localLights[_numberOfLights].intensity = 0.5f;
+   localLights[_numberOfLights].attenuationCoefficient = 0.5f;
+   _numberOfLights++;
+
+   _objects["greenCube"]->frame.SetPosition(localLights[_numberOfLights-1].position);
+
    return true;
 }
 

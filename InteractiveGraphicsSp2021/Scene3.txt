@@ -101,5 +101,11 @@ PC, RGB, cuboid, 0.2f, 0.2f, 0.2f, 1, 0, 1
 <endMesh>
 <endObject>
 
+greenCube,simple3DShader
+<factoried mesh>
+PC, RGB, cuboid, 0.2f, 0.2f, 0.2f, 0.2f, 0.95f, 0.2f
+<endMesh>
+<endObject>
+
 <endObjects>
 
