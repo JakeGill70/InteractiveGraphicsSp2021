@@ -50,6 +50,8 @@ bool OGLGraphicsScene::Create()
    _inputSystem = new GLFWInputSystem(window->GetGLFWWindow());
    _inputSystem->RegisterKey("W", GLFW_KEY_W);
    _inputSystem->RegisterKey("S", GLFW_KEY_S);
+   _inputSystem->RegisterKey("A", GLFW_KEY_A);
+   _inputSystem->RegisterKey("D", GLFW_KEY_D);
 
    SimpleMovingCameraAnimation* cameraAnimation = new SimpleMovingCameraAnimation();
    cameraAnimation->SetInputSystem(_inputSystem);
