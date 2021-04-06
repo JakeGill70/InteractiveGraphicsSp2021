@@ -21,7 +21,11 @@ public:
    AbstractVertexMesh<V>* NormalizedTexturedCuboidMesh(
       float width, float height, float depth, C color, float repeatS, float repeatT);
    AbstractVertexMesh<V>* CuboidMesh(float width, float height, float depth, C color);
-
+   AbstractVertexMesh<VertexPC>* CircularMeshXY(float radius, RGB color, int steps = 10);
+   AbstractVertexMesh<V>* DiskMesh(
+       float radius, C color, int steps);
+   AbstractVertexMesh<VertexPCNT>* NormalizedTexturedDiskMesh(
+       float radius, RGB color, int steps, float repeatS, float repeatT);
 };
 
 template <class V, class C>
@@ -85,7 +89,9 @@ AbstractVertexMesh<V>* MeshFactory<V, C>::CuboidMesh(
    V vG = { -halfWidth, -halfHeight, -halfDepth, color };
    V vH = { -halfWidth, halfHeight, -halfDepth, color };
 
+
    // Looking from the front
+
 
    // Front face
    mesh->AddVertexData(vA);
@@ -180,6 +186,103 @@ AbstractVertexMesh<V>* MeshFactory<V, C>::NormalizedTexturedCuboidMesh(
    }
 
    return mesh;
+}
+
+template <>
+AbstractVertexMesh<VertexPC>* MeshFactory<VertexPC, RGB>::CircularMeshXY(float radius, RGB color, int steps)
+{
+    OGLVertexMesh<VertexPC>* mesh = new OGLVertexMesh<VertexPC>();
+    mesh->SetPrimitive(GL_LINES);
+    float x, y, radians;
+    for (float theta = 0; theta <= 360; theta += steps) {
+        radians = glm::radians(theta);
+        x = radius * cosf(radians);
+        y = radius * sinf(radians);
+        mesh->AddVertexData({ x, y, 0, color });
+        radians = glm::radians(theta + steps);
+        x = radius * cosf(radians);
+        y = radius * sinf(radians);
+        mesh->AddVertexData({ x, y, 0, color });
+    }
+    return mesh;
+}
+
+template <class V, class C>
+AbstractVertexMesh<V>* MeshFactory<V, C>::DiskMesh(float radius, C color, int steps)
+{
+    OGLVertexMesh<V>* mesh = new OGLVertexMesh<V>();
+    float x, y, radians;
+
+    for (float theta = 0; theta <= 360; theta += steps) {
+        // center
+        V vCenter = { 0, 0, 0, color };
+        mesh->AddVertexData(vCenter);
+
+        // Current
+        radians = glm::radians(theta);
+        x = radius * cosf(radians);
+        y = radius * sinf(radians);
+        V vCurrent = { x, y, 0, color };
+        mesh->AddVertexData(vCurrent);
+
+        // Next
+        radians = glm::radians(theta + steps);
+        x = radius * cosf(radians);
+        y = radius * sinf(radians);
+        V vNext = { x, y, 0, color };
+        mesh->AddVertexData(vNext);
+    }
+    return mesh;
+}
+
+template <>
+AbstractVertexMesh<VertexPCNT>* MeshFactory<VertexPCNT, RGB>::NormalizedTexturedDiskMesh(
+    float radius, RGB color, int steps, float repeatS, float repeatT)
+{
+    OGLVertexMesh<VertexPCNT>* mesh = new OGLVertexMesh<VertexPCNT>();
+
+    // Generate vertexes
+    float x, y, radians;
+    for (float theta = 0; theta <= 360; theta += steps) {
+        // center
+        mesh->AddVertexData({0, 0, 0});
+
+        // Current
+        radians = glm::radians(theta);
+        x = radius * cosf(radians);
+        y = radius * sinf(radians);
+        mesh->AddVertexData({x, y, 0});
+
+        // Next
+        radians = glm::radians(theta + steps);
+        x = radius * cosf(radians);
+        y = radius * sinf(radians);
+        mesh->AddVertexData({x, y, 0});
+    }
+
+    // Set color
+    // ? Why cannot I simply use GetVertex(i).color = color ?
+    // ? It makes no sense to me.
+    int numberOfVertices = (int)mesh->GetNumberOfVertices();
+    for (int i = 0; i < numberOfVertices; i++) {
+        mesh->GetVertex(i).color.red = color.red;
+        mesh->GetVertex(i).color.green = color.green;
+        mesh->GetVertex(i).color.blue = color.blue;
+    }
+
+    // Set Texture
+    // Set Normals
+    for (int i = 0; i < numberOfVertices; i += 3)
+    {
+        mesh->GetVertex(i).tex = { 0, repeatT };
+        mesh->GetVertex(i + 1).tex = { 0, 0 };
+        mesh->GetVertex(i + 2).tex = { repeatS, 0 };
+
+        mesh->GetVertex(i).normal = { 0, 0, 1 };
+        mesh->GetVertex(i+1).normal = { 0, 0, 1 };
+        mesh->GetVertex(i+2).normal = { 0, 0, 1 };
+    }
+    return mesh;
 }
 
 #endif

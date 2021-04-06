@@ -69,6 +69,54 @@ bool OGLGraphicsScene::Create()
 
    _objects["redCube"]->frame.SetPosition(localLights[3].position);
 
+
+   // Move the other objects out of the way a bit
+   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-5, 0, 0));
+   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(5, 0, 0));
+   _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 5, 0));
+
+   MeshFactory<VertexPC, RGB> meshFactoryPCRGB;
+   OGLVertexMesh<VertexPC>* circleMesh = (OGLVertexMesh<VertexPC>*)
+       meshFactoryPCRGB.CircularMeshXY(2.5f, { 1, 1, 1 });
+   circleMesh->SetUpAttributes("PC");
+   GraphicsObject* whiteCircle = new GraphicsObject();
+   whiteCircle->AddMesh(circleMesh);
+   AddGraphicsObject("whiteCircle", whiteCircle, "simple3DShader");
+   _objects["whiteCircle"]->SendToGPU();
+   _objects["whiteCircle"]->frame.TranslateWorld({ 0, 2.5f, 0 });
+
+
+   OGLVertexMesh<VertexPC>* circleMesh2 = (OGLVertexMesh<VertexPC>*)
+       meshFactoryPCRGB.CircularMeshXY(1.0f, {1.0f,0.0f,0.0f});
+   circleMesh2->SetUpAttributes("PC");
+   GraphicsObject* redCircle = new GraphicsObject();
+   redCircle->AddMesh(circleMesh2);
+   AddGraphicsObject("redCircle", redCircle, "simple3DShader");
+   _objects["redCircle"]->SendToGPU();
+   _objects["redCircle"]->frame.TranslateWorld({ 0, 2.5f, -5.0f });
+
+
+   //MeshFactory<VertexPC, RGB> meshFactoryPRGBT;
+   OGLVertexMesh<VertexPC>* diskMesh = (OGLVertexMesh<VertexPC>*)
+       meshFactoryPCRGB.DiskMesh(0.25f, { 0.3f,0.3f,1.0f }, 10);
+   diskMesh->SetUpAttributes("PC");
+   GraphicsObject* blueDisk = new GraphicsObject();
+   blueDisk->AddMesh(diskMesh);
+   AddGraphicsObject("blueDisk", blueDisk, "simple3DShader");
+   _objects["blueDisk"]->SendToGPU();
+   _objects["blueDisk"]->frame.TranslateWorld({ 0, 2.0f, -7.0f });
+
+   MeshFactory<VertexPCNT, RGB> meshFactoryPCNT;
+   OGLVertexMesh<VertexPCNT>* diskMesh2 = (OGLVertexMesh<VertexPCNT>*)
+       meshFactoryPCNT.NormalizedTexturedDiskMesh(3.5f, { 1,1,1}, 30, 1, 1);
+   diskMesh2->SetUpAttributes("PCNT");
+   diskMesh2->SetTexture(_textures["marbleTexture"]);
+   GraphicsObject* blueDisk2 = new GraphicsObject();
+   blueDisk2->AddMesh(diskMesh2);
+   AddGraphicsObject("blueDisk2", blueDisk2, "lightingShader");
+   _objects["blueDisk2"]->SendToGPU();
+   _objects["blueDisk2"]->frame.TranslateWorld({ 0, 4.0f, 2.0f });
+
    return true;
 }
 
