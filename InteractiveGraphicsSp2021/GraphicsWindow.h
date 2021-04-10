@@ -28,6 +28,7 @@ public:
    virtual void Terminate() = 0;
    virtual void Show() = 0;
    virtual bool IsTimeToClose() = 0;
+   virtual bool IsMinimized() = 0;
    virtual void GetWindowSize(int& width, int& height) = 0;
    virtual void ProcessUserInput() = 0;
    virtual void SwapBuffer() = 0;

@@ -24,6 +24,11 @@ public:
    void PollEvents();
    void Clear();
 
+   bool IsMinimized() {
+      int iconified = glfwGetWindowAttrib(_window, GLFW_ICONIFIED);
+      return iconified != 0;
+   }
+
    GLFWwindow* GetGLFWWindow() {
       return _window;
    }

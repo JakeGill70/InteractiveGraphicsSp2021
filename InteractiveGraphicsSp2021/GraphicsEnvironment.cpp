@@ -58,15 +58,17 @@ void GraphicsEnvironment::Run()
    _window->Show();
    _timer.StartTiming();
    while (!_window->IsTimeToClose()) {
-      _window->GetWindowSize(width, height);
-      _scene->UpdateCameraProjection(width / (float)height);
-      _window->ProcessUserInput();
+      if (!_window->IsMinimized()) {
+         _window->GetWindowSize(width, height);
+         _scene->UpdateCameraProjection(width / (float)height);
+         _window->ProcessUserInput();
 
-      _window->Clear();
-      _scene->Update(_timer.GetElapsedTimeInSeconds());
-      _scene->Render();
+         _window->Clear();
+         _scene->Update(_timer.GetElapsedTimeInSeconds());
+         _scene->Render();
 
-      _window->SwapBuffer();
+         _window->SwapBuffer();
+      }
       _window->PollEvents();
    }
 

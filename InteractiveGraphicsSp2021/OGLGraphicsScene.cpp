@@ -42,7 +42,7 @@ bool OGLGraphicsScene::Create()
    _objects["purpleCube"]->frame.SetPosition(localLights[2].position);
    _objects["redCube"]->frame.SetPosition(localLights[3].position);
 
-   _currentCamera = _cameras["camera1"];
+   _currentCamera = _cameras["camera"];
    _currentCamera->frame.SetPosition(0, 5, 15);
    _currentCamera->SetupLookingForward();
    _currentCamera->UpdateView();
