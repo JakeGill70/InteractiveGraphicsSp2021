@@ -8,6 +8,7 @@
 #include "GLFWInputSystem.h"
 #include "GLFWGraphicsWindow.h"
 #include "SimpleMovingCameraAnimation.h"
+#include "ObjectFactory.h"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
@@ -105,19 +106,95 @@ bool OGLGraphicsScene::Create()
 
    HideAllObjects();
 
-   _objects["floor"]->isVisible = true;
+   //_objects["floor"]->isVisible = true;
    _objects["axis"]->isVisible = true;
 
 
    OGLVertexMesh<VertexPC>* spiroMesh = (OGLVertexMesh<VertexPC>*)
-      //meshFactoryPCRGB.SpirographMeshXY(5, 0.955f, 0.55f, 20, { 1, 0, 1 });
-      meshFactoryPCRGB.SpirographMeshXY(5, 0.5f, 0.9f, 20, { 1, 0, 1 });
+      meshFactoryPCRGB.SpirographMeshXY(5, 0.955f, 0.55f, 20, { 1, 0, 1 });
    spiroMesh->SetUpAttributes("PC");
    GraphicsObject* spirograph = new GraphicsObject();
    spirograph->AddMesh(spiroMesh);
    AddGraphicsObject("spirograph", spirograph, "simple3DShader");
    _objects["spirograph"]->SendToGPU();
-   //_objects["spirograph"]->frame.TranslateWorld({ 0, 5.0f, 0 });
+   _objects["spirograph"]->frame.TranslateWorld({ 0, 5.0f, 0 });
+   _objects["spirograph"]->isVisible = false;
+
+   glm::vec3 points[3]{};
+   points[0] = { -4, 0, 0 };
+   points[1] = { 0, 5, 0 };
+   points[2] = { 4, -5, 0 };
+   OGLVertexMesh<VertexPC>* qbezierMesh = (OGLVertexMesh<VertexPC>*)
+      meshFactoryPCRGB.QuadraticBezierMatrixXY(points, { 0, 1, 0 });
+   qbezierMesh->SetUpAttributes("PC");
+   GraphicsObject* qbezier = new GraphicsObject();
+   qbezier->AddMesh(qbezierMesh);
+   AddGraphicsObject("qbezier", qbezier, "simple3DShader");
+   _objects["qbezier"]->SendToGPU();
+   _objects["qbezier"]->isVisible = false;
+
+   glm::vec3 cpoints[4]{};
+   cpoints[0] = { -4, 0, 0 };
+   cpoints[1] = { 0, 10, 0 };
+   cpoints[2] = { 4, -5, 0 };
+   cpoints[3] = { 6, 0, 0 };
+   OGLVertexMesh<VertexPC>* cbezierMesh = (OGLVertexMesh<VertexPC>*)
+      meshFactoryPCRGB.CubicBezierMatrixXY(cpoints, { 0, 1, 0 });
+   cbezierMesh->SetUpAttributes("PC");
+   GraphicsObject* cbezier = new GraphicsObject();
+   cbezier->AddMesh(cbezierMesh);
+   AddGraphicsObject("cbezier", cbezier, "simple3DShader");
+   _objects["cbezier"]->SendToGPU();
+   _objects["cbezier"]->isVisible = false;
+
+   stringstream ss;
+   GraphicsObject* object;
+   //for (int i = 0; i < 4; i++) {
+   //   object = ObjectFactory::PlainCuboid(0.5f, 0.5f, 0.5f, { 1, 1, 1 });
+   //   ss << "p" << i;
+   //   AddGraphicsObject(ss.str(), object, "simple3DShader");
+   //   _objects[ss.str()]->SendToGPU();
+   //   _objects[ss.str()]->frame.TranslateWorld(cpoints[i]);
+   //}
+
+   glm::vec3 spoints[4][4]{};
+   spoints[0][0] = { -10,  2, -10 };
+   spoints[0][1] = { -7,  6, -10 };
+   spoints[0][2] = { 3, -6, -10 };
+   spoints[0][3] = { 10,  4, -10 };
+
+   spoints[1][0] = { -10,  0, -5 };
+   spoints[1][1] = { -7,  6, -5 };
+   spoints[1][2] = { 3, -6, -5 };
+   spoints[1][3] = { 10,  -6, -5 };
+
+   spoints[2][0] = { -10,  4, 0 };
+   spoints[2][1] = { -7,  6, 0 };
+   spoints[2][2] = { 3, -6, 0 };
+   spoints[2][3] = { 10,  2, 0 };
+
+   spoints[3][0] = { -10,  -4, 5 };
+   spoints[3][1] = { -7,  6, 5 };
+   spoints[3][2] = { 3, -6, 5 };
+   spoints[3][3] = { 10,  -4, 5 };
+   OGLVertexMesh<VertexPC>* cubicPatchMesh = (OGLVertexMesh<VertexPC>*)
+      meshFactoryPCRGB.CubicBezierPatch(spoints, { 0, 1, 0 }, 20);
+   GraphicsObject* cubicPatch = new GraphicsObject();
+   cubicPatch->AddMesh(cubicPatchMesh);
+   AddGraphicsObject("bezierPatch", cubicPatch, "simple3DShader");
+   _objects["bezierPatch"]->SendToGPU();
+
+   for (int row = 0; row < 4; row++) {
+      for (int col = 0; col < 4; col++) {
+         RGB color = { 1, 1, 1 };
+         if (row == col) color = { 1, 0, 0 };
+         object = ObjectFactory::PlainCuboid(0.2f, 0.2f, 0.2f, color);
+         ss << "p" << row << col;
+         AddGraphicsObject(ss.str(), object, "simple3DShader");
+         _objects[ss.str()]->SendToGPU();
+         _objects[ss.str()]->frame.TranslateWorld(spoints[row][col]);
+      }
+   }
 
    return true;
 }

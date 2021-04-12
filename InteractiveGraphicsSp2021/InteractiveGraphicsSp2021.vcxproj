@@ -166,6 +166,8 @@
     <ClCompile Include="GraphicsWindow.cpp" />
     <ClCompile Include="HighResolutionTimer.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MeshFactory.cpp" />
+    <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="OGLGraphicsScene.cpp" />
     <ClCompile Include="OGLGraphicsSystem.cpp" />
     <ClCompile Include="OGLShader.cpp" />
@@ -198,6 +200,7 @@
     <ClInclude Include="GraphicsWindow.h" />
     <ClInclude Include="HighResolutionTimer.h" />
     <ClInclude Include="MeshFactory.hpp" />
+    <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="OGLGraphicsScene.h" />
     <ClInclude Include="OGLGraphicsSystem.h" />
     <ClInclude Include="OGLShader.h" />
