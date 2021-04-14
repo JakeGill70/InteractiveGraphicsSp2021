@@ -20,7 +20,7 @@ local, 0, 0.5f, 2.0f, 1, 1, 1, 0.5f, 1
 local, -7, 2.5f, 3.0f, 1, 1, 0, 0.5f, 0.5f
 local, 3, 1.0f, 7.0f, 1, 0, 1, 0.8f, 0.5f
 local, 5, 1, -5, 1, 0, 0, 0.5f, 0.5f
-#global, 0, 3, 0, 1, 1, 1, 5.0f, 0.5f
+global, 0, 3, 0, 1, 1, 1, 5.0f, 0.5f
 <endLights>
 
 # texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
@@ -131,6 +131,15 @@ material, 0.01, 0.9f, 200.0f
 <endMesh>
 <endObject>
 
+kitchen_ceiling,lightingShader
+<factoried mesh>
+# Format
+# Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, flat, XZ, ceramicTexture, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
 kitchen_cabinet1,lightingShader
 <factoried mesh>
 # Format
@@ -224,53 +233,53 @@ material, 0.01, 0.9f, 200.0f
 #					SPACE
 #############################################
 
-# space_floor,lightingShader
-# <factoried mesh>
-# # Format
-# # Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
-# PCNT, RGBA, flat, XZ, space, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
-# material, 0.01, 0.9f, 200.0f
-# <endMesh>
-# <endObject>
-# 
-# space_ceiling,lightingShader
-# <factoried mesh>
-# # Format
-# # Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
-# PCNT, RGBA, flat, XZ, space, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
-# material, 0.01, 0.9f, 200.0f
-# <endMesh>
-# <endObject>
-# 
-# space_leftWall,lightingShader
-# <factoried mesh>
-# PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-# material, 0.01, 0.9f, 200.0f
-# <endMesh>
-# <endObject>
-# 
-# space_rightWall,lightingShader
-# <factoried mesh>
-# PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-# material, 0.01, 0.9f, 200.0f
-# <endMesh>
-# <endObject>
-# 
-# space_frontWall,lightingShader
-# <factoried mesh>
-# PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-# material, 0.01, 0.9f, 200.0f
-# <endMesh>
-# <endObject>
-# 
-# space_backWall,lightingShader
-# <factoried mesh>
-# PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-# material, 0.01, 0.9f, 200.0f
-# <endMesh>
-# <endObject>
+space_floor,lightingShader
+<factoried mesh>
+# Format
+# Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, flat, XZ, space, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
 
-spaceShip, lightingShader
+space_ceiling,lightingShader
+<factoried mesh>
+# Format
+# Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, flat, XZ, space, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+space_leftWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+space_rightWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+space_frontWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+space_backWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+space_spaceShip, lightingShader
 <file>
 spaceShip.waveFormObj,pallet
 <endObject>

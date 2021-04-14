@@ -21,13 +21,48 @@ void OGLGraphicsScene::MoveRoom(map<string, GraphicsObject*> objectsMap, string 
     for (std::map<string, GraphicsObject*>::iterator it = objectsMap.begin(); it != objectsMap.end(); ++it)
     {
         objectName = it->first;
-        if (objectName.find("kitchen_") == 0) {
+        if (objectName.find(objectNamePrefix) == 0) {
             it->second->frame.TranslateWorld(translationVector);
         }
     }
 }
 
+void OGLGraphicsScene::CreateSpace() {
+    glm::vec3 moveAmt = { 100,0,0 };
+    _objects["space_ceiling"]->frame.RotateLocal(180, { 1,0,0 });
+    _objects["space_ceiling"]->frame.TranslateWorld({ 0, 5, 0 });
+
+    _objects["space_leftWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["space_leftWall"]->frame.RotateLocal(-90, { 0,0,1 });
+    _objects["space_leftWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    _objects["space_rightWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["space_rightWall"]->frame.RotateLocal(90, { 0,0,1 });
+    _objects["space_rightWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    _objects["space_frontWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["space_frontWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    _objects["space_backWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["space_backWall"]->frame.RotateLocal(180, { 0,0,1 });
+    _objects["space_backWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    glm::vec3 spaceShipStartPos = { 20,2,0 };
+    SineWaveMovementAnimation* spaceShipAnimation = new SineWaveMovementAnimation({ -6,0,0 }, 8.0f, (moveAmt + spaceShipStartPos));
+    spaceShipAnimation->SetVertMoveSpeed(5);
+    _objects["space_spaceShip"]->SetAnimation(spaceShipAnimation);
+
+    _objects["space_spaceShip"]->frame.RotateWorld(270, { 0,1,0 });
+
+    MoveRoom(_objects, "space_", moveAmt);
+}
+
 void OGLGraphicsScene::CreateKitchen() {
+    glm::vec3 moveAmt = { 0,0,0 };
+
+    _objects["kitchen_ceiling"]->frame.RotateLocal(180, { 1,0,0 });
+    _objects["kitchen_ceiling"]->frame.TranslateWorld({ 0, 5, 0 });
+
     _objects["kitchen_leftWall"]->frame.RotateLocal(90, { 1,0,0 });
     _objects["kitchen_leftWall"]->frame.RotateLocal(-90, { 0,0,1 });
     _objects["kitchen_leftWall"]->frame.TranslateLocal({ 0,-10,0 });
@@ -72,13 +107,7 @@ void OGLGraphicsScene::CreateKitchen() {
     PlateAnimation* plateAnimation = new PlateAnimation();
     _objects["kitchen_plate"]->SetAnimation(plateAnimation);
 
-    MoveRoom(_objects, "kitchen_", { 100,0,0 });
-
-    SineWaveMovementAnimation* spaceShipAnimation = new SineWaveMovementAnimation({ -2,0,0 }, 5.0f, { 0,0,0 });
-    spaceShipAnimation->SetVertMoveSpeed(5);
-    _objects["spaceShip"]->SetAnimation(spaceShipAnimation);
-
-    _objects["spaceShip"]->frame.RotateWorld(270, { 0,1,0 });
+    MoveRoom(_objects, "kitchen_", moveAmt);
 }
 
 bool OGLGraphicsScene::Create()
@@ -112,23 +141,7 @@ bool OGLGraphicsScene::Create()
 
     CreateKitchen();
 
-    /*_objects["space_ceiling"]->frame.RotateLocal(180, { 1,0,0 });
-    _objects["space_ceiling"]->frame.TranslateWorld({ 0, 5, 0 });
-
-    _objects["space_leftWall"]->frame.RotateLocal(90, { 1,0,0 });
-    _objects["space_leftWall"]->frame.RotateLocal(-90, { 0,0,1 });
-    _objects["space_leftWall"]->frame.TranslateLocal({ 0,-10,0 });
-
-    _objects["space_rightWall"]->frame.RotateLocal(90, { 1,0,0 });
-    _objects["space_rightWall"]->frame.RotateLocal(90, { 0,0,1 });
-    _objects["space_rightWall"]->frame.TranslateLocal({ 0,-10,0 });
-
-    _objects["space_frontWall"]->frame.RotateLocal(90, { 1,0,0 });
-    _objects["space_frontWall"]->frame.TranslateLocal({ 0,-10,0 });
-
-    _objects["space_backWall"]->frame.RotateLocal(90, { 1,0,0 });
-    _objects["space_backWall"]->frame.RotateLocal(180, { 0,0,1 });
-    _objects["space_backWall"]->frame.TranslateLocal({ 0,-10,0 });*/
+    CreateSpace();
 
     //_objects["markerCube"]->frame.SetPosition(_objects["spaceShip"]->frame.GetPosition());
 

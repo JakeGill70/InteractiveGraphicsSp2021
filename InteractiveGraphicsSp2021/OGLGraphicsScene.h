@@ -48,6 +48,7 @@ protected:
 
    // TODO: This really should be apart of a serpate subclass, but it works for now.
    void CreateKitchen();
+   void CreateSpace();
    void MoveRoom(map<string, GraphicsObject*> objectsMap, string objectNamePrefix, glm::vec3 translationVector);
 
 };
