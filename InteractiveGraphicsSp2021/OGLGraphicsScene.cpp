@@ -9,6 +9,7 @@
 #include "GLFWInputSystem.h"
 #include "GLFWGraphicsWindow.h"
 #include "SimpleMovingCameraAnimation.h"
+#include "SineWaveMovementAnimation.h"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
@@ -72,6 +73,12 @@ void OGLGraphicsScene::CreateKitchen() {
     _objects["kitchen_plate"]->SetAnimation(plateAnimation);
 
     MoveRoom(_objects, "kitchen_", { 100,0,0 });
+
+    SineWaveMovementAnimation* spaceShipAnimation = new SineWaveMovementAnimation({ -2,0,0 }, 5.0f, { 0,0,0 });
+    spaceShipAnimation->SetVertMoveSpeed(5);
+    _objects["spaceShip"]->SetAnimation(spaceShipAnimation);
+
+    _objects["spaceShip"]->frame.RotateWorld(270, { 0,1,0 });
 }
 
 bool OGLGraphicsScene::Create()

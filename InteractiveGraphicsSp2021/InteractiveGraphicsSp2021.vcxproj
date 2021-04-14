@@ -180,6 +180,7 @@
     <ClCompile Include="RotateAnimation.cpp" />
     <ClCompile Include="SceneReader.cpp" />
     <ClCompile Include="SimpleMovingCameraAnimation.cpp" />
+    <ClCompile Include="SineWaveMovementAnimation.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +215,7 @@
     <ClInclude Include="RotateAnimation.h" />
     <ClInclude Include="SceneReader.h" />
     <ClInclude Include="SimpleMovingCameraAnimation.h" />
+    <ClInclude Include="SineWaveMovementAnimation.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TextFileReader.h" />
     <ClInclude Include="OGLVertexMesh.hpp" />
