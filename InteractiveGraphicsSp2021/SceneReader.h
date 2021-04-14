@@ -12,6 +12,7 @@ using std::ifstream;
 using std::vector;
 #include <unordered_map>
 using std::unordered_map;
+#include "OGLVertexMesh.hpp"
 
 struct CameraData{
    string name;
@@ -52,11 +53,19 @@ struct FactoriedMeshData {
    Material material;
 };
 
+struct ObjFileMeshData {
+    string textureName;
+    bool hasMaterial;
+    Material material;
+    OGLVertexMesh<VertexPCNT>* meshPtr;
+};
+
 struct ObjectData {
    string name;
    string shaderName;
    vector<MeshData> meshData;
    vector<FactoriedMeshData> factoriedMeshData;
+   vector<ObjFileMeshData> objMeshData;
 };
 
 // texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
@@ -126,6 +135,7 @@ protected:
    virtual void ProcessTextureLine(const string& line);
    virtual void ProcessTextureArrayLine(const string& line);
    virtual void ProcessTextureFileLine(const string& line);
+   virtual void ProcessObjFileLine(const string& line);
 };
 
 #endif

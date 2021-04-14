@@ -170,10 +170,12 @@
     <ClCompile Include="GraphicsWindow.cpp" />
     <ClCompile Include="HighResolutionTimer.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ObjLoader.cpp" />
     <ClCompile Include="OGLGraphicsScene.cpp" />
     <ClCompile Include="OGLGraphicsSystem.cpp" />
     <ClCompile Include="OGLShader.cpp" />
     <ClCompile Include="OGLTexture.cpp" />
+    <ClCompile Include="PlateAnimation.cpp" />
     <ClCompile Include="ReferenceFrame.cpp" />
     <ClCompile Include="RotateAnimation.cpp" />
     <ClCompile Include="SceneReader.cpp" />
@@ -202,10 +204,12 @@
     <ClInclude Include="GraphicsWindow.h" />
     <ClInclude Include="HighResolutionTimer.h" />
     <ClInclude Include="MeshFactory.hpp" />
+    <ClInclude Include="ObjLoader.hpp" />
     <ClInclude Include="OGLGraphicsScene.h" />
     <ClInclude Include="OGLGraphicsSystem.h" />
     <ClInclude Include="OGLShader.h" />
     <ClInclude Include="OGLTexture.h" />
+    <ClInclude Include="PlateAnimation.h" />
     <ClInclude Include="ReferenceFrame.h" />
     <ClInclude Include="RotateAnimation.h" />
     <ClInclude Include="SceneReader.h" />
@@ -215,6 +219,8 @@
     <ClInclude Include="OGLVertexMesh.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ExampleCube.waveFormObj" />
     <None Include="PCNTDiffuse2FragmentShader.glsl" />
     <None Include="PCNTDiffuseFragmentShader.glsl" />
     <None Include="PCNTLightingFragmentShader.glsl" />
@@ -223,23 +229,34 @@
     <None Include="PCTAmbientFragmentShader.glsl" />
     <None Include="labweek07.ig" />
     <None Include="PCT3DVertexShader.glsl" />
+    <None Include="spaceShip.waveFormObj" />
+    <None Include="spaceShip2.waveFormObj" />
     <None Include="TexFragmentShader.glsl" />
     <None Include="Simple3DVertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Project2Scene.txt" />
     <Text Include="scene.txt" />
     <Text Include="Scene2.txt" />
     <Text Include="Scene3.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brickwall.jpg" />
+    <Image Include="cabinetTexture.jpg" />
+    <Image Include="ceramic.jpg" />
     <Image Include="crate.jpg" />
     <Image Include="grass.jpg" />
     <Image Include="marble-stone-floor.jpg" />
     <Image Include="metal.jpg" />
+    <Image Include="pallet.jpg" />
+    <Image Include="pallet2.jpg" />
     <Image Include="pluto_texture.jpg" />
+    <Image Include="seamlessSpaceC0.jpg" />
     <Image Include="sky.jpg" />
     <Image Include="smiley.jpg" />
+    <Image Include="soapyWater.jpg" />
+    <Image Include="stainedKitchenFloor.jpg" />
+    <Image Include="wallpaperWithBevel.jpg" />
     <Image Include="wood_floor.jpg" />
     <Image Include="world.jpg" />
   </ItemGroup>

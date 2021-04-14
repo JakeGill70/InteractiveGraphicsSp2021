@@ -14,14 +14,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    _In_ int       nCmdShow)
 {
    GLFWGraphicsWindow* window = 
-      new GLFWGraphicsWindow(800, 600, "Lec Week 11 - Interactive Graphics");
+      new GLFWGraphicsWindow(800, 600, "Project 2 - Interactive Graphics");
 
    OGLGraphicsSystem* graphicsSystem = new OGLGraphicsSystem();
 
    OGLGraphicsScene* scene = 
       new OGLGraphicsScene(
          window,
-         new SceneReader("Scene3.txt"), 
+         new SceneReader("Project2Scene.txt"), 
          new TextFileReader());
 
    GraphicsEnvironment environment(window, graphicsSystem, scene);

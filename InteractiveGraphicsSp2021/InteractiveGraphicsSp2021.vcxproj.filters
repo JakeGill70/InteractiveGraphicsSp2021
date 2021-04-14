@@ -96,6 +96,12 @@
     <ClCompile Include="GLFWInputSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PlateAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsStructures.h">
@@ -194,6 +200,12 @@
     <ClInclude Include="GLFWInputSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlateAnimation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="labweek07.ig" />
@@ -206,11 +218,22 @@
     <None Include="PCNTDiffuse2FragmentShader.glsl" />
     <None Include="PCNTSpecularFragmentShader.glsl" />
     <None Include="PCNTLightingFragmentShader.glsl" />
+    <None Include="ClassDiagram.cd" />
+    <None Include="spaceShip.waveFormObj">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ExampleCube.waveFormObj">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="spaceShip2.waveFormObj">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="scene.txt" />
     <Text Include="Scene2.txt" />
     <Text Include="Scene3.txt" />
+    <Text Include="Project2Scene.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brickwall.jpg">
@@ -241,6 +264,30 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="world.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="wallpaperWithBevel.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="stainedKitchenFloor.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="cabinetTexture.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="ceramic.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="soapyWater.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="seamlessSpaceC0.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pallet.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pallet2.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

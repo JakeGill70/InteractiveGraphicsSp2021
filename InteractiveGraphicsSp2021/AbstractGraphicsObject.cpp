@@ -31,3 +31,11 @@ void GraphicsObject::SendToGPU()
       mesh->SendToGPU();
    }
 }
+
+GraphicsObject* GraphicsObject::copy() {
+    GraphicsObject* newObj = new GraphicsObject();
+    newObj->frame = this->frame;
+    newObj->_animation = this->_animation;
+    newObj->_meshes = this->_meshes;
+    return newObj;
+}

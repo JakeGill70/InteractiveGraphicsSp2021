@@ -2,6 +2,7 @@
 #include "OGLShader.h"
 #include "TextFileReader.h"
 #include "RotateAnimation.h"
+#include "PlateAnimation.h"
 #include "OGLTexture.h"
 #include "OGLVertexMesh.hpp"
 #include "MeshFactory.hpp"
@@ -14,110 +15,117 @@ OGLGraphicsScene::~OGLGraphicsScene()
    delete _sceneReader;
 }
 
+void OGLGraphicsScene::MoveRoom(map<string, GraphicsObject*> objectsMap, string objectNamePrefix, glm::vec3 translationVector) {
+    string objectName;
+    for (std::map<string, GraphicsObject*>::iterator it = objectsMap.begin(); it != objectsMap.end(); ++it)
+    {
+        objectName = it->first;
+        if (objectName.find("kitchen_") == 0) {
+            it->second->frame.TranslateWorld(translationVector);
+        }
+    }
+}
+
+void OGLGraphicsScene::CreateKitchen() {
+    _objects["kitchen_leftWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["kitchen_leftWall"]->frame.RotateLocal(-90, { 0,0,1 });
+    _objects["kitchen_leftWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    _objects["kitchen_rightWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["kitchen_rightWall"]->frame.RotateLocal(90, { 0,0,1 });
+    _objects["kitchen_rightWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    _objects["kitchen_frontWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["kitchen_frontWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    _objects["kitchen_backWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["kitchen_backWall"]->frame.RotateLocal(180, { 0,0,1 });
+    _objects["kitchen_backWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    _objects["kitchen_cabinet1"]->frame.TranslateLocal({ 0,0.75f,-9 });
+    _objects["kitchen_cabinet2"]->frame.TranslateLocal({ -1.25,0.75f,-9 });
+    _objects["kitchen_cabinet3"]->frame.TranslateLocal({ -2.5,0.75f,-9 });
+    _objects["kitchen_cabinet4"]->frame.TranslateLocal({ 1.25,0.75f,-9 });
+    _objects["kitchen_cabinet5"]->frame.TranslateLocal({ 2.5,0.75f,-9 });
+
+    _objects["kitchen_counterTop1"]->frame.TranslateLocal({ 0, 1.4, -9 });
+    _objects["kitchen_counterTop2"]->frame.TranslateLocal({ -1.25, 1.4, -9 });
+    _objects["kitchen_counterTop3"]->frame.TranslateLocal({ -2.5, 1.4, -9 });
+    _objects["kitchen_counterTop4"]->frame.TranslateLocal({ 1.25, 1.4, -9 });
+    _objects["kitchen_counterTop5"]->frame.TranslateLocal({ 2.5, 1.4, -9 });
+
+    _objects["kitchen_sink"]->frame.TranslateLocal({ 0, 1.451, -9 });
+
+    MeshFactory<VertexPCNT, RGB> meshFactoryPCNT;
+    OGLVertexMesh<VertexPCNT>* plateMesh = (OGLVertexMesh<VertexPCNT>*)
+        meshFactoryPCNT.NormalizedTexturedDiskMesh(0.25f, { 1,1,1 }, 10, 1, 1);
+    plateMesh->SetUpAttributes("PCNT");
+    plateMesh->SetTexture(_textures["ceramicTexture"]);
+    GraphicsObject* plate = new GraphicsObject();
+    plate->AddMesh(plateMesh);
+    AddGraphicsObject("kitchen_plate", plate, "lightingShader");
+    _objects["kitchen_plate"]->SendToGPU();
+    _objects["kitchen_plate"]->frame.TranslateWorld({ 1, 1.451f, -9 });
+    _objects["kitchen_plate"]->frame.RotateLocal(-90, { 1,0,0 });
+
+    PlateAnimation* plateAnimation = new PlateAnimation();
+    _objects["kitchen_plate"]->SetAnimation(plateAnimation);
+
+    MoveRoom(_objects, "kitchen_", { 100,0,0 });
+}
+
 bool OGLGraphicsScene::Create()
 {
-   if (!LoadScene()) return false;
-   ReadCameraData();
-   if (!ReadShaderData()) return false;
-   if (!ReadLightData()) return false;
-   if (!ReadTextureData()) return false;
-   if (!ReadObjectData()) return false;
+    if (!LoadScene()) return false;
+    ReadCameraData();
+    if (!ReadShaderData()) return false;
+    if (!ReadLightData()) return false;
+    if (!ReadTextureData()) return false;
+    if (!ReadObjectData()) return false;
 
-   RotateAnimation* defaultRot = new RotateAnimation();
-   _objects["smileyCube"]->SetAnimation(defaultRot);
-   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-7, 2, 0));
+    _objects["axis"]->frame.TranslateLocal({ 0,0,0 });
 
-   RotateAnimation* defaultRot2 = new RotateAnimation();
-   _objects["smileyCube2"]->SetAnimation(defaultRot2);
-   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(4, 2, 0));
+    _currentCamera = _cameras["camera"];
+    _currentCamera->frame.SetPosition(0, 2, 8);
+    _currentCamera->SetupLookingForward();
+    _currentCamera->UpdateView();
 
-   RotateAnimation* crateRot = new RotateAnimation(glm::vec3(1, 0, 0), 45.0f);
-   _objects["crate"]->SetAnimation(crateRot);
-   _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 6.5f, 0));
-   
-   _objects["axis"]->frame.TranslateWorld(glm::vec3(0, 0.1f, 0));
+    GLFWGraphicsWindow* window = (GLFWGraphicsWindow*)_window;
+    _inputSystem = new GLFWInputSystem(window->GetGLFWWindow());
+    _inputSystem->RegisterKey("W", GLFW_KEY_W);
+    _inputSystem->RegisterKey("S", GLFW_KEY_S);
+    _inputSystem->RegisterKey("A", GLFW_KEY_A);
+    _inputSystem->RegisterKey("D", GLFW_KEY_D);
+    _inputSystem->RegisterKey("LEFT", GLFW_KEY_LEFT);
+    _inputSystem->RegisterKey("RIGHT", GLFW_KEY_RIGHT);
 
-   _objects["whiteCube"]->frame.SetPosition(localLights[0].position);
-   _objects["yellowCube"]->frame.SetPosition(localLights[1].position);
-   _objects["purpleCube"]->frame.SetPosition(localLights[2].position);
+    SimpleMovingCameraAnimation* cameraAnimation = new SimpleMovingCameraAnimation();
+    cameraAnimation->SetInputSystem(_inputSystem);
+    _currentCamera->SetAnimation(cameraAnimation);
 
-   _currentCamera = _cameras["camera"];
-   _currentCamera->frame.SetPosition(0, 5, 15);
-   _currentCamera->SetupLookingForward();
-   _currentCamera->UpdateView();
+    CreateKitchen();
 
-   GLFWGraphicsWindow* window = (GLFWGraphicsWindow*)_window;
-   _inputSystem = new GLFWInputSystem(window->GetGLFWWindow());
-   _inputSystem->RegisterKey("W", GLFW_KEY_W);
-   _inputSystem->RegisterKey("S", GLFW_KEY_S);
-   _inputSystem->RegisterKey("A", GLFW_KEY_A);
-   _inputSystem->RegisterKey("D", GLFW_KEY_D);
-   _inputSystem->RegisterKey("LEFT", GLFW_KEY_LEFT);
-   _inputSystem->RegisterKey("RIGHT", GLFW_KEY_RIGHT);
+    /*_objects["space_ceiling"]->frame.RotateLocal(180, { 1,0,0 });
+    _objects["space_ceiling"]->frame.TranslateWorld({ 0, 5, 0 });
 
-   SimpleMovingCameraAnimation* cameraAnimation = new SimpleMovingCameraAnimation();
-   cameraAnimation->SetInputSystem(_inputSystem);
-   _currentCamera->SetAnimation(cameraAnimation);
+    _objects["space_leftWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["space_leftWall"]->frame.RotateLocal(-90, { 0,0,1 });
+    _objects["space_leftWall"]->frame.TranslateLocal({ 0,-10,0 });
 
-   localLights[_numberOfLights].color = glm::vec3(0.2f, 0.95f, 0.2f);
-   localLights[_numberOfLights].position = glm::vec3(-10.0f, 1.0f, -10.0f);
-   localLights[_numberOfLights].intensity = 0.5f;
-   localLights[_numberOfLights].attenuationCoefficient = 0.5f;
-   _numberOfLights++;
+    _objects["space_rightWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["space_rightWall"]->frame.RotateLocal(90, { 0,0,1 });
+    _objects["space_rightWall"]->frame.TranslateLocal({ 0,-10,0 });
 
-   _objects["greenCube"]->frame.SetPosition(localLights[_numberOfLights-1].position);
+    _objects["space_frontWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["space_frontWall"]->frame.TranslateLocal({ 0,-10,0 });
 
-   _objects["redCube"]->frame.SetPosition(localLights[3].position);
+    _objects["space_backWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["space_backWall"]->frame.RotateLocal(180, { 0,0,1 });
+    _objects["space_backWall"]->frame.TranslateLocal({ 0,-10,0 });*/
 
+    //_objects["markerCube"]->frame.SetPosition(_objects["spaceShip"]->frame.GetPosition());
 
-   // Move the other objects out of the way a bit
-   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-5, 0, 0));
-   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(5, 0, 0));
-   _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 5, 0));
-
-   MeshFactory<VertexPC, RGB> meshFactoryPCRGB;
-   OGLVertexMesh<VertexPC>* circleMesh = (OGLVertexMesh<VertexPC>*)
-       meshFactoryPCRGB.CircularMeshXY(2.5f, { 1, 1, 1 });
-   circleMesh->SetUpAttributes("PC");
-   GraphicsObject* whiteCircle = new GraphicsObject();
-   whiteCircle->AddMesh(circleMesh);
-   AddGraphicsObject("whiteCircle", whiteCircle, "simple3DShader");
-   _objects["whiteCircle"]->SendToGPU();
-   _objects["whiteCircle"]->frame.TranslateWorld({ 0, 2.5f, 0 });
-
-
-   OGLVertexMesh<VertexPC>* circleMesh2 = (OGLVertexMesh<VertexPC>*)
-       meshFactoryPCRGB.CircularMeshXY(1.0f, {1.0f,0.0f,0.0f});
-   circleMesh2->SetUpAttributes("PC");
-   GraphicsObject* redCircle = new GraphicsObject();
-   redCircle->AddMesh(circleMesh2);
-   AddGraphicsObject("redCircle", redCircle, "simple3DShader");
-   _objects["redCircle"]->SendToGPU();
-   _objects["redCircle"]->frame.TranslateWorld({ 0, 2.5f, -5.0f });
-
-
-   //MeshFactory<VertexPC, RGB> meshFactoryPRGBT;
-   OGLVertexMesh<VertexPC>* diskMesh = (OGLVertexMesh<VertexPC>*)
-       meshFactoryPCRGB.DiskMesh(0.25f, { 0.3f,0.3f,1.0f }, 10);
-   diskMesh->SetUpAttributes("PC");
-   GraphicsObject* blueDisk = new GraphicsObject();
-   blueDisk->AddMesh(diskMesh);
-   AddGraphicsObject("blueDisk", blueDisk, "simple3DShader");
-   _objects["blueDisk"]->SendToGPU();
-   _objects["blueDisk"]->frame.TranslateWorld({ 0, 2.0f, -7.0f });
-
-   MeshFactory<VertexPCNT, RGB> meshFactoryPCNT;
-   OGLVertexMesh<VertexPCNT>* diskMesh2 = (OGLVertexMesh<VertexPCNT>*)
-       meshFactoryPCNT.NormalizedTexturedDiskMesh(3.5f, { 1,1,1}, 30, 1, 1);
-   diskMesh2->SetUpAttributes("PCNT");
-   diskMesh2->SetTexture(_textures["marbleTexture"]);
-   GraphicsObject* blueDisk2 = new GraphicsObject();
-   blueDisk2->AddMesh(diskMesh2);
-   AddGraphicsObject("blueDisk2", blueDisk2, "lightingShader");
-   _objects["blueDisk2"]->SendToGPU();
-   _objects["blueDisk2"]->frame.TranslateWorld({ 0, 4.0f, 2.0f });
-
-   return true;
+    return true;
 }
 
 bool OGLGraphicsScene::LoadScene()
@@ -127,7 +135,7 @@ bool OGLGraphicsScene::LoadScene()
    if (_sceneReader->HasError()) {
       return false;
    }
-   _sceneReader->Close();
+   _sceneReader->Close(); 
    return true;
 }
 
@@ -244,6 +252,7 @@ bool OGLGraphicsScene::ReadObjectData()
    ObjectData data;
    MeshData meshData;
    FactoriedMeshData factoriedMeshData;
+   ObjFileMeshData objMeshData;
    unordered_map<string, ObjectData>& objectData = _sceneReader->GetObjectData();
    for (auto it = objectData.begin(); it != objectData.end(); it++) {
       object = new GraphicsObject();
@@ -271,6 +280,12 @@ bool OGLGraphicsScene::ReadObjectData()
             delete object;
             return false;
          }
+      }
+      for (auto mit = data.objMeshData.begin(); mit != data.objMeshData.end(); mit++) {
+          objMeshData = *mit;
+          auto txDat = _textures[objMeshData.textureName];
+          objMeshData.meshPtr->SetTexture(txDat);
+          object->AddMesh(objMeshData.meshPtr);
       }
       AddGraphicsObject(data.name, object, data.shaderName);
       object->SendToGPU();

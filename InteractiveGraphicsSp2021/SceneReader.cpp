@@ -1,4 +1,5 @@
 #include "SceneReader.h"
+#include "ObjLoader.hpp"
 
 void SceneReader::Open()
 {
@@ -60,6 +61,9 @@ void SceneReader::ProcessLine(const string& line)
    }
    else if (_state == "reading index data") {
       ProcessIndexDataLine(line);
+   }
+   else if (_state == "reading obj mesh data") {
+       ProcessObjFileLine(line);
    }
 }
 
@@ -247,6 +251,10 @@ void SceneReader::ProcessMeshDataLine(const string& line)
       _state = "reading factoried mesh data";
       return;
    }
+   if (line == "<file>") {
+       _state = "reading obj mesh data";
+       return;
+   }
    if (line == "<endMesh>") {
       _state = "reading mesh data";
       _currentMeshIndex++;
@@ -337,6 +345,35 @@ void SceneReader::ProcessFactoriedMeshDataLine(const string& line)
    _objectData[_currentName].factoriedMeshData.push_back(factoryMeshData);
 }
 
+void SceneReader::ProcessObjFileLine(const string& line) {
+    string objFileLine = line;
+    Trim(objFileLine);
+    vector<string> tokens;
+    Split(line, ',', tokens);
+    for (size_t i = 0; i < tokens.size(); i++) {
+        Trim(tokens[i]);
+    }
+
+    ObjFileMeshData data;
+    ObjReader objFile(tokens[0]);
+    objFile.Open();
+    objFile.Read();
+    if (objFile.HasError()) {
+        _errorOccurred = true;
+        _log << "This .obj file could not be loaded: " << tokens[0] << std::endl;
+        _state = "reading mesh data";
+        objFile.Close();
+        return;
+    }
+    data.meshPtr = objFile.LoadOBJ();
+    data.textureName = tokens[1];
+    data.hasMaterial = true;
+    data.material = { 0.1, 0.9, 200 };
+    _objectData[_currentName].objMeshData.push_back(data);
+    objFile.Close();
+    _state = "reading mesh data";
+}
+
 void SceneReader::ProcessVertexDataLine(const string& line)
 {
    if (line == "<endVertexData>") {
@@ -371,7 +408,4 @@ void SceneReader::Close()
 {
    _fin.close();
 }
-
-
-
 

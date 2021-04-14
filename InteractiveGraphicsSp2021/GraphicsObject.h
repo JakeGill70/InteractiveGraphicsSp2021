@@ -45,5 +45,7 @@ public:
    virtual void Update(double elapsedSeconds);
 
    virtual void SendToGPU();
+
+   virtual GraphicsObject* copy();
 };
 #endif

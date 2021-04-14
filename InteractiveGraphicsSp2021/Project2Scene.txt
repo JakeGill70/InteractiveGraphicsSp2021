@@ -1,0 +1,280 @@
+# camera name, pos x, pos y, pos z, fov, near plane, far plane
+camera,0,5,10,80,0.1f,50
+<endCameras>
+
+# shader name, file path of vertex shader, file path of fragment shader, camera name
+defaultShader,default,default,none
+simple3DShader,Simple3DVertexShader.glsl,default,camera
+simpleTextureShader,PCT3DVertexShader.glsl,TexFragmentShader.glsl,camera
+ambientShader,PCT3DVertexShader.glsl,PCTAmbientFragmentShader.glsl,camera
+globalDiffuseShader,PCNTLightingVertexShader.glsl,PCNTDiffuseFragmentShader.glsl,camera
+diffuseShader,PCNTLightingVertexShader.glsl,PCNTDiffuse2FragmentShader.glsl,camera
+specularShader,PCNTLightingVertexShader.glsl,PCNTSpecularFragmentShader.glsl,camera
+lightingShader,PCNTLightingVertexShader.glsl,PCNTLightingFragmentShader.glsl,camera
+<endShaders>
+
+# Lights Format:
+# type, x, y, z, r, g, b, intensity, attenuation, coefficient
+global, 100.0f, 100.0f, 0, 1, 1, 1, 0.5, 0.0
+local, 0, 0.5f, 2.0f, 1, 1, 1, 0.5f, 1
+local, -7, 2.5f, 3.0f, 1, 1, 0, 0.5f, 0.5f
+local, 3, 1.0f, 7.0f, 1, 0, 1, 0.8f, 0.5f
+local, 5, 1, -5, 1, 0, 0, 0.5f, 0.5f
+#global, 0, 3, 0, 1, 1, 1, 5.0f, 0.5f
+<endLights>
+
+# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
+brickwallTexture
+<file>
+brickwall.jpg
+<endTexture>
+smileyTexture
+<file>
+smiley.jpg
+<endTexture>
+woodFloorTexture
+<file>
+wood_floor.jpg
+<endTexture>
+marbleTexture
+<file>
+marble-stone-floor.jpg
+<endTexture>
+crateTexture
+<file>
+crate.jpg
+<endTexture>
+stainedKitchenFloor
+<file>
+stainedKitchenFloor.jpg
+<endTexture>
+kitchenWallpaper
+<file>
+wallpaperWithBevel.jpg
+<endTexture>
+cabinetTexture
+<file>
+cabinetTexture.jpg
+<endTexture>
+ceramicTexture
+<file>
+ceramic.jpg
+<endTexture>
+soapyWater
+<file>
+soapyWater.jpg
+<endTexture>
+space
+<file>
+seamlessSpacec0.jpg
+<endTexture>
+pallet
+<file>
+pallet.jpg
+<endTexture>
+
+<endTextures>
+
+# object name, shader name
+axis,simple3DShader
+PC,lines
+# x, y, z, r, g, b
+0, 0, 0, 1, 0, 0
+2.0f, 0, 0, 1, 0, 0
+0,    0, 0, 0, 1, 0
+0, 2.0f, 0, 0, 1, 0
+0, 0,    0, 0, 0, 1
+0, 0, 2.0f, 0, 0, 1
+<endVertexData>
+<endIndexData>
+<endMesh>
+<endObject>
+
+#############################################
+#				   KITCHEN
+#############################################
+
+kitchen_floor,lightingShader
+<factoried mesh>
+# Format
+# Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, flat, XZ, stainedKitchenFloor, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+kitchen_leftWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, kitchenWallpaper, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+kitchen_rightWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, kitchenWallpaper, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+kitchen_frontWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, kitchenWallpaper, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+kitchen_backWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, kitchenWallpaper, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+kitchen_cabinet1,lightingShader
+<factoried mesh>
+# Format
+# Vertex Type, colorType, cuboid, textureName, w, h, l, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, cuboid, cabinetTexture, 1.25, 1.25, 1.25, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
+kitchen_cabinet2,lightingShader
+<factoried mesh>
+# Format
+# Vertex Type, colorType, cuboid, textureName, w, h, l, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, cuboid, cabinetTexture, 1.25, 1.25, 1.25, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
+kitchen_cabinet3,lightingShader
+<factoried mesh>
+# Format
+# Vertex Type, colorType, cuboid, textureName, w, h, l, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, cuboid, cabinetTexture, 1.25, 1.25, 1.25, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
+kitchen_cabinet4,lightingShader
+<factoried mesh>
+# Format
+# Vertex Type, colorType, cuboid, textureName, w, h, l, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, cuboid, cabinetTexture, 1.25, 1.25, 1.25, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
+kitchen_cabinet5,lightingShader
+<factoried mesh>
+# Format
+# Vertex Type, colorType, cuboid, textureName, w, h, l, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, cuboid, cabinetTexture, 1.25, 1.25, 1.25, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
+kitchen_counterTop1,lightingShader
+<factoried mesh>
+# Format
+# Vertex Type, colorType, cuboid, textureName, w, h, l, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, cuboid, ceramicTexture, 1.25, 0.1, 1.25, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
+kitchen_counterTop2,lightingShader
+<factoried mesh>
+# Format
+# Vertex Type, colorType, cuboid, textureName, w, h, l, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, cuboid, marbleTexture, 1.25, 0.1, 1.25, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
+kitchen_counterTop3,lightingShader
+<factoried mesh>
+# Format
+# Vertex Type, colorType, cuboid, textureName, w, h, l, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, cuboid, marbleTexture, 1.25, 0.1, 1.25, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
+kitchen_counterTop4,lightingShader
+<factoried mesh>
+# Format
+# Vertex Type, colorType, cuboid, textureName, w, h, l, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, cuboid, marbleTexture, 1.25, 0.1, 1.25, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
+kitchen_counterTop5,lightingShader
+<factoried mesh>
+# Format
+# Vertex Type, colorType, cuboid, textureName, w, h, l, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, cuboid, marbleTexture, 1.25, 0.1, 1.25, 1, 1, 1, 1, 1, 1
+<endMesh>
+<endObject>
+
+kitchen_sink,lightingShader
+<factoried mesh>
+# Format
+# Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, flat, XZ, soapyWater, -0.5, -0.5, 1, 1, 1, 1, 1, 0, 4, 4
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+#############################################
+#					SPACE
+#############################################
+
+# space_floor,lightingShader
+# <factoried mesh>
+# # Format
+# # Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
+# PCNT, RGBA, flat, XZ, space, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
+# material, 0.01, 0.9f, 200.0f
+# <endMesh>
+# <endObject>
+# 
+# space_ceiling,lightingShader
+# <factoried mesh>
+# # Format
+# # Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
+# PCNT, RGBA, flat, XZ, space, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
+# material, 0.01, 0.9f, 200.0f
+# <endMesh>
+# <endObject>
+# 
+# space_leftWall,lightingShader
+# <factoried mesh>
+# PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+# material, 0.01, 0.9f, 200.0f
+# <endMesh>
+# <endObject>
+# 
+# space_rightWall,lightingShader
+# <factoried mesh>
+# PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+# material, 0.01, 0.9f, 200.0f
+# <endMesh>
+# <endObject>
+# 
+# space_frontWall,lightingShader
+# <factoried mesh>
+# PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+# material, 0.01, 0.9f, 200.0f
+# <endMesh>
+# <endObject>
+# 
+# space_backWall,lightingShader
+# <factoried mesh>
+# PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+# material, 0.01, 0.9f, 200.0f
+# <endMesh>
+# <endObject>
+
+spaceShip, lightingShader
+<file>
+spaceShip.waveFormObj,pallet
+<endObject>
+
+
+<endObjects>
+

@@ -46,6 +46,10 @@ protected:
    void CreatePCCuboidMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPC>*& mesh);
    void CreatePCNTCuboidMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPCNT>*& mesh);
 
+   // TODO: This really should be apart of a serpate subclass, but it works for now.
+   void CreateKitchen();
+   void MoveRoom(map<string, GraphicsObject*> objectsMap, string objectNamePrefix, glm::vec3 translationVector);
+
 };
 
 #endif
