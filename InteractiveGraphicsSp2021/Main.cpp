@@ -15,6 +15,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
    GLFWGraphicsWindow* window = 
       new GLFWGraphicsWindow(800, 600, "Lec Week 13 - Interactive Graphics");
+   window->SetShowState(WindowShowState::Maximized);
 
    OGLGraphicsSystem* graphicsSystem = new OGLGraphicsSystem();
 

@@ -1,5 +1,6 @@
 #include "MeshFactory.hpp"
 #include "OGLVertexMesh.hpp"
+#include "UsefulMacros.h"
 
 template <>
 AbstractVertexMesh<VertexPC>* MeshFactory<VertexPC, RGB>::CircularMeshXY(float radius, RGB color, int steps)
@@ -294,5 +295,232 @@ AbstractVertexMesh<VertexPC>* MeshFactory<VertexPC, RGB>::CubicBezierPatch(
       mesh->AddVertexData(V3);
    }
    mesh->SetUpAttributes("PC");
+   return mesh;
+}
+
+template<>
+AbstractVertexMesh<VertexPCNT>* MeshFactory<VertexPCNT, RGBA>::CubicBezierPatchPCNT(
+   glm::vec3 points[][4], RGBA color, float repeatS, float repeatT, int steps)
+{
+   OGLVertexMesh<VertexPCNT>* mesh = new OGLVertexMesh<VertexPCNT>();
+   mesh->SetPrimitive(GL_TRIANGLES);
+   glm::mat4 CM{};
+   CM[0] = glm::vec4(-1, 3, -3, 1);
+   CM[1] = glm::vec4(3, -6, 3, 0);
+   CM[2] = glm::vec4(-3, 3, 0, 0);
+   CM[3] = glm::vec4(1, 0, 0, 0);
+   glm::mat4 Px{}, Py{}, Pz{};
+   for (auto row = 0; row < 4; row++) {
+      for (auto col = 0; col < 4; col++) {
+         Px[row][col] = points[row][col].x;
+         Py[row][col] = points[row][col].y;
+         Pz[row][col] = points[row][col].z;
+      }
+   }
+   glm::vec4 sv = { 0, 0, 0, 1 };
+   glm::vec4 tv = { 0, 0, 0, 1 };
+   float x, y, z;
+   float tick = 1.0f / steps;
+   // endTick accounts for a rounding error when checking for
+   // 1 inclusive (s <= 1 in the loop below)
+   float endTick = 1.0f + (tick / 2.0f);
+   vector<glm::vec3> vertices;
+
+   for (float s = 0; s <= endTick; s += tick) { // The columns
+      sv[0] = s * s * s;
+      sv[1] = s * s;
+      sv[2] = s;
+      for (float t = 0; t <= endTick; t += tick) { // The rows
+         tv[0] = t * t * t;
+         tv[1] = t * t;
+         tv[2] = t;
+         x = glm::dot(sv, CM * Px * CM * tv);
+         y = glm::dot(sv, CM * Py * CM * tv);
+         z = glm::dot(sv, CM * Pz * CM * tv);
+         vertices.push_back({ x, y, z });
+      }
+   }
+   // Since the range is from 0 to 1 inclusive we'll have one extra row
+   // and column. We have to add 1 to step.
+   int index;
+   glm::vec3 A, B, N;
+   VertexPCNT V1, V2, V3, V4;
+   float s = 0.0f, t = repeatT;
+   float sInc = repeatS / steps;
+   float tInc = repeatT / steps;
+   int row = 0, col = 0;
+   for (col = 0; col < steps; col++) {
+      for (row = 0; row < steps; row++) {
+         // Use column-major calculations
+         index = col * (steps + 1) + row;
+         x = vertices[index].x;
+         y = vertices[index].y;
+         z = vertices[index].z;
+         V1 = { x, y, z, color, {0, 1, 0}, {s, t} };
+         index = col * (steps + 1) + (row + 1);
+         x = vertices[index].x;
+         y = vertices[index].y;
+         z = vertices[index].z;
+         V2 = { x, y, z, color, {0, 1, 0}, {s, t - tInc} };
+         index = (col + 1) * (steps + 1) + (row + 1);
+         x = vertices[index].x;
+         y = vertices[index].y;
+         z = vertices[index].z;
+         V3 = { x, y, z, color, {0, 1, 0}, {s + sInc, t - tInc} };
+         index = (col + 1) * (steps + 1) + row;
+         x = vertices[index].x;
+         y = vertices[index].y;
+         z = vertices[index].z;
+         V4 = { x, y, z, color, {0, 1, 0}, {s + sInc, t} };
+
+         t -= tInc;
+         // V1 +--+ V4
+         //    |\ |
+         //    | \|
+         // V2 +--+ V3
+         A = V2.position.AsVec3() - V1.position.AsVec3();
+         B = V4.position.AsVec3() - V1.position.AsVec3();
+         N = glm::normalize(glm::cross(A, B));
+         V1.normal = { N.x, N.y, N.z };
+
+         A = V1.position.AsVec3() - V2.position.AsVec3();
+         B = V3.position.AsVec3() - V2.position.AsVec3();
+         N = glm::normalize(glm::cross(B, A));
+         V2.normal = { N.x, N.y, N.z };
+
+         A = V2.position.AsVec3() - V3.position.AsVec3();
+         B = V4.position.AsVec3() - V3.position.AsVec3();
+         N = glm::normalize(glm::cross(B, A));
+         V3.normal = { N.x, N.y, N.z };
+
+         A = V1.position.AsVec3() - V4.position.AsVec3();
+         B = V3.position.AsVec3() - V4.position.AsVec3();
+         N = glm::normalize(glm::cross(A, B));
+         V4.normal = { N.x, N.y, N.z };
+
+         mesh->AddVertexData(V1);
+         mesh->AddVertexData(V2);
+         mesh->AddVertexData(V3);
+         mesh->AddVertexData(V1);
+         mesh->AddVertexData(V3);
+         mesh->AddVertexData(V4);
+      }
+      s += sInc;
+   }
+   mesh->SetUpAttributes("PCNT");
+   return mesh;
+}
+
+template<>
+AbstractVertexMesh<VertexPCNT>* MeshFactory<VertexPCNT, RGBA>::CubicBezierPatchPCNTRandomY(
+   glm::vec3 points[][4], float minY, float maxY, RGBA color, float repeatS, float repeatT, int steps)
+{
+   SEED;
+   OGLVertexMesh<VertexPCNT>* mesh = new OGLVertexMesh<VertexPCNT>();
+   mesh->SetPrimitive(GL_TRIANGLES);
+   glm::mat4 CM{};
+   CM[0] = glm::vec4(-1, 3, -3, 1);
+   CM[1] = glm::vec4(3, -6, 3, 0);
+   CM[2] = glm::vec4(-3, 3, 0, 0);
+   CM[3] = glm::vec4(1, 0, 0, 0);
+   glm::mat4 Px{}, Py{}, Pz{};
+   for (auto row = 0; row < 4; row++) {
+      for (auto col = 0; col < 4; col++) {
+         Px[row][col] = points[row][col].x;
+         Py[row][col] = RANGED_RANDOM(minY, maxY);
+         Pz[row][col] = points[row][col].z;
+      }
+   }
+   glm::vec4 sv = { 0, 0, 0, 1 };
+   glm::vec4 tv = { 0, 0, 0, 1 };
+   float x, y, z;
+   float tick = 1.0f / steps;
+   // endTick accounts for a rounding error when checking for
+   // 1 inclusive (s <= 1 in the loop below)
+   float endTick = 1.0f + (tick / 2.0f);
+   vector<glm::vec3> vertices;
+
+   for (float s = 0; s <= endTick; s += tick) { // The columns
+      sv[0] = s * s * s;
+      sv[1] = s * s;
+      sv[2] = s;
+      for (float t = 0; t <= endTick; t += tick) { // The rows
+         tv[0] = t * t * t;
+         tv[1] = t * t;
+         tv[2] = t;
+         x = glm::dot(sv, CM * Px * CM * tv);
+         y = glm::dot(sv, CM * Py * CM * tv);
+         z = glm::dot(sv, CM * Pz * CM * tv);
+         vertices.push_back({ x, y, z });
+      }
+   }
+   // Since the range is from 0 to 1 inclusive we'll have one extra row
+   // and column. We have to add 1 to step.
+   int index;
+   glm::vec3 A, B, N;
+   VertexPCNT V1, V2, V3, V4;
+   float s = 0.0f, t = repeatT;
+   float sInc = repeatS / steps;
+   float tInc = repeatT / steps;
+   int row = 0, col = 0;
+   for (col = 0; col < steps; col++) {
+      for (row = 0; row < steps; row++) {
+         // Use column-major calculations
+         index = col * (steps + 1) + row;
+         x = vertices[index].x;
+         y = vertices[index].y;
+         z = vertices[index].z;
+         V1 = { x, y, z, color, {0, 1, 0}, {s, t} };
+         index = col * (steps + 1) + (row + 1);
+         x = vertices[index].x;
+         y = vertices[index].y;
+         z = vertices[index].z;
+         V2 = { x, y, z, color, {0, 1, 0}, {s, t - tInc} };
+         index = (col + 1) * (steps + 1) + (row + 1);
+         x = vertices[index].x;
+         y = vertices[index].y;
+         z = vertices[index].z;
+         V3 = { x, y, z, color, {0, 1, 0}, {s + sInc, t - tInc} };
+         index = (col + 1) * (steps + 1) + row;
+         x = vertices[index].x;
+         y = vertices[index].y;
+         z = vertices[index].z;
+         V4 = { x, y, z, color, {0, 1, 0}, {s + sInc, t} };
+
+         t -= tInc;
+         // V1 +--+ V4
+         //    |\ |
+         //    | \|
+         // V2 +--+ V3
+         A = V2.position.AsVec3() - V1.position.AsVec3();
+         B = V4.position.AsVec3() - V1.position.AsVec3();
+         N = glm::normalize(glm::cross(A, B));
+         V1.normal = { N.x, N.y, N.z };
+
+         A = V1.position.AsVec3() - V2.position.AsVec3();
+         B = V3.position.AsVec3() - V2.position.AsVec3();
+         N = glm::normalize(glm::cross(B, A));
+         V2.normal = { N.x, N.y, N.z };
+
+         A = V2.position.AsVec3() - V3.position.AsVec3();
+         B = V4.position.AsVec3() - V3.position.AsVec3();
+         N = glm::normalize(glm::cross(B, A));
+         V3.normal = { N.x, N.y, N.z };
+
+         A = V1.position.AsVec3() - V4.position.AsVec3();
+         B = V3.position.AsVec3() - V4.position.AsVec3();
+         N = glm::normalize(glm::cross(A, B));
+         V4.normal = { N.x, N.y, N.z };
+
+         mesh->AddVertexData(V1);
+         mesh->AddVertexData(V2);
+         mesh->AddVertexData(V3);
+         mesh->AddVertexData(V1);
+         mesh->AddVertexData(V3);
+         mesh->AddVertexData(V4);
+      }
+      s += sInc;
+   }
+   mesh->SetUpAttributes("PCNT");
    return mesh;
 }

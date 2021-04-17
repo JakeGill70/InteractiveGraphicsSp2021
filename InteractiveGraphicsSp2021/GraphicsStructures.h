@@ -6,6 +6,9 @@
 
 struct Vector3D {
    GLfloat x, y, z;
+   glm::vec3 AsVec3() {
+      return glm::vec3(x, y, z);
+   }
 };
 
 struct RGB {

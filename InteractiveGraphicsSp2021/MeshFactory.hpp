@@ -29,6 +29,8 @@ public:
    AbstractVertexMesh<VertexPC>* CubicBezierXY(glm::vec3 points[], RGB color, int steps = 10);
    AbstractVertexMesh<VertexPC>* CubicBezierMatrixXY(glm::vec3 points[], RGB color, int steps = 10);
    AbstractVertexMesh<VertexPC>* CubicBezierPatch(glm::vec3 points[][4], RGB color, int steps = 10);
+   AbstractVertexMesh<VertexPCNT>* CubicBezierPatchPCNT(glm::vec3 points[][4], RGBA color, float repeatS = 1, float repeatT = 1, int steps = 10);
+   AbstractVertexMesh<VertexPCNT>* CubicBezierPatchPCNTRandomY(glm::vec3 points[][4], float minY, float maxY, RGBA color, float repeatS = 1, float repeatT = 1, int steps = 10);
 };
 
 template <class V, class C>

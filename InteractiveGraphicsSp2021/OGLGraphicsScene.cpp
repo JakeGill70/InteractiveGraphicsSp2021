@@ -177,12 +177,25 @@ bool OGLGraphicsScene::Create()
    spoints[3][1] = { -7,  6, 5 };
    spoints[3][2] = { 3, -6, 5 };
    spoints[3][3] = { 10,  -4, 5 };
+
    OGLVertexMesh<VertexPC>* cubicPatchMesh = (OGLVertexMesh<VertexPC>*)
       meshFactoryPCRGB.CubicBezierPatch(spoints, { 0, 1, 0 }, 20);
    GraphicsObject* cubicPatch = new GraphicsObject();
    cubicPatch->AddMesh(cubicPatchMesh);
    AddGraphicsObject("bezierPatch", cubicPatch, "simple3DShader");
    _objects["bezierPatch"]->SendToGPU();
+   _objects["bezierPatch"]->isVisible = false;
+
+   OGLVertexMesh<VertexPCNT>* cubicPatchMeshPCNT = (OGLVertexMesh<VertexPCNT>*)
+      meshFactoryPCNTRGBA.CubicBezierPatchPCNTRandomY(spoints, -5, 5, { 1, 1, 1 }, 40, 40, 20);
+   cubicPatchMeshPCNT->SetTexture(_textures["smileyTexture"]);
+   GraphicsObject* cubicPatchPCNT = new GraphicsObject();
+   cubicPatchPCNT->AddMesh(cubicPatchMeshPCNT);
+   AddGraphicsObject("bezierPatchPCNT", cubicPatchPCNT, "lightingShader");
+   _objects["bezierPatchPCNT"]->SendToGPU();
+   //_objects["bezierPatch"]->isVisible = false;
+
+
 
    for (int row = 0; row < 4; row++) {
       for (int col = 0; col < 4; col++) {

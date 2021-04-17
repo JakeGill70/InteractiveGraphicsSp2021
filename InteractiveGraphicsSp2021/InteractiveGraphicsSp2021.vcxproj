@@ -212,6 +212,7 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TextFileReader.h" />
     <ClInclude Include="OGLVertexMesh.hpp" />
+    <ClInclude Include="UsefulMacros.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PCNTDiffuse2FragmentShader.glsl" />
