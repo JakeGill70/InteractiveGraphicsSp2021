@@ -13,6 +13,8 @@ using std::map;
 #include "GraphicsWindow.h"
 #include "AbstractInputSystem.h"
 
+class AbstractKeyBinding;
+
 class BaseGraphicsScene :
     public BaseObject
 {
@@ -26,6 +28,7 @@ protected:
    int _numberOfLights;
    GraphicsWindow* _window;
    AbstractInputSystem* _inputSystem;
+   AbstractKeyBinding* _keyBinding;
 
 public:
    Light globalLight;
@@ -35,7 +38,7 @@ public:
 public:
    BaseGraphicsScene(GraphicsWindow* window) 
       : _currentCamera(nullptr), _textFileReader(nullptr), 
-      _window(window), _inputSystem(nullptr) {
+      _window(window), _inputSystem(nullptr), _keyBinding(nullptr) {
       globalLight.position = { 100.0f, 100.0f, 0 };
       globalLight.color = { 1, 1, 1 };
       globalLight.intensity = 0.25;

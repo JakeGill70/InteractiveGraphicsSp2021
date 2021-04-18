@@ -1,0 +1,73 @@
+# camera name, pos x, pos y, pos z, fov, near plane, far plane
+camera,0,5,10,80,0.1f,50
+<endCameras>
+
+# shader name, file path of vertex shader, file path of fragment shader, camera name
+defaultShader,default,default,none
+simple3DShader,Simple3DVertexShader.glsl,default,camera
+simpleTextureShader,PCT3DVertexShader.glsl,TexFragmentShader.glsl,camera
+ambientShader,PCT3DVertexShader.glsl,PCTAmbientFragmentShader.glsl,camera
+globalDiffuseShader,PCNTLightingVertexShader.glsl,PCNTDiffuseFragmentShader.glsl,camera
+diffuseShader,PCNTLightingVertexShader.glsl,PCNTDiffuse2FragmentShader.glsl,camera
+specularShader,PCNTLightingVertexShader.glsl,PCNTSpecularFragmentShader.glsl,camera
+lightingShader,PCNTLightingVertexShader.glsl,PCNTLightingFragmentShader.glsl,camera
+<endShaders>
+
+global, 100.0f, 100.0f, 0, 1, 1, 1, 0.1, 0.0
+local, 0, 0.5f, 2.0f, 1, 1, 1, 0.5f, 1
+local, -7, 2.5f, 3.0f, 1, 1, 0, 0.5f, 0.5f
+local, 3, 1.0f, 7.0f, 1, 0, 1, 0.8f, 0.5f
+local, 5, 1, -5, 1, 0, 0, 0.5f, 0.5f
+<endLights>
+
+# texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
+brickwallTexture
+<file>
+brickwall.jpg
+<endTexture>
+smileyTexture
+<file>
+smiley.jpg
+<endTexture>
+woodFloorTexture
+<file>
+wood_floor.jpg
+<endTexture>
+marbleTexture
+<file>
+marble-stone-floor.jpg
+<endTexture>
+crateTexture
+<file>
+crate.jpg
+<endTexture>
+worldTexture
+<file>
+world.jpg
+<endTexture>
+<endTextures>
+
+# object name, shader name
+axis,simple3DShader
+PC,lines
+# x, y, z, r, g, b
+0, 0, 0, 1, 0, 0
+2.0f, 0, 0, 1, 0, 0
+0,    0, 0, 0, 1, 0
+0, 2.0f, 0, 0, 1, 0
+0, 0,    0, 0, 0, 1
+0, 0, 2.0f, 0, 0, 1
+<endVertexData>
+<endIndexData>
+<endMesh>
+<endObject>
+
+floor,lightingShader
+<factoried mesh>
+PCNT, RGBA, triangles, flat, XZ, woodFloorTexture, -20, -20, 40, 40, 1, 1, 1, 1, 20, 20
+material, 0.01, 0.9f, 200.0f
+<endMesh>
+<endObject>
+
+<endObjects>
+

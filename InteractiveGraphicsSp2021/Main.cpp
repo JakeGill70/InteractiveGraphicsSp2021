@@ -14,7 +14,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    _In_ int       nCmdShow)
 {
    GLFWGraphicsWindow* window = 
-      new GLFWGraphicsWindow(800, 600, "Lec Week 13 - Interactive Graphics");
+      new GLFWGraphicsWindow(800, 600, "Lec Week 14 - Interactive Graphics");
    window->SetShowState(WindowShowState::Maximized);
 
    OGLGraphicsSystem* graphicsSystem = new OGLGraphicsSystem();
@@ -22,7 +22,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
    OGLGraphicsScene* scene = 
       new OGLGraphicsScene(
          window,
-         new SceneReader("Scene3.txt"), 
+         new SceneReader("SceneLecW14.txt"), 
          new TextFileReader());
 
    GraphicsEnvironment environment(window, graphicsSystem, scene);

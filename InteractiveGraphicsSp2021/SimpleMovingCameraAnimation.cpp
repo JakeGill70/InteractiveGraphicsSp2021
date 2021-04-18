@@ -2,12 +2,16 @@
 #include "ReferenceFrame.h"
 #include "BaseCamera.h"
 #include "AbstractInputSystem.h"
+#include "AbstractKeyBinding.h"
 
-SimpleMovingCameraAnimation::SimpleMovingCameraAnimation()
+SimpleMovingCameraAnimation::SimpleMovingCameraAnimation(
+   BaseCamera* camera, AbstractInputSystem* inputSystem, AbstractKeyBinding* keyBinding)
+   : AbstractCameraAnimation(camera, inputSystem, keyBinding)
 {
    _state = SimpleMovingState::Not_Moving;
    _speed = 20.0f;
    _turnSpeed = 180.0f;
+   _camera->SetAnimation(this);
 }
 
 inline SimpleMovingState SimpleMovingCameraAnimation::GetState()

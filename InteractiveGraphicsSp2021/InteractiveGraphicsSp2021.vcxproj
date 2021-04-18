@@ -182,8 +182,10 @@
     <ClInclude Include="AbstractAnimation.h" />
     <ClInclude Include="AbstractCameraAnimation.h" />
     <ClInclude Include="AbstractInputSystem.h" />
+    <ClInclude Include="AbstractKeyBinding.h" />
     <ClInclude Include="GLFWGraphicsWindow.h" />
     <ClInclude Include="GLFWInputSystem.h" />
+    <ClInclude Include="GLFWKeyBinding.h" />
     <ClInclude Include="GraphicsEnvironment.h" />
     <ClInclude Include="GraphicsObject.h" />
     <ClInclude Include="AbstractMesh.h" />
@@ -230,6 +232,7 @@
     <Text Include="scene.txt" />
     <Text Include="Scene2.txt" />
     <Text Include="Scene3.txt" />
+    <Text Include="SceneLecW14.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brickwall.jpg" />

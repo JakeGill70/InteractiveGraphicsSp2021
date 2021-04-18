@@ -24,6 +24,7 @@ BaseGraphicsScene::~BaseGraphicsScene()
 
    delete _textFileReader;
    if (_inputSystem) delete _inputSystem;
+   if (_keyBinding) delete _keyBinding;
 }
 
 void BaseGraphicsScene::UpdateCameraProjection(float aspectRatio)

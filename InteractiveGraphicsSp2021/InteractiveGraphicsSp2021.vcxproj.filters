@@ -206,6 +206,12 @@
     <ClInclude Include="UsefulMacros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AbstractKeyBinding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLFWKeyBinding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="labweek07.ig" />
@@ -223,6 +229,7 @@
     <Text Include="scene.txt" />
     <Text Include="Scene2.txt" />
     <Text Include="Scene3.txt" />
+    <Text Include="SceneLecW14.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brickwall.jpg">

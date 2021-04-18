@@ -1,6 +1,7 @@
 #include "AbstractCameraAnimation.h"
 #include "BaseCamera.h"
 #include "AbstractInputSystem.h"
+#include "AbstractKeyBinding.h"
 
 void AbstractCameraAnimation::SetCamera(BaseCamera* camera)
 {
@@ -20,5 +21,11 @@ void AbstractCameraAnimation::SetInputSystem(AbstractInputSystem* inputSystem)
 AbstractInputSystem* AbstractCameraAnimation::GetInputSystem()
 {
    return _inputSystem;
+}
+
+void AbstractCameraAnimation::SetKeyBindings(AbstractKeyBinding* keyBinding)
+{
+   _keyBinding = keyBinding;
+   _keyBinding->SetBindings();
 }
 
