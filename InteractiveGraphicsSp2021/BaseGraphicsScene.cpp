@@ -1,4 +1,5 @@
 #include "BaseGraphicsScene.h"
+#include "AbstractKeyBinding.h"
 
 BaseGraphicsScene::~BaseGraphicsScene()
 {
