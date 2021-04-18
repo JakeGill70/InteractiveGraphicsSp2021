@@ -24,6 +24,10 @@ public:
       orientation[3] = glm::vec4(pos, 1.0f);
    }
 
+   glm::vec3 Transform(const glm::vec3& vector) {
+      return orientation * glm::vec4(vector, 1);
+   }
+
    void TranslateLocal(const glm::vec3& vector);
 
    void RotateLocal(float degrees, const glm::vec3& axis);
