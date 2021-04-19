@@ -14,12 +14,14 @@ class OGLGraphicsScene :
 {
 private:
    SceneReader* _sceneReader;
+   bool isShowingControlPoints;
 
 public:
    OGLGraphicsScene(GraphicsWindow* window, SceneReader* sceneReader, TextFileReader* textFileReader)
       : BaseGraphicsScene(window), _sceneReader(sceneReader)
    {
       _textFileReader = textFileReader;
+      isShowingControlPoints = false;
    }
    ~OGLGraphicsScene();
 
@@ -47,6 +49,7 @@ protected:
    void CreatePCNTCuboidMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPCNT>*& mesh);
 
    void CreateRandomCurve(string objName, string texName, glm::vec3 offset);
+   void MakeObjectsVisisble(string objNamePrefix, bool visibility);
 
 };
 

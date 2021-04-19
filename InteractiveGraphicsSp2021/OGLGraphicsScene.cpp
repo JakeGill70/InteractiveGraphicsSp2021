@@ -20,7 +20,16 @@ int getRandomNumber(int min, int max) {
     return ((rand() % (max - min)) + min);
 }
 
+void OGLGraphicsScene::MakeObjectsVisisble(string objNamePrefix, bool visibility) {
+    string objectName;
+    for (std::map<string, GraphicsObject*>::iterator it = _objects.begin(); it != _objects.end(); ++it)
+    {
+        objectName = it->first;
         if (objectName.find(objNamePrefix) == 0) {
+            it->second->isVisible = visibility;
+        }
+    }
+}
 
 void OGLGraphicsScene::CreateRandomCurve(string objName, string texName, glm::vec3 offset) {
     glm::vec3 spoints[4][4]{};
@@ -66,6 +75,7 @@ void OGLGraphicsScene::CreateRandomCurve(string objName, string texName, glm::ve
 
     stringstream ss;
     GraphicsObject* object;
+    VisibilityAnimation* anim;
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
             RGB color = { 1, 1, 1 };
@@ -75,6 +85,8 @@ void OGLGraphicsScene::CreateRandomCurve(string objName, string texName, glm::ve
             object = ObjectFactory::PlainCuboid(0.2f, 0.2f, 0.2f, color);
             ss << "p::" << objName << ":" << row << ":" << col;
             AddGraphicsObject(ss.str(), object, "simple3DShader");
+            anim = new VisibilityAnimation(_inputSystem);
+            _objects[ss.str()]->SetAnimation(anim);
             _objects[ss.str()]->frame.TranslateWorld(spoints[row][col] + offset);
             _objects[ss.str()]->SendToGPU();
         }
@@ -103,6 +115,7 @@ bool OGLGraphicsScene::Create()
    _inputSystem->RegisterKey("D", GLFW_KEY_D);
    _inputSystem->RegisterKey("LEFT", GLFW_KEY_LEFT);
    _inputSystem->RegisterKey("RIGHT", GLFW_KEY_RIGHT);
+   _inputSystem->RegisterKey("1", GLFW_KEY_1);
 
    SimpleMovingCameraAnimation* cameraAnimation = new SimpleMovingCameraAnimation();
    cameraAnimation->SetInputSystem(_inputSystem);
