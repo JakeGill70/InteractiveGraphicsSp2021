@@ -27,6 +27,7 @@ void SimpleMovingCameraAnimation::Update(double elapsedSeconds)
 {
 	CheckInputSystem();
 	ReferenceFrame& frame = _camera->frame;
+	glm::vec3 camPos = frame.GetPosition();
 	glm::vec3 moveDelta(1);
 	switch (_state) {
 	case SimpleMovingState::Not_Moving:
@@ -95,6 +96,21 @@ void SimpleMovingCameraAnimation::CheckInputSystem()
 	keyState = _inputSystem->GetKeyState("RIGHT");
 	if (keyState == KeyState::Pressed) {
 		_state = SimpleMovingState::Turning_Right;
+		return;
+	}
+	keyState = _inputSystem->GetKeyState("1");
+	if (keyState == KeyState::Pressed) {
+		_camera->frame.SetPosition({ 0,2,-6 });
+		return;
+	}
+	keyState = _inputSystem->GetKeyState("2");
+	if (keyState == KeyState::Pressed) {
+		_camera->frame.SetPosition({ 200,2,6 });
+		return;
+	}
+	keyState = _inputSystem->GetKeyState("3");
+	if (keyState == KeyState::Pressed) {
+		_camera->frame.SetPosition({ 300,2,8 });
 		return;
 	}
 }

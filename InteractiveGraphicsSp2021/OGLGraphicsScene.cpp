@@ -10,6 +10,7 @@
 #include "GLFWGraphicsWindow.h"
 #include "SimpleMovingCameraAnimation.h"
 #include "SineWaveMovementAnimation.h"
+#include "JumpAnimation.h"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
@@ -27,8 +28,58 @@ void OGLGraphicsScene::MoveRoom(map<string, GraphicsObject*> objectsMap, string 
     }
 }
 
-void OGLGraphicsScene::CreateSpace() {
-    glm::vec3 moveAmt = { 100,0,0 };
+void OGLGraphicsScene::CreateClassRoom(glm::vec3 moveAmt) {
+    _objects["classRoom_ceiling"]->frame.RotateLocal(180, { 1,0,0 });
+    _objects["classRoom_ceiling"]->frame.TranslateWorld({ 0, 5, 0 });
+
+    _objects["classRoom_leftWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["classRoom_leftWall"]->frame.RotateLocal(-90, { 0,0,1 });
+    _objects["classRoom_leftWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    _objects["classRoom_rightWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["classRoom_rightWall"]->frame.RotateLocal(90, { 0,0,1 });
+    _objects["classRoom_rightWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    _objects["classRoom_frontWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["classRoom_frontWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    _objects["classRoom_backWall"]->frame.RotateLocal(90, { 1,0,0 });
+    _objects["classRoom_backWall"]->frame.RotateLocal(180, { 0,0,1 });
+    _objects["classRoom_backWall"]->frame.TranslateLocal({ 0,-10,0 });
+
+    _objects["classRoom_chalkBoard"]->frame.TranslateLocal({ 0,2,-10 });
+
+    _objects["classRoom_desk1"]->frame.TranslateLocal({ -4,0,-3 });
+    _objects["classRoom_desk2"]->frame.TranslateLocal({ -2,0,-3 });
+    _objects["classRoom_desk3"]->frame.TranslateLocal({  0,0,-3 });
+    _objects["classRoom_desk4"]->frame.TranslateLocal({  2,0,-3 });
+    _objects["classRoom_desk5"]->frame.TranslateLocal({  4,0,-3 });
+
+    _objects["classRoom_desk6"]->frame.TranslateLocal({ -4,0,0 });
+    _objects["classRoom_desk7"]->frame.TranslateLocal({ -2,0,0 });
+    _objects["classRoom_desk8"]->frame.TranslateLocal({  0,0,0 });
+    _objects["classRoom_desk9"]->frame.TranslateLocal({  2,0,0 });
+    _objects["classRoom_desk10"]->frame.TranslateLocal({ 4,0,0 });
+
+    _objects["classRoom_desk11"]->frame.TranslateLocal({ -4,0,3 });
+    _objects["classRoom_desk12"]->frame.TranslateLocal({ -2,0,3 });
+    _objects["classRoom_desk13"]->frame.TranslateLocal({  0,0,3 });
+    _objects["classRoom_desk14"]->frame.TranslateLocal({  2,0,3 });
+    _objects["classRoom_desk15"]->frame.TranslateLocal({  4,0,3 });
+
+    string deskName;
+    JumpAnimation* jmpAnim;
+    for (int i = 16; i-->1;)
+    {
+        deskName = "classRoom_desk" + std::to_string(i);
+        jmpAnim = new JumpAnimation(1, _inputSystem);
+        _objects[deskName]->SetAnimation(jmpAnim);
+    }
+
+    MoveRoom(_objects, "classRoom_", moveAmt);
+}
+
+void OGLGraphicsScene::CreateSpace(glm::vec3 moveAmt) {
     _objects["space_ceiling"]->frame.RotateLocal(180, { 1,0,0 });
     _objects["space_ceiling"]->frame.TranslateWorld({ 0, 5, 0 });
 
@@ -54,11 +105,15 @@ void OGLGraphicsScene::CreateSpace() {
 
     _objects["space_spaceShip"]->frame.RotateWorld(270, { 0,1,0 });
 
+    _objects["space_spaceStation"]->frame.TranslateLocal({ -2,0,-3 });
+
+    RotateAnimation* stationAnim = new RotateAnimation({ 0,1,0 }, 15);
+    _objects["space_spaceStation"]->SetAnimation(stationAnim);
+
     MoveRoom(_objects, "space_", moveAmt);
 }
 
-void OGLGraphicsScene::CreateKitchen() {
-    glm::vec3 moveAmt = { 0,0,0 };
+void OGLGraphicsScene::CreateKitchen(glm::vec3 moveAmt) {
 
     _objects["kitchen_ceiling"]->frame.RotateLocal(180, { 1,0,0 });
     _objects["kitchen_ceiling"]->frame.TranslateWorld({ 0, 5, 0 });
@@ -119,10 +174,10 @@ bool OGLGraphicsScene::Create()
     if (!ReadTextureData()) return false;
     if (!ReadObjectData()) return false;
 
-    _objects["axis"]->frame.TranslateLocal({ 0,0,0 });
+    //_objects["axis"]->frame.TranslateLocal({ 0,0,0 });
 
     _currentCamera = _cameras["camera"];
-    _currentCamera->frame.SetPosition(0, 2, 8);
+    _currentCamera->frame.SetPosition(100, 2, 8);
     _currentCamera->SetupLookingForward();
     _currentCamera->UpdateView();
 
@@ -134,16 +189,21 @@ bool OGLGraphicsScene::Create()
     _inputSystem->RegisterKey("D", GLFW_KEY_D);
     _inputSystem->RegisterKey("LEFT", GLFW_KEY_LEFT);
     _inputSystem->RegisterKey("RIGHT", GLFW_KEY_RIGHT);
+    _inputSystem->RegisterKey("SPACE", GLFW_KEY_SPACE);
+    _inputSystem->RegisterKey("1", GLFW_KEY_1);
+    _inputSystem->RegisterKey("2", GLFW_KEY_2);
+    _inputSystem->RegisterKey("3", GLFW_KEY_3);
 
     SimpleMovingCameraAnimation* cameraAnimation = new SimpleMovingCameraAnimation();
     cameraAnimation->SetInputSystem(_inputSystem);
     _currentCamera->SetAnimation(cameraAnimation);
 
-    CreateKitchen();
+    CreateKitchen({0,0,0});
 
-    CreateSpace();
+    CreateSpace({ 200,0,0 });
 
-    //_objects["markerCube"]->frame.SetPosition(_objects["spaceShip"]->frame.GetPosition());
+    CreateClassRoom({ 300,0,0 });
+
 
     return true;
 }

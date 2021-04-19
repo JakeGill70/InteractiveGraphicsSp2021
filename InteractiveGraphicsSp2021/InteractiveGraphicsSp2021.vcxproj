@@ -169,6 +169,7 @@
     <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="GraphicsWindow.cpp" />
     <ClCompile Include="HighResolutionTimer.cpp" />
+    <ClCompile Include="JumpAnimation.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
     <ClCompile Include="OGLGraphicsScene.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="GraphicsSystem.h" />
     <ClInclude Include="GraphicsWindow.h" />
     <ClInclude Include="HighResolutionTimer.h" />
+    <ClInclude Include="JumpAnimation.h" />
     <ClInclude Include="MeshFactory.hpp" />
     <ClInclude Include="ObjLoader.hpp" />
     <ClInclude Include="OGLGraphicsScene.h" />
@@ -221,6 +223,7 @@
     <ClInclude Include="OGLVertexMesh.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ChalkBoard.waveFormObj" />
     <None Include="ClassDiagram.cd" />
     <None Include="ExampleCube.waveFormObj" />
     <None Include="PCNTDiffuse2FragmentShader.glsl" />
@@ -231,8 +234,10 @@
     <None Include="PCTAmbientFragmentShader.glsl" />
     <None Include="labweek07.ig" />
     <None Include="PCT3DVertexShader.glsl" />
+    <None Include="SchoolDesk.waveFormObj" />
     <None Include="spaceShip.waveFormObj" />
     <None Include="spaceShip2.waveFormObj" />
+    <None Include="spaceStation.waveFormObj" />
     <None Include="TexFragmentShader.glsl" />
     <None Include="Simple3DVertexShader.glsl" />
   </ItemGroup>

@@ -15,12 +15,13 @@ lightingShader,PCNTLightingVertexShader.glsl,PCNTLightingFragmentShader.glsl,cam
 
 # Lights Format:
 # type, x, y, z, r, g, b, intensity, attenuation, coefficient
-global, 100.0f, 100.0f, 0, 1, 1, 1, 0.5, 0.0
-local, 0, 0.5f, 2.0f, 1, 1, 1, 0.5f, 1
-local, -7, 2.5f, 3.0f, 1, 1, 0, 0.5f, 0.5f
-local, 3, 1.0f, 7.0f, 1, 0, 1, 0.8f, 0.5f
-local, 5, 1, -5, 1, 0, 0, 0.5f, 0.5f
-global, 0, 3, 0, 1, 1, 1, 5.0f, 0.5f
+global, 100.0f, 100.0f, 0, 1, 1, 1, 0.1, 0.0
+# Kitchen Light
+local, 0, 3, 0, 1, 1, 1, 5f, 0.2f
+# Space Light
+local, 200, 3, 0, 0.8f, 0.8f, 1.0f, 3f, 0.5f
+# ClassRoom Light
+local, 300, 3, 0, 1, 1, 1, 3f, 0.5f
 <endLights>
 
 # texture name, width, height, number of channels, wrap s, wrap t, min filter, max filter
@@ -106,28 +107,28 @@ material, 0.01, 0.9f, 200.0f
 kitchen_leftWall,lightingShader
 <factoried mesh>
 PCNT, RGBA, flat, XZ, kitchenWallpaper, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-material, 0.01, 0.9f, 200.0f
+material, 0.05, 0.1f, 1.0f
 <endMesh>
 <endObject>
 
 kitchen_rightWall,lightingShader
 <factoried mesh>
 PCNT, RGBA, flat, XZ, kitchenWallpaper, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-material, 0.01, 0.9f, 200.0f
+material, 0.05, 0.1f, 1.0f
 <endMesh>
 <endObject>
 
 kitchen_frontWall,lightingShader
 <factoried mesh>
 PCNT, RGBA, flat, XZ, kitchenWallpaper, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-material, 0.01, 0.9f, 200.0f
+material, 0.05, 0.1f, 1.0f
 <endMesh>
 <endObject>
 
 kitchen_backWall,lightingShader
 <factoried mesh>
 PCNT, RGBA, flat, XZ, kitchenWallpaper, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-material, 0.01, 0.9f, 200.0f
+material, 0.05, 0.1f, 1.0f
 <endMesh>
 <endObject>
 
@@ -238,7 +239,7 @@ space_floor,lightingShader
 # Format
 # Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
 PCNT, RGBA, flat, XZ, space, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
-material, 0.01, 0.9f, 200.0f
+material, 0.05, 0.1f, 1.0f
 <endMesh>
 <endObject>
 
@@ -247,35 +248,35 @@ space_ceiling,lightingShader
 # Format
 # Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
 PCNT, RGBA, flat, XZ, space, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
-material, 0.01, 0.9f, 200.0f
+material, 0.05, 0.1f, 1.0f
 <endMesh>
 <endObject>
 
 space_leftWall,lightingShader
 <factoried mesh>
 PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-material, 0.01, 0.9f, 200.0f
+material, 0.05, 0.1f, 1.0f
 <endMesh>
 <endObject>
 
 space_rightWall,lightingShader
 <factoried mesh>
 PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-material, 0.01, 0.9f, 200.0f
+material, 0.05, 0.1f, 1.0f
 <endMesh>
 <endObject>
 
 space_frontWall,lightingShader
 <factoried mesh>
 PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-material, 0.01, 0.9f, 200.0f
+material, 0.05, 0.1f, 1.0f
 <endMesh>
 <endObject>
 
 space_backWall,lightingShader
 <factoried mesh>
 PCNT, RGBA, flat, XZ, space, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
-material, 0.01, 0.9f, 200.0f
+material, 0.05, 0.1f, 1.0f
 <endMesh>
 <endObject>
 
@@ -284,6 +285,141 @@ space_spaceShip, lightingShader
 spaceShip.waveFormObj,pallet
 <endObject>
 
+space_spaceStation, lightingShader
+<file>
+spaceStation.waveFormObj,pallet
+<endObject>
+
+
+#############################################
+#				 CLASS ROOM
+#############################################
+
+classRoom_floor,lightingShader
+<factoried mesh>
+# Format
+# Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, flat, XZ, woodFloorTexture, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
+material, 0.01, 0.3f, 200.0f
+<endMesh>
+<endObject>
+
+classRoom_ceiling,lightingShader
+<factoried mesh>
+# Format
+# Vertex type, color, flat, XZ, textureName, xPos, zPos, width, length, R, G, B, A, repeatT, repeatS
+PCNT, RGBA, flat, XZ, ceramicTexture, -10, -10, 20, 20, 1, 1, 1, 0, 4, 4
+material, 0.05, 0.1f, 1.0f
+<endMesh>
+<endObject>
+
+classRoom_leftWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, brickwallTexture, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.05, 0.1f, 1.0f
+<endMesh>
+<endObject>
+
+classRoom_rightWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, brickwallTexture, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.05, 0.1f, 1.0f
+<endMesh>
+<endObject>
+
+classRoom_frontWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, brickwallTexture, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.05, 0.1f, 1.0f
+<endMesh>
+<endObject>
+
+classRoom_backWall,lightingShader
+<factoried mesh>
+PCNT, RGBA, flat, XZ, brickwallTexture, -10, -5, 20, 5, 1, 1, 1, 1, 5, 1
+material, 0.05, 0.1f, 1.0f
+<endMesh>
+<endObject>
+
+classRoom_chalkBoard, lightingShader
+<file>
+ChalkBoard.waveFormObj,pallet
+<endObject>
+
+classRoom_desk1, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk2, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk3, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk4, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk5, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk6, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk7, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk8, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk9, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk10, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk11, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk12, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk13, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk14, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
+
+classRoom_desk15, lightingShader
+<file>
+SchoolDesk.waveFormObj,pallet
+<endObject>
 
 <endObjects>
 

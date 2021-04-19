@@ -105,6 +105,9 @@
     <ClCompile Include="SineWaveMovementAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="JumpAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsStructures.h">
@@ -212,6 +215,9 @@
     <ClInclude Include="SineWaveMovementAnimation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JumpAnimation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="labweek07.ig" />
@@ -232,6 +238,15 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="spaceShip2.waveFormObj">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SchoolDesk.waveFormObj">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ChalkBoard.waveFormObj">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="spaceStation.waveFormObj">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
