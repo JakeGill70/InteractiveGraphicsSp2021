@@ -46,6 +46,8 @@ protected:
    void CreatePCCuboidMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPC>*& mesh);
    void CreatePCNTCuboidMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPCNT>*& mesh);
 
+   void CreateRandomCurve(string objName, string texName, glm::vec3 offset);
+
 };
 
 #endif

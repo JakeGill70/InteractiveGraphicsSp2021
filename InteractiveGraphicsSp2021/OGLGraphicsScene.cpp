@@ -9,10 +9,76 @@
 #include "GLFWGraphicsWindow.h"
 #include "SimpleMovingCameraAnimation.h"
 #include "ObjectFactory.h"
+#include "VisibilityAnimation.h"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
-   delete _sceneReader;
+   delete _sceneReader; 
+}
+
+int getRandomNumber(int min, int max) {
+    return ((rand() % (max - min)) + min);
+}
+
+        if (objectName.find(objNamePrefix) == 0) {
+
+void OGLGraphicsScene::CreateRandomCurve(string objName, string texName, glm::vec3 offset) {
+    glm::vec3 spoints[4][4]{};
+    /*spoints[0][0] = { -10,  2, -10 };
+    spoints[0][1] = { -7,  6, -10 };
+    spoints[0][2] = { 3, -6, -10 };
+    spoints[0][3] = { 10,  4, -10 };
+
+    spoints[1][0] = { -10,  0, -5 };
+    spoints[1][1] = { -7,  6, -5 };
+    spoints[1][2] = { 3, -6, -5 };
+    spoints[1][3] = { 10,  -6, -5 };
+
+    spoints[2][0] = { -10,  4, 0 };
+    spoints[2][1] = { -7,  6, 0 };
+    spoints[2][2] = { 3, -6, 0 };
+    spoints[2][3] = { 10,  2, 0 };
+
+    spoints[3][0] = { -10,  -4, 5 };
+    spoints[3][1] = { -7,  6, 5 };
+    spoints[3][2] = { 3, -6, 5 };
+    spoints[3][3] = { 10,  -4, 5 };*/
+
+    int z;
+    for (int row = 0; row < 4; row++) {
+        z = getRandomNumber(-10, 10);
+        spoints[row][0] = { getRandomNumber(-10,10), getRandomNumber(-5,5), z };
+        spoints[row][1] = { getRandomNumber(-10,10), getRandomNumber(-5,5), z };
+        spoints[row][2] = { getRandomNumber(-10,10), getRandomNumber(-5,5), z };
+        spoints[row][3] = { getRandomNumber(-10,10), getRandomNumber(-5,5), z };
+    }
+
+    MeshFactory<VertexPCNT, RGBA> meshFactoryPCNTRGBA;
+
+    OGLVertexMesh<VertexPCNT>* patch_Mesh = (OGLVertexMesh<VertexPCNT>*)
+        meshFactoryPCNTRGBA.CubicBezierPatchPCNTRandomY(spoints, -5, 5, { 1, 1, 1 }, 40, 40, 20);
+    patch_Mesh->SetTexture(_textures[texName]);
+    GraphicsObject* patch_Object = new GraphicsObject();
+    patch_Object->AddMesh(patch_Mesh);
+    patch_Object->frame.TranslateWorld(offset);
+    AddGraphicsObject(objName, patch_Object, "lightingShader");
+    _objects[objName]->SendToGPU();
+
+    stringstream ss;
+    GraphicsObject* object;
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            RGB color = { 1, 1, 1 };
+            if (row == col) {
+                color = { 1, 0, 0 };
+            }
+            object = ObjectFactory::PlainCuboid(0.2f, 0.2f, 0.2f, color);
+            ss << "p::" << objName << ":" << row << ":" << col;
+            AddGraphicsObject(ss.str(), object, "simple3DShader");
+            _objects[ss.str()]->frame.TranslateWorld(spoints[row][col] + offset);
+            _objects[ss.str()]->SendToGPU();
+        }
+    }
 }
 
 bool OGLGraphicsScene::Create()
@@ -24,27 +90,8 @@ bool OGLGraphicsScene::Create()
    if (!ReadTextureData()) return false;
    if (!ReadObjectData()) return false;
 
-   RotateAnimation* defaultRot = new RotateAnimation();
-   _objects["smileyCube"]->SetAnimation(defaultRot);
-   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-7, 2, 0));
-
-   RotateAnimation* defaultRot2 = new RotateAnimation();
-   _objects["smileyCube2"]->SetAnimation(defaultRot2);
-   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(4, 2, 0));
-
-   RotateAnimation* crateRot = new RotateAnimation(glm::vec3(1, 0, 0), 45.0f);
-   _objects["crate"]->SetAnimation(crateRot);
-   _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 6.5f, 0));
-   
-   _objects["axis"]->frame.TranslateWorld(glm::vec3(0, 0.1f, 0));
-
-   _objects["whiteCube"]->frame.SetPosition(localLights[0].position);
-   _objects["yellowCube"]->frame.SetPosition(localLights[1].position);
-   _objects["purpleCube"]->frame.SetPosition(localLights[2].position);
-   _objects["redCube"]->frame.SetPosition(localLights[3].position);
-
    _currentCamera = _cameras["camera"];
-   _currentCamera->frame.SetPosition(0, 5, 15);
+   _currentCamera->frame.SetPosition(0, 0, 15);
    _currentCamera->SetupLookingForward();
    _currentCamera->UpdateView();
 
@@ -67,147 +114,10 @@ bool OGLGraphicsScene::Create()
    localLights[_numberOfLights].attenuationCoefficient = 0.5f;
    _numberOfLights++;
 
-   MeshFactory<VertexPC, RGB> meshFactoryPCRGB;
-   _objects["greenCube"]->frame.SetPosition(localLights[_numberOfLights-1].position);
-
-   // Move the other objects out of the way a bit
-   _objects["smileyCube"]->frame.TranslateWorld(glm::vec3(-5, 0, 0));
-   _objects["smileyCube2"]->frame.TranslateWorld(glm::vec3(5, 0, 0));
-   _objects["crate"]->frame.TranslateWorld(glm::vec3(0, 5, 0));
-
-   OGLVertexMesh<VertexPC>* circleMesh = (OGLVertexMesh<VertexPC>*)
-      meshFactoryPCRGB.CircularMeshXY(2.5f, { 1, 1, 1 });
-   circleMesh->SetUpAttributes("PC");
-   GraphicsObject* whiteCircle = new GraphicsObject();
-   whiteCircle->AddMesh(circleMesh);
-   AddGraphicsObject("whiteCircle", whiteCircle, "simple3DShader");
-   _objects["whiteCircle"]->SendToGPU();
-   _objects["whiteCircle"]->frame.TranslateWorld({ 0, 2.5f, 0 });
-
-   OGLVertexMesh<VertexPC>* circleMesh2 = (OGLVertexMesh<VertexPC>*)
-      meshFactoryPCRGB.CircularMeshXY(4.0f, { 0.23f, 0.45f, 0.67f });
-   circleMesh2->SetUpAttributes("PC");
-   GraphicsObject* myCircle = new GraphicsObject();
-   myCircle->AddMesh(circleMesh2);
-   AddGraphicsObject("myCircle", myCircle, "simple3DShader");
-   _objects["myCircle"]->SendToGPU();
-   _objects["myCircle"]->frame.TranslateWorld({ 0, 4.0f, -10 });
-
-   MeshFactory<VertexPCNT, RGBA> meshFactoryPCNTRGBA;
-   OGLVertexMesh<VertexPCNT>* diskMesh = (OGLVertexMesh<VertexPCNT>*)
-      meshFactoryPCNTRGBA.DiskMeshXY(5, { 1, 1, 1, 1 });
-   diskMesh->SetUpAttributes("PCNT");
-   diskMesh->SetTexture(_textures["marbleTexture"]);
-   GraphicsObject* worldDisk = new GraphicsObject();
-   worldDisk->AddMesh(diskMesh);
-   AddGraphicsObject("worldDisk", worldDisk, "lightingShader");
-   _objects["worldDisk"]->SendToGPU();
-   _objects["worldDisk"]->frame.TranslateWorld({ 0, 5, 2.5f });
-
-   HideAllObjects();
-
-   //_objects["floor"]->isVisible = true;
-   _objects["axis"]->isVisible = true;
-
-
-   OGLVertexMesh<VertexPC>* spiroMesh = (OGLVertexMesh<VertexPC>*)
-      meshFactoryPCRGB.SpirographMeshXY(5, 0.955f, 0.55f, 20, { 1, 0, 1 });
-   spiroMesh->SetUpAttributes("PC");
-   GraphicsObject* spirograph = new GraphicsObject();
-   spirograph->AddMesh(spiroMesh);
-   AddGraphicsObject("spirograph", spirograph, "simple3DShader");
-   _objects["spirograph"]->SendToGPU();
-   _objects["spirograph"]->frame.TranslateWorld({ 0, 5.0f, 0 });
-   _objects["spirograph"]->isVisible = false;
-
-   glm::vec3 points[3]{};
-   points[0] = { -4, 0, 0 };
-   points[1] = { 0, 5, 0 };
-   points[2] = { 4, -5, 0 };
-   OGLVertexMesh<VertexPC>* qbezierMesh = (OGLVertexMesh<VertexPC>*)
-      meshFactoryPCRGB.QuadraticBezierMatrixXY(points, { 0, 1, 0 });
-   qbezierMesh->SetUpAttributes("PC");
-   GraphicsObject* qbezier = new GraphicsObject();
-   qbezier->AddMesh(qbezierMesh);
-   AddGraphicsObject("qbezier", qbezier, "simple3DShader");
-   _objects["qbezier"]->SendToGPU();
-   _objects["qbezier"]->isVisible = false;
-
-   glm::vec3 cpoints[4]{};
-   cpoints[0] = { -4, 0, 0 };
-   cpoints[1] = { 0, 10, 0 };
-   cpoints[2] = { 4, -5, 0 };
-   cpoints[3] = { 6, 0, 0 };
-   OGLVertexMesh<VertexPC>* cbezierMesh = (OGLVertexMesh<VertexPC>*)
-      meshFactoryPCRGB.CubicBezierMatrixXY(cpoints, { 0, 1, 0 });
-   cbezierMesh->SetUpAttributes("PC");
-   GraphicsObject* cbezier = new GraphicsObject();
-   cbezier->AddMesh(cbezierMesh);
-   AddGraphicsObject("cbezier", cbezier, "simple3DShader");
-   _objects["cbezier"]->SendToGPU();
-   _objects["cbezier"]->isVisible = false;
-
-   stringstream ss;
-   GraphicsObject* object;
-   //for (int i = 0; i < 4; i++) {
-   //   object = ObjectFactory::PlainCuboid(0.5f, 0.5f, 0.5f, { 1, 1, 1 });
-   //   ss << "p" << i;
-   //   AddGraphicsObject(ss.str(), object, "simple3DShader");
-   //   _objects[ss.str()]->SendToGPU();
-   //   _objects[ss.str()]->frame.TranslateWorld(cpoints[i]);
-   //}
-
-   glm::vec3 spoints[4][4]{};
-   spoints[0][0] = { -10,  2, -10 };
-   spoints[0][1] = { -7,  6, -10 };
-   spoints[0][2] = { 3, -6, -10 };
-   spoints[0][3] = { 10,  4, -10 };
-
-   spoints[1][0] = { -10,  0, -5 };
-   spoints[1][1] = { -7,  6, -5 };
-   spoints[1][2] = { 3, -6, -5 };
-   spoints[1][3] = { 10,  -6, -5 };
-
-   spoints[2][0] = { -10,  4, 0 };
-   spoints[2][1] = { -7,  6, 0 };
-   spoints[2][2] = { 3, -6, 0 };
-   spoints[2][3] = { 10,  2, 0 };
-
-   spoints[3][0] = { -10,  -4, 5 };
-   spoints[3][1] = { -7,  6, 5 };
-   spoints[3][2] = { 3, -6, 5 };
-   spoints[3][3] = { 10,  -4, 5 };
-
-   OGLVertexMesh<VertexPC>* cubicPatchMesh = (OGLVertexMesh<VertexPC>*)
-      meshFactoryPCRGB.CubicBezierPatch(spoints, { 0, 1, 0 }, 20);
-   GraphicsObject* cubicPatch = new GraphicsObject();
-   cubicPatch->AddMesh(cubicPatchMesh);
-   AddGraphicsObject("bezierPatch", cubicPatch, "simple3DShader");
-   _objects["bezierPatch"]->SendToGPU();
-   _objects["bezierPatch"]->isVisible = false;
-
-   OGLVertexMesh<VertexPCNT>* cubicPatchMeshPCNT = (OGLVertexMesh<VertexPCNT>*)
-      meshFactoryPCNTRGBA.CubicBezierPatchPCNTRandomY(spoints, -5, 5, { 1, 1, 1 }, 40, 40, 20);
-   cubicPatchMeshPCNT->SetTexture(_textures["smileyTexture"]);
-   GraphicsObject* cubicPatchPCNT = new GraphicsObject();
-   cubicPatchPCNT->AddMesh(cubicPatchMeshPCNT);
-   AddGraphicsObject("bezierPatchPCNT", cubicPatchPCNT, "lightingShader");
-   _objects["bezierPatchPCNT"]->SendToGPU();
-   //_objects["bezierPatch"]->isVisible = false;
-
-
-
-   for (int row = 0; row < 4; row++) {
-      for (int col = 0; col < 4; col++) {
-         RGB color = { 1, 1, 1 };
-         if (row == col) color = { 1, 0, 0 };
-         object = ObjectFactory::PlainCuboid(0.2f, 0.2f, 0.2f, color);
-         ss << "p" << row << col;
-         AddGraphicsObject(ss.str(), object, "simple3DShader");
-         _objects[ss.str()]->SendToGPU();
-         _objects[ss.str()]->frame.TranslateWorld(spoints[row][col]);
-      }
-   }
+   CreateRandomCurve("patch1", "worldTexture", {-30,0,0});
+   CreateRandomCurve("patch2", "createTexture", { -10,0,0 });
+   CreateRandomCurve("patch3", "woodFloorTexture", { 10,0,0 });
+   CreateRandomCurve("patch4", "brickwallTexture", { 30,0,0 });
 
    return true;
 }

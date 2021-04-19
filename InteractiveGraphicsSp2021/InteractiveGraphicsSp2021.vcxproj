@@ -61,20 +61,24 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\CSCI4157Sp2021.props" />
     <Import Project="..\CSCI4157Sp2021.props" />
+    <Import Project="D:\GLFW\Sheets\InteractiveGraphics\InteractiveGraphicsStarterSheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\CSCI4157Sp2021.props" />
     <Import Project="..\CSCI4157Sp2021.props" />
+    <Import Project="D:\GLFW\Sheets\InteractiveGraphics\InteractiveGraphicsStarterSheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\CSCI4157Sp2021.props" />
+    <Import Project="D:\GLFW\Sheets\InteractiveGraphics\InteractiveGraphicsStarterSheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\CSCI4157Sp2021.props" />
     <Import Project="..\CSCI4157Sp2021.props" />
+    <Import Project="D:\GLFW\Sheets\InteractiveGraphics\InteractiveGraphicsStarterSheet.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -177,6 +181,7 @@
     <ClCompile Include="SceneReader.cpp" />
     <ClCompile Include="SimpleMovingCameraAnimation.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
+    <ClCompile Include="VisibilityAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAnimation.h" />
@@ -213,6 +218,7 @@
     <ClInclude Include="TextFileReader.h" />
     <ClInclude Include="OGLVertexMesh.hpp" />
     <ClInclude Include="UsefulMacros.h" />
+    <ClInclude Include="VisibilityAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PCNTDiffuse2FragmentShader.glsl" />

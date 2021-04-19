@@ -298,6 +298,9 @@ AbstractVertexMesh<VertexPC>* MeshFactory<VertexPC, RGB>::CubicBezierPatch(
    return mesh;
 }
 
+// Written By: Dr. Jeff Roach, ETSU
+// https://github.com/ArchwayEon/InteractiveGraphicsSp2021.git
+// Branch: lec_week_13
 template<>
 AbstractVertexMesh<VertexPCNT>* MeshFactory<VertexPCNT, RGBA>::CubicBezierPatchPCNT(
    glm::vec3 points[][4], RGBA color, float repeatS, float repeatT, int steps)
@@ -411,6 +414,9 @@ AbstractVertexMesh<VertexPCNT>* MeshFactory<VertexPCNT, RGBA>::CubicBezierPatchP
    return mesh;
 }
 
+// Written By: Dr. Jeff Roach, ETSU
+// https://github.com/ArchwayEon/InteractiveGraphicsSp2021.git
+// Branch: lec_week_13
 template<>
 AbstractVertexMesh<VertexPCNT>* MeshFactory<VertexPCNT, RGBA>::CubicBezierPatchPCNTRandomY(
    glm::vec3 points[][4], float minY, float maxY, RGBA color, float repeatS, float repeatT, int steps)
