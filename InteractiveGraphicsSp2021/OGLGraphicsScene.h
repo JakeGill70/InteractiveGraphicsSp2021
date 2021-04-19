@@ -50,7 +50,7 @@ protected:
 
    void CreateRandomCurve(string objName, string texName, glm::vec3 offset);
    void MakeObjectsVisisble(string objNamePrefix, bool visibility);
-
+   void MakeRandomLight(glm::vec3 minVals, glm::vec3 maxVals);
 };
 
 #endif

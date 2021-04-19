@@ -31,6 +31,21 @@ void OGLGraphicsScene::MakeObjectsVisisble(string objNamePrefix, bool visibility
     }
 }
 
+void OGLGraphicsScene::MakeRandomLight(glm::vec3 minVals, glm::vec3 maxVals) {
+    glm::vec3 color = { getRandomNumber(1,100) / 100.0f, getRandomNumber(1,100) / 100.0f, getRandomNumber(1,100) / 100.0f };
+    float colorMax = std::fmax(color.r, std::fmax(color.g, color.b));
+    color = { color.r / colorMax, color.g / colorMax, color.b / colorMax };
+    localLights[_numberOfLights].color = color;
+
+    glm::vec3 pos = { getRandomNumber(minVals.x, maxVals.x), getRandomNumber(minVals.y, maxVals.y), getRandomNumber(minVals.z, maxVals.z) };
+    localLights[_numberOfLights].position = pos;
+
+    float intensity = (float)getRandomNumber(4, 15) / 10.0f;
+    localLights[_numberOfLights].intensity = intensity;
+    localLights[_numberOfLights].attenuationCoefficient = 0.5f;
+    _numberOfLights++;
+}
+
 void OGLGraphicsScene::CreateRandomCurve(string objName, string texName, glm::vec3 offset) {
     glm::vec3 spoints[4][4]{};
     /*spoints[0][0] = { -10,  2, -10 };
@@ -131,6 +146,26 @@ bool OGLGraphicsScene::Create()
    CreateRandomCurve("patch2", "createTexture", { -10,0,0 });
    CreateRandomCurve("patch3", "woodFloorTexture", { 10,0,0 });
    CreateRandomCurve("patch4", "brickwallTexture", { 30,0,0 });
+
+   // Patch 1 lights
+   MakeRandomLight({ -30, -5, -5 }, { -20, 5, 5 });
+   MakeRandomLight({ -30, -5, -5 }, { -20, 5, 5 });
+   MakeRandomLight({ -30, -5, -5 }, { -20, 5, 5 });
+
+   // Patch 2 lights
+   MakeRandomLight({ -10, -5, -5 }, { 0, 5, 5 });
+   MakeRandomLight({ -10, -5, -5 }, { 0, 5, 5 });
+   MakeRandomLight({ -10, -5, -5 }, { 0, 5, 5 });
+
+   // Patch 3 lights
+   MakeRandomLight({ 10, -5, -5 }, { 20, 5, 5 });
+   MakeRandomLight({ 10, -5, -5 }, { 20, 5, 5 });
+   MakeRandomLight({ 10, -5, -5 }, { 20, 5, 5 });
+
+   // Patch 4 lights
+   MakeRandomLight({ 20, -5, -5 }, { 30, 5, 5 });
+   MakeRandomLight({ 20, -5, -5 }, { 30, 5, 5 });
+   MakeRandomLight({ 20, -5, -5 }, { 30, 5, 5 });
 
    return true;
 }

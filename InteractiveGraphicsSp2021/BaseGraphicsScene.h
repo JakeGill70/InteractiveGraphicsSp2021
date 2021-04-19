@@ -29,7 +29,7 @@ protected:
 
 public:
    Light globalLight;
-   static const int NumberOfLights = 10;
+   static const int NumberOfLights = 25;
    Light localLights[BaseGraphicsScene::NumberOfLights];
  
 public:
