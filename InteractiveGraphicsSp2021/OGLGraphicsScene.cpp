@@ -32,18 +32,35 @@ void OGLGraphicsScene::MakeObjectsVisisble(string objNamePrefix, bool visibility
 }
 
 void OGLGraphicsScene::MakeRandomLight(glm::vec3 minVals, glm::vec3 maxVals) {
+    // Make color
     glm::vec3 color = { getRandomNumber(1,100) / 100.0f, getRandomNumber(1,100) / 100.0f, getRandomNumber(1,100) / 100.0f };
     float colorMax = std::fmax(color.r, std::fmax(color.g, color.b));
     color = { color.r / colorMax, color.g / colorMax, color.b / colorMax };
-    localLights[_numberOfLights].color = color;
-
+    
+    // Make position
     glm::vec3 pos = { getRandomNumber(minVals.x, maxVals.x), getRandomNumber(minVals.y, maxVals.y), getRandomNumber(minVals.z, maxVals.z) };
-    localLights[_numberOfLights].position = pos;
+    
+    // Make intensity
+    float intensity = 2.0f;// (float)getRandomNumber(4, 15) / 10.0f;
 
-    float intensity = (float)getRandomNumber(4, 15) / 10.0f;
+    // Make light
+    localLights[_numberOfLights].color = color;
+    localLights[_numberOfLights].position = pos;
     localLights[_numberOfLights].intensity = intensity;
     localLights[_numberOfLights].attenuationCoefficient = 0.5f;
     _numberOfLights++;
+
+    // Make Gizmo object
+    GraphicsObject* object;
+    stringstream ss;
+    string objName;
+
+    object = ObjectFactory::PlainCuboid(0.5f, 0.5f, 0.5f, {color.r, color.g, color.b});
+    ss << "l::" << "randomLight:" << _numberOfLights;
+    objName = ss.str();
+    AddGraphicsObject(objName, object, "simple3DShader");
+    _objects[objName]->frame.TranslateWorld(pos);
+    _objects[objName]->SendToGPU();
 }
 
 void OGLGraphicsScene::CreateRandomCurve(string objName, string texName, glm::vec3 offset) {
@@ -118,7 +135,7 @@ bool OGLGraphicsScene::Create()
    if (!ReadObjectData()) return false;
 
    _currentCamera = _cameras["camera"];
-   _currentCamera->frame.SetPosition(0, 0, 15);
+   _currentCamera->frame.SetPosition(0, 1, 15);
    _currentCamera->SetupLookingForward();
    _currentCamera->UpdateView();
 
@@ -143,7 +160,7 @@ bool OGLGraphicsScene::Create()
    _numberOfLights++;
 
    CreateRandomCurve("patch1", "worldTexture", {-30,0,0});
-   CreateRandomCurve("patch2", "createTexture", { -10,0,0 });
+   CreateRandomCurve("patch2", "crateTexture", { -10,0,0 });
    CreateRandomCurve("patch3", "woodFloorTexture", { 10,0,0 });
    CreateRandomCurve("patch4", "brickwallTexture", { 30,0,0 });
 
