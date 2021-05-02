@@ -89,6 +89,7 @@ bool OGLGraphicsScene::Create()
    _objects["axis"]->isVisible = true;
    _objects["floor"]->isVisible = true;
 
+   // Milestone 1
    MakeRandomBoxes(90, { 20.0f, 1.0, 20.0f }, { 0,1,0 });
 
    return true;
