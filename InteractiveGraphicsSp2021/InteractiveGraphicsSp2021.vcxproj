@@ -162,6 +162,8 @@
     <ClCompile Include="BaseCamera.cpp" />
     <ClCompile Include="BaseGraphicsScene.cpp" />
     <ClCompile Include="BaseObject.cpp" />
+    <ClCompile Include="BoundingSphere.cpp" />
+    <ClCompile Include="GeometricPlane.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="GLFWGraphicsWindow.cpp" />
     <ClCompile Include="GLFWInputSystem.cpp" />
@@ -181,12 +183,15 @@
     <ClCompile Include="SceneReader.cpp" />
     <ClCompile Include="SimpleMovingCameraAnimation.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
+    <ClCompile Include="ViewingFrustrum.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAnimation.h" />
     <ClInclude Include="AbstractCameraAnimation.h" />
     <ClInclude Include="AbstractInputSystem.h" />
     <ClInclude Include="AbstractKeyBinding.h" />
+    <ClInclude Include="BoundingSphere.h" />
+    <ClInclude Include="GeometricPlane.h" />
     <ClInclude Include="GLFWGraphicsWindow.h" />
     <ClInclude Include="GLFWInputSystem.h" />
     <ClInclude Include="GLFWKeyBinding.h" />
@@ -219,6 +224,7 @@
     <ClInclude Include="TextFileReader.h" />
     <ClInclude Include="OGLVertexMesh.hpp" />
     <ClInclude Include="UsefulMacros.h" />
+    <ClInclude Include="ViewingFrustrum.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PCNTDiffuse2FragmentShader.glsl" />
