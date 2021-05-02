@@ -46,6 +46,7 @@ protected:
    void CreatePCCuboidMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPC>*& mesh);
    void CreatePCNTCuboidMesh(FactoriedMeshData& meshData, OGLVertexMesh<VertexPCNT>*& mesh);
 
+   void MakeRandomBoxes(int count, glm::vec3 range, glm::vec3 centerPoint);
 };
 
 #endif
