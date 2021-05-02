@@ -19,8 +19,9 @@ inline void GraphicsObject::SetAnimation(AbstractAnimation* animation)
 
 void GraphicsObject::Update(double elapsedSeconds)
 {
-   if (_animation == nullptr) return;
-   _animation->Update(elapsedSeconds);
+    boundingSphere.position = this->frame.GetPosition();
+    if (_animation == nullptr) return;
+    _animation->Update(elapsedSeconds);
 }
 
 void GraphicsObject::SendToGPU()

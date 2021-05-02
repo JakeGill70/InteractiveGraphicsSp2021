@@ -10,6 +10,8 @@ class BoundingSphere :
 public:
 	glm::vec3 position;
 	float radius;
+
+	BoundingSphere();
 };
 
 #endif // !BOUNDING_SPHERE

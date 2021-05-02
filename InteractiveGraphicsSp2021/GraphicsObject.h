@@ -5,6 +5,7 @@
 #include "BaseObject.h"
 #include "ReferenceFrame.h"
 #include "AbstractTexture.h"
+#include "BoundingSphere.h"
 class AbstractAnimation;
 #include "AbstractMesh.h"
 #include <vector>
@@ -21,6 +22,7 @@ protected:
 public:
    ReferenceFrame frame;
    bool isVisible;
+   BoundingSphere boundingSphere;
 
 public:
    GraphicsObject() : _animation(nullptr), isVisible(true){}
