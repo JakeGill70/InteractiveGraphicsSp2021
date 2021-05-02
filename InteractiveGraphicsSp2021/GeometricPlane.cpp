@@ -28,3 +28,13 @@ void GeometricPlane::Set(glm::vec3 normal, glm::vec3 p) {
 	this->normal = glm::normalize(normal);
 	distance = -glm::dot(p, this->normal);
 }
+
+bool GeometricPlane::IsPointInFront(glm::vec3 p) {
+	float projection = glm::dot(p, normal);
+	return (projection + distance) > 0;
+}
+
+bool GeometricPlane::IsSphereInFront(BoundingSphere sphere) {
+	float projection = glm::dot(sphere.position, normal);
+	return (projection + distance + sphere.radius) > 0;
+}
