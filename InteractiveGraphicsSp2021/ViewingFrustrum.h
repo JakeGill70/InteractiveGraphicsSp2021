@@ -13,9 +13,9 @@ protected:
 	int frontWidth, frontHeight;
 	int backWidth, backHeight;
 	int depth;
-	ReferenceFrame frame;
 	GeometricPlane planes[6];
 public:
+	ReferenceFrame frame;
 	ViewingFrustrum(float fw, float fh, float bw, float bh, float depth);
 	void Set(float fw, float fh, float bw, float bh, float depth);
 	void Create();

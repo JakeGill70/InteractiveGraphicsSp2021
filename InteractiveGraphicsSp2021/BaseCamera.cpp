@@ -2,6 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "AbstractCameraAnimation.h"
 
+
 void BaseCamera::SetAnimation(AbstractCameraAnimation* animation)
 {
    _animation = animation;
@@ -45,4 +46,21 @@ void BaseCamera::SetupLookingForward()
    glm::vec3 forward = frame.orientation[2];
    forward = -forward;
    target = position + forward;
+}
+
+void BaseCamera::SetupViewingFrustum(float depth) {
+    float fov_radians = this->fieldOfView * 0.0174533f; // Magic number ~= PI/180, used to 
+
+    float frontHeight = tan(fov_radians / 2) * nearPlane * 2;
+    float backHeight = tan(fov_radians / 2) * depth * 2;
+    float frontWidth = _aspectRatio * frontHeight;
+    float backWidth = _aspectRatio * backHeight;
+
+    viewingFrustrum->Set(frontWidth, frontHeight, backWidth, backHeight, depth);
+}
+
+void BaseCamera::OrientViewingFrustum() {
+    viewingFrustrum->frame = frame;
+    viewingFrustrum->frame.RotateLocal(180, { 0,1,0 });
+    viewingFrustrum->Create();
 }
