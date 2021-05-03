@@ -60,7 +60,7 @@ void BaseCamera::SetupViewingFrustum(float depth) {
 }
 
 void BaseCamera::OrientViewingFrustum() {
-    viewingFrustrum->frame = frame;
+    viewingFrustrum->frame.SetPosition(frame.GetPosition());
     viewingFrustrum->frame.RotateLocal(180, { 0,1,0 });
     viewingFrustrum->Create();
 }
