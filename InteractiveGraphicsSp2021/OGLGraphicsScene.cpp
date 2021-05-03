@@ -27,6 +27,7 @@ void OGLGraphicsScene::MakeRandomBoxes(int count, glm::vec3 range, glm::vec3 cen
     OGLVertexMesh<VertexPCNT>* myCuboidMesh;
     stringstream ss;
     float width, height, depth;
+    float radius;
     float x, y, z;
 
     string name;
@@ -42,8 +43,11 @@ void OGLGraphicsScene::MakeRandomBoxes(int count, glm::vec3 range, glm::vec3 cen
         width = RANGED_RANDOM(minSize.x, maxSize.x);
         height = RANGED_RANDOM(minSize.y, maxSize.y);
         depth = RANGED_RANDOM(minSize.z, maxSize.z);
+        radius = fmax(width, fmax(height, depth));
+
         // Create object
         GraphicsObject* myCuboidObject = ObjectFactory::PCNTCuboid(width, height, depth, { 1,1,1 }, _textures[texNames[RANGED_RANDOM_INT(0, 3)]]);
+        myCuboidObject->boundingSphere.radius = radius;
         // Add object
         ss << "randomCuboid#" << i;
         name = ss.str();
