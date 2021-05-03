@@ -82,7 +82,7 @@ bool OGLGraphicsScene::Create()
    if (!ReadObjectData()) return false;
 
    _currentCamera = _cameras["camera"];
-   _currentCamera->frame.SetPosition(0, 5, 15);
+   _currentCamera->frame.SetPosition(0, 1, 15);
    _currentCamera->SetupLookingForward();
    _currentCamera->UpdateView();
 
@@ -99,7 +99,7 @@ bool OGLGraphicsScene::Create()
    _objects["floor"]->isVisible = true;
 
    // Milestone 1
-   MakeRandomBoxes(90, { 20.0f, 1.0, 20.0f }, { 0,1,0 });
+   MakeRandomBoxes(90, { 20.0f, 0.5, 20.0f }, { 0,1,0 });
 
    return true;
 }
