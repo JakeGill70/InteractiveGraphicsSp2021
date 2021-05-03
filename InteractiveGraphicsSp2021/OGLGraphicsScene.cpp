@@ -97,7 +97,9 @@ bool OGLGraphicsScene::Create()
 
    _objects["axis"]->frame.TranslateWorld(glm::vec3(0, 0.01f, 0));
    _objects["axis"]->isVisible = true;
+   _objects["axis"]->isStaticObject = true;
    _objects["floor"]->isVisible = true;
+   _objects["floor"]->isStaticObject = true;
 
    // Milestone 1
    MakeRandomBoxes(90, { 20.0f, 0.5, 20.0f }, { 0,1,0 });

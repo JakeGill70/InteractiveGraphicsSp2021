@@ -23,9 +23,10 @@ public:
    ReferenceFrame frame;
    bool isVisible;
    BoundingSphere boundingSphere;
+   bool isStaticObject;
 
 public:
-   GraphicsObject() : _animation(nullptr), isVisible(true){}
+   GraphicsObject() : _animation(nullptr), isVisible(true), isStaticObject(false){}
 
    virtual ~GraphicsObject();
 

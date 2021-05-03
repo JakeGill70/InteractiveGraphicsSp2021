@@ -88,6 +88,13 @@ void BaseGraphicsScene::Update(double elapsedSeconds)
        if (_currentCamera->viewingFrustrum->hasSphereInside(obj->boundingSphere)) {
            obj->GetMesh(0)->material.ambientIntensity = 1;
 
+           // Push close objects out of the way
+           if (glm::distance(obj->frame.GetPosition(), _currentCamera->frame.GetPosition()) <= 2 &&
+               _inputSystem->GetKeyState("W") == KeyState::Pressed) {
+               float speed = 3.0f;
+               glm::vec3 dir = obj->frame.GetPosition() - _currentCamera->frame.GetPosition();
+               obj->frame.TranslateWorld(dir * (float)elapsedSeconds * speed);
+           }
        }
        else {
            obj->GetMesh(0)->material.ambientIntensity = 0.01;
