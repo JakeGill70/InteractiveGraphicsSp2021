@@ -29,6 +29,7 @@ void OGLGraphicsScene::MakeRandomBoxes(int count, glm::vec3 range, glm::vec3 cen
     float width, height, depth;
     float radius;
     float x, y, z;
+    glm::vec3 axis;
 
     string name;
 
@@ -60,7 +61,11 @@ void OGLGraphicsScene::MakeRandomBoxes(int count, glm::vec3 range, glm::vec3 cen
         y = RANGED_RANDOM(-range.y, range.y) + centerPoint.y;
         z = RANGED_RANDOM(-range.z, range.z) + centerPoint.z;
         _objects[name]->frame.TranslateWorld({ x, y, z });
-        _objects[name]->frame.RotateLocal(RANDOM * 90, { RANDOM, RANDOM, RANDOM });
+
+        // Rotate object to random orientation
+        axis = { RANDOM, RANDOM, RANDOM };
+        axis = glm::normalize(axis);
+        _objects[name]->frame.RotateLocal(RANDOM * 90, axis);
         _objects[name]->isVisible = true;
         _objects[name]->SendToGPU();
     }
