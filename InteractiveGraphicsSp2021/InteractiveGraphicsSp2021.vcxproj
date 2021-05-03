@@ -163,6 +163,7 @@
     <ClCompile Include="BaseGraphicsScene.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BoundingSphere.cpp" />
+    <ClCompile Include="FollowAnimation.cpp" />
     <ClCompile Include="GeometricPlane.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="GLFWGraphicsWindow.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="AbstractInputSystem.h" />
     <ClInclude Include="AbstractKeyBinding.h" />
     <ClInclude Include="BoundingSphere.h" />
+    <ClInclude Include="FollowAnimation.h" />
     <ClInclude Include="GeometricPlane.h" />
     <ClInclude Include="GLFWGraphicsWindow.h" />
     <ClInclude Include="GLFWInputSystem.h" />

@@ -45,6 +45,8 @@ public:
 
    virtual inline void SetAnimation(AbstractAnimation* animation);
 
+   virtual inline AbstractAnimation* GetAnimation();
+
    virtual void Update(double elapsedSeconds);
 
    virtual void SendToGPU();

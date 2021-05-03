@@ -17,6 +17,10 @@ inline void GraphicsObject::SetAnimation(AbstractAnimation* animation)
    _animation->SetObject(this);
 }
 
+inline AbstractAnimation* GraphicsObject::GetAnimation() {
+    return _animation;
+}
+
 void GraphicsObject::Update(double elapsedSeconds)
 {
     boundingSphere.position = this->frame.GetPosition();

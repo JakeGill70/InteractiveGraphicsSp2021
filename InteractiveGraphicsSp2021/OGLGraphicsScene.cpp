@@ -11,6 +11,7 @@
 #include "ObjectFactory.h"
 #include "GLFWKeyBinding.h"
 #include "UsefulMacros.h"
+#include "FollowAnimation.h"
 
 OGLGraphicsScene::~OGLGraphicsScene()
 {
@@ -100,6 +101,17 @@ bool OGLGraphicsScene::Create()
 
    // Milestone 1
    MakeRandomBoxes(90, { 20.0f, 0.5, 20.0f }, { 0,1,0 });
+
+
+   GraphicsObject* frustumModel = ObjectFactory::FrustumModel(_currentCamera->viewingFrustrum->getFrustumCorners(), { 1,0,0 }, { 0,0,1 });
+   AddGraphicsObject("dbg_frustum::frustumModel", frustumModel, "simple3DShader");
+   _objects["dbg_frustum::frustumModel"]->frame.SetPosition(_currentCamera->frame.GetPosition());
+   _objects["dbg_frustum::frustumModel"]->frame.orientation = _currentCamera->frame.orientation;
+   _objects["dbg_frustum::frustumModel"]->frame.RotateLocal(180, { 0,1,0 });
+   _objects["dbg_frustum::frustumModel"]->SendToGPU();
+
+   _objects["dbg_frustum::frustumModel"]->SetAnimation(new FollowAnimation(&(_currentCamera->frame)));
+
 
    return true;
 }

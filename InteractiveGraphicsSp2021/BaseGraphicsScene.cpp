@@ -1,5 +1,7 @@
 #include "BaseGraphicsScene.h"
 #include "AbstractKeyBinding.h"
+#include "ObjectFactory.h"
+#include "FollowAnimation.h"
 
 BaseGraphicsScene::~BaseGraphicsScene()
 {
@@ -38,8 +40,61 @@ void BaseGraphicsScene::UpdateCameraProjection(float aspectRatio)
 void BaseGraphicsScene::Update(double elapsedSeconds)
 {
    _currentCamera->Update(elapsedSeconds);
+   _currentCamera->SetupViewingFrustum(2);
+   _currentCamera->OrientViewingFrustum();
+
+   if (_inputSystem->GetKeyState("F2") == KeyState::Pressed) {
+       string objectName;
+       _frustumViewState = (_frustumViewState + 1) % 3;
+       if (_frustumViewState == 0) {
+            // Hide frustums
+           for (std::map<string, GraphicsObject*>::iterator it = _objects.begin(); it != _objects.end(); ++it)
+           {
+               objectName = it->first;
+               if (objectName.find("dbg_frustum::") == 0) {
+                   it->second->isVisible = false;
+               }
+           }
+       }
+       else if (_frustumViewState == 1) {
+           // Show frustums
+           // Play follow animation
+           for (std::map<string, GraphicsObject*>::iterator it = _objects.begin(); it != _objects.end(); ++it)
+           {
+               objectName = it->first;
+               if (objectName.find("dbg_frustum::") == 0) {
+                   it->second->isVisible = true;
+                   ((FollowAnimation*)(it->second->GetAnimation()))->setFollowing(true);
+               }
+           }
+       }
+       else if (_frustumViewState == 2) {
+           // Show frustums
+           // Stop follow animation
+           for (std::map<string, GraphicsObject*>::iterator it = _objects.begin(); it != _objects.end(); ++it)
+           {
+               objectName = it->first;
+               if (objectName.find("dbg_frustum::") == 0) {
+                   it->second->isVisible = true;
+                   ((FollowAnimation*)(it->second->GetAnimation()))->setFollowing(false);
+               }
+           }
+       }
+   }
+
    for (auto iterator = _objects.begin(); iterator != _objects.end(); iterator++) {
-      iterator->second->Update(elapsedSeconds);
+       GraphicsObject* obj = iterator->second;
+       obj->Update(elapsedSeconds);
+       if (_currentCamera->viewingFrustrum->hasSphereInside(obj->boundingSphere)) {
+           obj->GetMesh(0)->material.ambientIntensity = 1;
+
+       }
+       else {
+           obj->GetMesh(0)->material.ambientIntensity = 0.01;
+       }
+       if (iterator->first == "axis") {
+           obj->isVisible = true;
+       }
    }
 }
 

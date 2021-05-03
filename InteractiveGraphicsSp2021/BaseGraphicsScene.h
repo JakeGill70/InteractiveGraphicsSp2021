@@ -29,6 +29,7 @@ protected:
    GraphicsWindow* _window;
    AbstractInputSystem* _inputSystem;
    AbstractKeyBinding* _keyBinding;
+   int _frustumViewState;
 
 public:
    Light globalLight;
@@ -48,6 +49,7 @@ public:
          localLights[i].color = { 1, 1, 1 };
          localLights[i].attenuationCoefficient = 0.2f;
       }
+      _frustumViewState = 0;
    }
    virtual ~BaseGraphicsScene();
 
