@@ -29,7 +29,7 @@ void ViewingFrustum::Create() {
 	glm::vec3 lrb = { -halfBackWidth, -halfBackHeight, depth };
 	glm::vec3 urb = { -halfBackWidth,  halfBackHeight, depth };
 
-	// Transform each point to the cameraï¿½s 
+	// Transform each point to the camera’s 
 	// orientation
 	glm::vec3 F1 = frame.Transform(ulf);
 	glm::vec3 F2 = frame.Transform(llf);
@@ -71,3 +71,32 @@ bool ViewingFrustum::hasPointInside(glm::vec3 point)
 	return true;
 }
 
+std::vector<glm::vec3> ViewingFrustum::getFrustumCorners()
+{
+	std::vector<glm::vec3> corners;
+
+	float halfFrontWidth = frontWidth / 2;
+	float halfFrontHeight = frontHeight / 2;
+	float halfBackWidth = backWidth / 2;
+	float halfBackHeight = backHeight / 2;
+
+	glm::vec3 ulf = { halfFrontWidth, halfFrontHeight, 0 };
+	glm::vec3 llf = { halfFrontWidth, -halfFrontHeight, 0 };
+	glm::vec3 lrf = { -halfFrontWidth, -halfFrontHeight, 0 };
+	glm::vec3 urf = { -halfFrontWidth,  halfFrontHeight, 0 };
+	glm::vec3 ulb = { halfBackWidth,  halfBackHeight, depth };
+	glm::vec3 llb = { halfBackWidth, -halfBackHeight, depth };
+	glm::vec3 lrb = { -halfBackWidth, -halfBackHeight, depth };
+	glm::vec3 urb = { -halfBackWidth,  halfBackHeight, depth };
+
+	corners.push_back(ulf);
+	corners.push_back(llf);
+	corners.push_back(lrf);
+	corners.push_back(urf);
+	corners.push_back(ulb);
+	corners.push_back(llb);
+	corners.push_back(lrb);
+	corners.push_back(urb);
+
+	return corners;
+}

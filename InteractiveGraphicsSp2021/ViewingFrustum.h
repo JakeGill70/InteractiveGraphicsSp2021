@@ -22,6 +22,7 @@ public:
 	void Create();
 	bool hasSphereInside(BoundingSphere sphere);
 	bool hasPointInside(glm::vec3 point);
+	std::vector<glm::vec3> getFrustumCorners();
 };
 
 #endif // !VIEWING_FRUSTRUM
