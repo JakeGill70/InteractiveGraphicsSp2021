@@ -10,9 +10,9 @@ class ViewingFrustrum :
 	public BaseObject
 {
 protected:
-	int frontWidth, frontHeight;
-	int backWidth, backHeight;
-	int depth;
+	float frontWidth, frontHeight;
+	float backWidth, backHeight;
+	float depth;
 	GeometricPlane planes[6];
 public:
 	ReferenceFrame frame;
