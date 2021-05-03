@@ -183,7 +183,7 @@
     <ClCompile Include="SceneReader.cpp" />
     <ClCompile Include="SimpleMovingCameraAnimation.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
-    <ClCompile Include="ViewingFrustrum.cpp" />
+    <ClCompile Include="ViewingFrustum.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAnimation.h" />
@@ -224,7 +224,7 @@
     <ClInclude Include="TextFileReader.h" />
     <ClInclude Include="OGLVertexMesh.hpp" />
     <ClInclude Include="UsefulMacros.h" />
-    <ClInclude Include="ViewingFrustrum.h" />
+    <ClInclude Include="ViewingFrustum.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PCNTDiffuse2FragmentShader.glsl" />

@@ -1,12 +1,12 @@
-#include "ViewingFrustrum.h"
+#include "ViewingFrustum.h"
 
-ViewingFrustrum::ViewingFrustrum(float fw, float fh, float bw, float bh, float depth)
+ViewingFrustum::ViewingFrustum(float fw, float fh, float bw, float bh, float depth)
 {
 	Set(fw, fh, bw, bh, depth);
 	Create();
 }
 
-void ViewingFrustrum::Set(float fw, float fh, float bw, float bh, float depth) {
+void ViewingFrustum::Set(float fw, float fh, float bw, float bh, float depth) {
 	frontWidth = fw;
 	frontHeight = fh;
 	backWidth = bw;
@@ -14,7 +14,7 @@ void ViewingFrustrum::Set(float fw, float fh, float bw, float bh, float depth) {
 	this->depth = depth;
 }
 
-void ViewingFrustrum::Create() {
+void ViewingFrustum::Create() {
 	float halfFrontWidth = frontWidth / 2;
 	float halfFrontHeight = frontHeight / 2;
 	float halfBackWidth = backWidth / 2;
@@ -29,7 +29,7 @@ void ViewingFrustrum::Create() {
 	glm::vec3 lrb = { -halfBackWidth, -halfBackHeight, depth };
 	glm::vec3 urb = { -halfBackWidth,  halfBackHeight, depth };
 
-	// Transform each point to the camera’s 
+	// Transform each point to the cameraï¿½s 
 	// orientation
 	glm::vec3 F1 = frame.Transform(ulf);
 	glm::vec3 F2 = frame.Transform(llf);
@@ -49,7 +49,7 @@ void ViewingFrustrum::Create() {
 	planes[5].Set(B2, F2, F3); // Bottom
 }
 
-bool ViewingFrustrum::hasSphereInside(BoundingSphere sphere)
+bool ViewingFrustum::hasSphereInside(BoundingSphere sphere)
 {
 	for (int i = 0; i < 5; i++)
 	{
@@ -60,7 +60,7 @@ bool ViewingFrustrum::hasSphereInside(BoundingSphere sphere)
 	return true;
 }
 
-bool ViewingFrustrum::hasPointInside(glm::vec3 point)
+bool ViewingFrustum::hasPointInside(glm::vec3 point)
 {
 	for (int i = 0; i < 5; i++)
 	{
@@ -70,3 +70,4 @@ bool ViewingFrustrum::hasPointInside(glm::vec3 point)
 	}
 	return true;
 }
+

@@ -5,7 +5,7 @@
 #include "BaseObject.h"
 #include <glm\glm.hpp>
 #include "ReferenceFrame.h"
-#include "ViewingFrustrum.h"
+#include "ViewingFrustum.h"
 
 class AbstractCameraAnimation;
 
@@ -21,7 +21,7 @@ public:
    float fieldOfView, nearPlane, farPlane;
    ReferenceFrame frame;
    glm::vec3 target;
-   ViewingFrustrum* viewingFrustrum;
+   ViewingFrustum* viewingFrustrum;
 
 public:
    BaseCamera() : 
@@ -30,7 +30,7 @@ public:
       target({ 0.0f, 0.0f, 0.0f }),
       frame(), _animation(nullptr)
    {
-       viewingFrustrum = new ViewingFrustrum(1, 1, 3, 3, 3);
+       viewingFrustrum = new ViewingFrustum(1, 1, 3, 3, 3);
    }
 
    inline void SetAspectRatio(float aspectRatio) {

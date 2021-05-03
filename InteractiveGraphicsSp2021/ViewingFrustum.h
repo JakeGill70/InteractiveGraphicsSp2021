@@ -5,8 +5,9 @@
 #include "BaseObject.h"
 #include "ReferenceFrame.h"
 #include "GeometricPlane.h"
+#include <vector>
 
-class ViewingFrustrum :
+class ViewingFrustum :
 	public BaseObject
 {
 protected:
@@ -16,7 +17,7 @@ protected:
 	GeometricPlane planes[6];
 public:
 	ReferenceFrame frame;
-	ViewingFrustrum(float fw, float fh, float bw, float bh, float depth);
+	ViewingFrustum(float fw, float fh, float bw, float bh, float depth);
 	void Set(float fw, float fh, float bw, float bh, float depth);
 	void Create();
 	bool hasSphereInside(BoundingSphere sphere);
