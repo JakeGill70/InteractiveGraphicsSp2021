@@ -18,6 +18,7 @@ public:
       _inputSystem->RegisterKey("D", GLFW_KEY_D);
       _inputSystem->RegisterKey("LEFT", GLFW_KEY_LEFT);
       _inputSystem->RegisterKey("RIGHT", GLFW_KEY_RIGHT);
+      _inputSystem->RegisterKey("F2", GLFW_KEY_F2);
    }
 };
 
